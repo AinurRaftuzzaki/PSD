@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -185,6 +185,7 @@
 <li class="toctree-l2"><a class="reference internal" href="bussiness-understanding.html">Business Understanding</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data-understanding.html">Data Understanding</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Penjelasan Metrik Statistika Deskriptif</a></li>
+
 </ul>
 </details></li>
 </ul>
@@ -382,6 +383,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Penjelasan Metrik Statistika Deskriptif</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#min-max">1. Min &amp; Max</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mean">2. Mean</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#std-deviation-standar-deviasi">3. Std. Deviation (Standar Deviasi)</a></li>
@@ -392,6 +394,17 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metrik-kualitas-anomali-data">8. Metrik Kualitas / Anomali Data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#median">9. Median</a></li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-analisis-data-polutan-dari-cloud-database-ke-knime"><strong>Implementasi Analisis Data Polutan: Dari Cloud Database ke KNIME</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-1-memperoleh-kredensial-database-dari-aiven">Langkah 1: Memperoleh Kredensial Database dari Aiven</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-2-mengonfigurasi-koneksi-di-dbeaver">Langkah 2: Mengonfigurasi Koneksi di dbeaver</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-3-melakukan-inspeksi-tabel-data-di-dbeaver">Langkah 3: Melakukan Inspeksi Tabel Data di dbeaver</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-4-menyusun-alur-kerja-workflow-di-knime">Langkah 4: Menyusun Alur Kerja (Workflow) di KNIME</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-5-membaca-output-statistika-deskriptif">Langkah 5: Membaca Output Statistika Deskriptif</a></li>
+</ul>
+</li>
+</ul>
+
             </nav>
         </div>
     </div>
@@ -515,6 +528,104 @@ document.write(`
 </ul>
 </section>
 </section>
+<section class="tex2jax_ignore mathjax_ignore" id="implementasi-analisis-data-polutan-dari-cloud-database-ke-knime">
+<h1><strong>Implementasi Analisis Data Polutan: Dari Cloud Database ke KNIME</strong><a class="headerlink" href="#implementasi-analisis-data-polutan-dari-cloud-database-ke-knime" title="Link to this heading">#</a></h1>
+<p>Panduan ini menguraikan tahapan-tahapan untuk menghubungkan database PostgreSQL di platform Aiven, melakukan inspeksi data menggunakan HeidiSQL, serta mengekstraksi metrik statistika deskriptif memanfaatkan KNIME Analytics Platform.</p>
+<section id="langkah-1-memperoleh-kredensial-database-dari-aiven">
+<h2>Langkah 1: Memperoleh Kredensial Database dari Aiven<a class="headerlink" href="#langkah-1-memperoleh-kredensial-database-dari-aiven" title="Link to this heading">#</a></h2>
+<p>Sebelum menyambungkan koneksi melalui aplikasi apa pun, kita membutuhkan informasi kredensial server.</p>
+<ol class="arabic simple">
+<li><p>Akses <em>dashboard</em> atau console <strong>Aiven</strong>, lalu arahkan ke proyek yang dimiliki.</p></li>
+<li><p>Buka tab <strong>Overview</strong> pada layanan (<em>service</em>) PostgreSQL yang sedang beroperasi (<code class="docutils literal notranslate"><span class="pre">pg-c4fbe52</span></code>).</p></li>
+<li><p>Pada bagian <strong>Connection information</strong>, catat parameter-parameter berikut ini:</p>
+<ul class="simple">
+<li><p><strong>Host:</strong> <code class="docutils literal notranslate"><span class="pre">pg-366a67e1-postgresqlpsd.e.aivencloud.com</span></code></p></li>
+<li><p><strong>Port:</strong> <code class="docutils literal notranslate"><span class="pre">10977</span></code></p></li>
+<li><p><strong>User:</strong> <code class="docutils literal notranslate"><span class="pre">avnadmin</span></code></p></li>
+<li><p><strong>Password:</strong> (Klik ikon mata atau opsi <em>copy</em> untuk menyalin kata sandi rahasia)</p></li>
+<li><p><strong>SSL mode:</strong> <code class="docutils literal notranslate"><span class="pre">require</span></code></p></li>
+</ul>
+</li>
+<li><p>Pastikan Anda telah mengunduh sertifikat SSL (klik <strong>Show</strong> pada bagian <em>CA certificate</em> kemudian unduh) apabila <em>client</em> yang Anda gunakan mensyaratkannya.</p></li>
+</ol>
+<p><img alt="Aiven PostgreSQL Console" src="_images/aiven.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="langkah-2-mengonfigurasi-koneksi-di-dbeaver">
+<h2>Langkah 2: Mengonfigurasi Koneksi di dbeaver<a class="headerlink" href="#langkah-2-mengonfigurasi-koneksi-di-dbeaver" title="Link to this heading">#</a></h2>
+<p>dbeaver digunakan untuk meninjau tabel beserta datanya secara langsung sebelum diproses lebih lanjut.</p>
+<ol class="arabic simple">
+<li><p>Buka aplikasi <strong>dbeaver</strong>. Pada panel sebelah kiri (Browser), klik new data conection</p></li>
+<li><p>Pilih jenis database yang akan digunakan, pilih PostgreSQL.</p></li>
+<li><p>Pada ke tab <strong>Connection</strong>, terapkan konfigurasi di bawah ini:</p>
+<ul class="simple">
+<li><p><strong>Host name/address:</strong> Isikan informasi Host yang diperoleh dari langkah 1.</p></li>
+<li><p><strong>Port:</strong> Isikan <code class="docutils literal notranslate"><span class="pre">10977</span></code> (atau sesuai dengan <em>Port</em> pada langkah 1).</p></li>
+<li><p><strong>Username:</strong> Ketikkan <code class="docutils literal notranslate"><span class="pre">avnadmin</span></code>.</p></li>
+<li><p><strong>Password:</strong> Tempelkan (<em>paste</em>) kata sandi dari langkah 1, dan centang opsi <strong>Save password?</strong>.</p></li>
+</ul>
+</li>
+<li><p>Klik <strong>Finish</strong> guna menyimpan konfigurasi dan memulai koneksi.</p></li>
+</ol>
+<p><img alt="Konfigurasi Session Manager pgAdmin" src="_images/dbeaver.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="langkah-3-melakukan-inspeksi-tabel-data-di-dbeaver">
+<h2>Langkah 3: Melakukan Inspeksi Tabel Data di dbeaver<a class="headerlink" href="#langkah-3-melakukan-inspeksi-tabel-data-di-dbeaver" title="Link to this heading">#</a></h2>
+<p>Setelah koneksi berhasil, kita perlu memverifikasi ketersediaan data mentah beserta kesesuaian formatnya.</p>
+<ol class="arabic simple">
+<li><p>Pada panel sebelah kiri dbeaver, navigasikan <em>tree</em> server yang baru dibuat menuju Databases &gt; <code class="docutils literal notranslate"><span class="pre">defaultdb</span></code> &gt; Schemas &gt; <code class="docutils literal notranslate"><span class="pre">public</span></code> &gt; Tables.</p></li>
+<li><p>Pada tables, kemudian pilih <strong>View/Edit Data</strong> &gt; <strong>All Rows</strong>.</p></li>
+<li><p>Pastikan kolom data deret waktu (<em>time-series</em>) telah ditampilkan dengan tepat, yang meliputi kolom <code class="docutils literal notranslate"><span class="pre">date</span></code>, <code class="docutils literal notranslate"><span class="pre">no2</span></code>, <code class="docutils literal notranslate"><span class="pre">co</span></code>, dan <code class="docutils literal notranslate"><span class="pre">so2</span></code> .</p></li>
+<li><p>Perlu diketahui bahwa pada tahapan ini merupakan hal yang lumrah bila dijumpai nilai <code class="docutils literal notranslate"><span class="pre">[null]</span></code>. Nantinya, nilai tersebut akan teridentifikasi sebagai <em>missing values</em> pada saat tahap analisis.</p></li>
+</ol>
+<p><img alt="Tampilan Data Polutan di pgAdmin" src="_images/dbeaver_data.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="langkah-4-menyusun-alur-kerja-workflow-di-knime">
+<h2>Langkah 4: Menyusun Alur Kerja (Workflow) di KNIME<a class="headerlink" href="#langkah-4-menyusun-alur-kerja-workflow-di-knime" title="Link to this heading">#</a></h2>
+<p>Beralih menuju KNIME Analytics Platform guna menarik data dari database dan melakukan perhitungan statistiknya secara otomatis.</p>
+<ol class="arabic simple">
+<li><p>Jalankan <strong>KNIME Analytics Platform</strong> lalu buatlah <em>workflow</em> (alur kerja) yang baru.</p></li>
+<li><p>Tarik (<em>drag-and-drop</em>) <em>node</em> di bawah ini dari <em>Node Repository</em> menuju ke <em>workspace</em>:</p>
+<ul class="simple">
+<li><p><strong>PostgreSQL Connector:</strong> Berfungsi menghubungkan KNIME dengan server Aiven.</p></li>
+<li><p><strong>DB Table Selector:</strong> Berfungsi untuk menyeleksi tabel di dalam database.</p></li>
+<li><p><strong>DB Reader:</strong> Berfungsi untuk memuat tabel ke dalam memori KNIME.</p></li>
+<li><p><strong>Statistics:</strong> Berfungsi untuk menghitung metrik-metrik statistik.</p></li>
+</ul>
+</li>
+<li><p>Hubungkan setiap <em>node</em> tersebut mengikuti urutan yang telah disebutkan di atas.</p></li>
+<li><p><strong>Konfigurasi Node:</strong></p>
+<ul class="simple">
+<li><p>Lakukan klik ganda pada <strong>PostgreSQL Connector</strong>, lalu isikan <em>Hostname</em>, <em>Port</em>, <em>Database name</em> (<code class="docutils literal notranslate"><span class="pre">PSD_Polutan</span></code>), serta <em>Credentials</em> (User &amp; Password) yang identik dengan langkah 1 dan 2.</p></li>
+<li><p>Lakukan klik ganda pada <strong>DB Table Selector</strong>, kemudian pilih skema <code class="docutils literal notranslate"><span class="pre">public</span></code> serta tabel <code class="docutils literal notranslate"><span class="pre">polutan</span></code>.</p></li>
+</ul>
+</li>
+<li><p>Klik kanan pada <strong>DB Reader</strong> lalu pilih opsi <strong>Execute</strong>. Jika prosesnya berhasil, lampu indikator di bagian bawah <em>node</em> akan berubah menjadi hijau.</p></li>
+</ol>
+<p><img alt="Alur Kerja Database dan Statistik di KNIME" src="knime_node.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="langkah-5-membaca-output-statistika-deskriptif">
+<h2>Langkah 5: Membaca Output Statistika Deskriptif<a class="headerlink" href="#langkah-5-membaca-output-statistika-deskriptif" title="Link to this heading">#</a></h2>
+<p>Setelah data berhasil dimuat ke dalam KNIME, tahapan yang terakhir adalah menjalankan perhitungan analitiknya.</p>
+<ol class="arabic simple">
+<li><p>Klik kanan pada node <strong>Statistics</strong> kemudian pilih <strong>Execute</strong>.</p></li>
+<li><p>Bila lampu indikator telah berwarna hijau, klik kanan kembali pada node <strong>Statistics</strong> lalu pilih menu <strong>Statistics View</strong> (atau ikon bergambar kaca pembesar).</p></li>
+<li><p>Tabel metrik statistik akan ditampilkan, yang memuat:</p>
+<ul class="simple">
+<li><p><strong>Min, Max, Mean:</strong> Guna mengamati rentang serta nilai rata-rata dari masing-masing polutan.</p></li>
+<li><p><strong>Std. deviation &amp; Variance:</strong> Guna meninjau tingkat fluktuasi nilai gas di udara.</p></li>
+<li><p><strong>Skewness &amp; Kurtosis:</strong> Guna melihat bentuk asimetri dan tingkat keberadaan nilai-nilai yang ekstrem (<em>outlier</em>).</p></li>
+<li><p><strong>No. missings:</strong> Menyatakan jumlah data yang kosong (sebagai contoh, pada gas <span class="math notranslate nohighlight">\(CO\)</span> terdapat 73 data yang kosong).</p></li>
+<li><p><strong>Histogram:</strong> Menyajikan visualisasi mengenai sebaran datanya.</p></li>
+</ul>
+</li>
+</ol>
+<p><img alt="Tabel Hasil Output Node Statistics" src="statistic.png" /></p>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -571,6 +682,7 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Penjelasan Metrik Statistika Deskriptif</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#min-max">1. Min &amp; Max</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mean">2. Mean</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#std-deviation-standar-deviasi">3. Std. Deviation (Standar Deviasi)</a></li>
@@ -581,6 +693,17 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metrik-kualitas-anomali-data">8. Metrik Kualitas / Anomali Data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#median">9. Median</a></li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-analisis-data-polutan-dari-cloud-database-ke-knime"><strong>Implementasi Analisis Data Polutan: Dari Cloud Database ke KNIME</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-1-memperoleh-kredensial-database-dari-aiven">Langkah 1: Memperoleh Kredensial Database dari Aiven</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-2-mengonfigurasi-koneksi-di-dbeaver">Langkah 2: Mengonfigurasi Koneksi di dbeaver</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-3-melakukan-inspeksi-tabel-data-di-dbeaver">Langkah 3: Melakukan Inspeksi Tabel Data di dbeaver</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-4-menyusun-alur-kerja-workflow-di-knime">Langkah 4: Menyusun Alur Kerja (Workflow) di KNIME</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-5-membaca-output-statistika-deskriptif">Langkah 5: Membaca Output Statistika Deskriptif</a></li>
+</ul>
+</li>
+</ul>
+
   </nav></div>
 
 </div></div>
