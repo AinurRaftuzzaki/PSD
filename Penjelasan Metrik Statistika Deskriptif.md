@@ -67,3 +67,84 @@ Kelompok metrik ini memegang peranan krusial saat melakukan ekstraksi data menta
 *   **Perhitungan Manual:** Urutkan seluruh data mulai dari $X_1$ hingga $X_n$.
     *   Bila jumlah observasi ($n$) bernilai ganjil: $Median = X_{(n+1)/2}$
     *   Bila jumlah observasi ($n$) bernilai genap: $Median = \frac{X_{n/2} + X_{(n/2)+1}}{2}$
+
+# **Implementasi Analisis Data Polutan: Dari Cloud Database ke KNIME**
+
+Panduan ini menguraikan tahapan-tahapan untuk menghubungkan database PostgreSQL di platform Aiven, melakukan inspeksi data menggunakan HeidiSQL, serta mengekstraksi metrik statistika deskriptif memanfaatkan KNIME Analytics Platform.
+
+## Langkah 1: Memperoleh Kredensial Database dari Aiven
+
+Sebelum menyambungkan koneksi melalui aplikasi apa pun, kita membutuhkan informasi kredensial server.
+1. Akses *dashboard* atau console **Aiven**, lalu arahkan ke proyek yang dimiliki.
+2. Buka tab **Overview** pada layanan (*service*) PostgreSQL yang sedang beroperasi (`pg-c4fbe52`).
+3. Pada bagian **Connection information**, catat parameter-parameter berikut ini:
+   * **Host:** `pg-366a67e1-postgresqlpsd.e.aivencloud.com`
+   * **Port:** `10977`
+   * **User:** `avnadmin`
+   * **Password:** (Klik ikon mata atau opsi *copy* untuk menyalin kata sandi rahasia)
+   * **SSL mode:** `require`
+4. Pastikan Anda telah mengunduh sertifikat SSL (klik **Show** pada bagian *CA certificate* kemudian unduh) apabila *client* yang Anda gunakan mensyaratkannya.
+
+![Aiven PostgreSQL Console](aiven.png)
+
+---
+## Langkah 2: Mengonfigurasi Koneksi di dbeaver
+
+dbeaver digunakan untuk meninjau tabel beserta datanya secara langsung sebelum diproses lebih lanjut.
+1. Buka aplikasi **dbeaver**. Pada panel sebelah kiri (Browser), klik new data conection
+2. Pilih jenis database yang akan digunakan, pilih PostgreSQL.
+3. Pada ke tab **Connection**, terapkan konfigurasi di bawah ini:
+   * **Host name/address:** Isikan informasi Host yang diperoleh dari langkah 1.
+   * **Port:** Isikan `10977` (atau sesuai dengan *Port* pada langkah 1).
+   * **Username:** Ketikkan `avnadmin`.
+   * **Password:** Tempelkan (*paste*) kata sandi dari langkah 1, dan centang opsi **Save password?**.
+4. Klik **Finish** guna menyimpan konfigurasi dan memulai koneksi.
+
+![Konfigurasi Session Manager pgAdmin](dbeaver.png)
+
+---
+
+## Langkah 3: Melakukan Inspeksi Tabel Data di dbeaver
+
+Setelah koneksi berhasil, kita perlu memverifikasi ketersediaan data mentah beserta kesesuaian formatnya.
+1. Pada panel sebelah kiri dbeaver, navigasikan *tree* server yang baru dibuat menuju Databases > `defaultdb` > Schemas > `public` > Tables.
+2. Pada tables, kemudian pilih **View/Edit Data** > **All Rows**.
+3. Pastikan kolom data deret waktu (*time-series*) telah ditampilkan dengan tepat, yang meliputi kolom `date`, `no2`, `co`, dan `so2` .
+4. Perlu diketahui bahwa pada tahapan ini merupakan hal yang lumrah bila dijumpai nilai `[null]`. Nantinya, nilai tersebut akan teridentifikasi sebagai *missing values* pada saat tahap analisis.
+
+![Tampilan Data Polutan di pgAdmin](dbeaver_data.png)
+
+---
+
+## Langkah 4: Menyusun Alur Kerja (Workflow) di KNIME
+
+Beralih menuju KNIME Analytics Platform guna menarik data dari database dan melakukan perhitungan statistiknya secara otomatis.
+1. Jalankan **KNIME Analytics Platform** lalu buatlah *workflow* (alur kerja) yang baru.
+2. Tarik (*drag-and-drop*) *node* di bawah ini dari *Node Repository* menuju ke *workspace*:
+   * **PostgreSQL Connector:** Berfungsi menghubungkan KNIME dengan server Aiven.
+   * **DB Table Selector:** Berfungsi untuk menyeleksi tabel di dalam database.
+   * **DB Reader:** Berfungsi untuk memuat tabel ke dalam memori KNIME.
+   * **Statistics:** Berfungsi untuk menghitung metrik-metrik statistik.
+3. Hubungkan setiap *node* tersebut mengikuti urutan yang telah disebutkan di atas.
+4. **Konfigurasi Node:**
+   * Lakukan klik ganda pada **PostgreSQL Connector**, lalu isikan *Hostname*, *Port*, *Database name* (`PSD_Polutan`), serta *Credentials* (User & Password) yang identik dengan langkah 1 dan 2.
+   * Lakukan klik ganda pada **DB Table Selector**, kemudian pilih skema `public` serta tabel `polutan`.
+5. Klik kanan pada **DB Reader** lalu pilih opsi **Execute**. Jika prosesnya berhasil, lampu indikator di bagian bawah *node* akan berubah menjadi hijau.
+
+![Alur Kerja Database dan Statistik di KNIME](knime_node.png)
+
+---
+
+## Langkah 5: Membaca Output Statistika Deskriptif
+
+Setelah data berhasil dimuat ke dalam KNIME, tahapan yang terakhir adalah menjalankan perhitungan analitiknya.
+1. Klik kanan pada node **Statistics** kemudian pilih **Execute**.
+2. Bila lampu indikator telah berwarna hijau, klik kanan kembali pada node **Statistics** lalu pilih menu **Statistics View** (atau ikon bergambar kaca pembesar).
+3. Tabel metrik statistik akan ditampilkan, yang memuat:
+   * **Min, Max, Mean:** Guna mengamati rentang serta nilai rata-rata dari masing-masing polutan.
+   * **Std. deviation & Variance:** Guna meninjau tingkat fluktuasi nilai gas di udara.
+   * **Skewness & Kurtosis:** Guna melihat bentuk asimetri dan tingkat keberadaan nilai-nilai yang ekstrem (*outlier*).
+   * **No. missings:** Menyatakan jumlah data yang kosong (sebagai contoh, pada gas $CO$ terdapat 73 data yang kosong).
+   * **Histogram:** Menyajikan visualisasi mengenai sebaran datanya.
+
+![Tabel Hasil Output Node Statistics](statistic.png)
