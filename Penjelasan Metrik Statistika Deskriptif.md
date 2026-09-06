@@ -147,4 +147,6 @@ Setelah data berhasil dimuat ke dalam KNIME, tahapan yang terakhir adalah menjal
    * **No. missings:** Menyatakan jumlah data yang kosong (sebagai contoh, pada gas $CO$ terdapat 73 data yang kosong).
    * **Histogram:** Menyajikan visualisasi mengenai sebaran datanya.
 
-![Tabel Hasil Output Node Statistics](statistic1.png)(statistic2.png)(statistic3.png)
+![Tabel Hasil Output Node Statistics](statistic1.png)
+![Tabel Hasil Output Node Statistics](statistic2.png)
+![Tabel Hasil Output Node Statistics](statistic3.png)
