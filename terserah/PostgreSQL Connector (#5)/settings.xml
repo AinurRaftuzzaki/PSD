@@ -340,7 +340,7 @@
                 <entry key="knime.db.connection.jdbc.fetch_size" type="xint" value="10000"/>
                 <entry key="knime.db.dialect.sql.delimiter.identifier.closing" type="xstring" value="&quot;"/>
                 <entry key="knime.db.dialect.sql.delimiter.identifier.opening" type="xstring" value="&quot;"/>
-                <entry key="knime.db.connection.reconnect" type="xboolean" value="false"/>
+                <entry key="knime.db.connection.reconnect" type="xboolean" value="true"/>
                 <entry key="knime.db.connection.statement.cancellation.polling_period" type="xint" value="1000"/>
                 <entry key="knime.db.connection.idle.timeout" type="xint" value="0"/>
                 <entry key="knime.db.connection.metadata.table.types" type="xstring" value="TABLE, VIEW, MATERIALIZED VIEW"/>
@@ -391,7 +391,7 @@
             <entry key="index" type="xint" value="1"/>
             <entry key="port_spec_class" type="xstring" value="org.knime.database.port.DBSessionPortObjectSpec"/>
             <entry key="port_object_class" type="xstring" value="org.knime.database.port.DBSessionPortObject"/>
-            <entry key="port_object_summary" type="xstring" value="PostgreSQL 506f4257-b9ec-4bfe-a21b-b91f1a0b0296"/>
+            <entry key="port_object_summary" type="xstring" value="PostgreSQL ba123af8-79a5-493d-ac06-ff087f77832b"/>
             <entry key="port_spec_location" type="xstring" value="spec/spec.zip"/>
             <entry key="port_object_location" type="xstring" value="object/portobject.zip"/>
             <entry key="port_dir_location" type="xstring" value="port_1"/>
@@ -399,6 +399,6 @@
     </config>
     <config key="filestores">
         <entry key="file_store_location" type="xstring" isnull="true" value=""/>
-        <entry key="file_store_id" type="xstring" value="3ca3bada-bc23-44b9-ac66-90ae042db3b5"/>
+        <entry key="file_store_id" type="xstring" value="35c93c6d-134b-4af6-ad59-9af46234d2b1"/>
     </config>
 </config>

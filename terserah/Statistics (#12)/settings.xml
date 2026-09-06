@@ -6,72 +6,38 @@
         <entry key="memory_policy" type="xstring" value="CacheSmallInMemory"/>
     </config>
     <config key="model">
-        <config key="compute_median_Internals">
-            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
-            <entry key="EnabledStatus" type="xboolean" value="true"/>
-        </config>
         <entry key="compute_median" type="xboolean" value="false"/>
-        <config key="num_nominal-values_Internals">
-            <entry key="SettingsModelID" type="xstring" value="SMID_integer"/>
-            <entry key="EnabledStatus" type="xboolean" value="true"/>
-        </config>
-        <entry key="num_nominal-values" type="xint" value="20"/>
-        <config key="num_nominal-values_output_Internals">
-            <entry key="SettingsModelID" type="xstring" value="SMID_integer"/>
-            <entry key="EnabledStatus" type="xboolean" value="true"/>
-        </config>
-        <entry key="num_nominal-values_output" type="xint" value="1000"/>
-        <config key="filter_nominal_columns_Internals">
-            <entry key="SettingsModelID" type="xstring" value="SMID_columnfilter"/>
-            <entry key="EnabledStatus" type="xboolean" value="true"/>
-        </config>
         <config key="filter_nominal_columns">
             <entry key="filter-type" type="xstring" value="STANDARD"/>
             <config key="included_names">
-                <entry key="array-size" type="xint" value="2"/>
-                <entry key="0" type="xstring" value="date"/>
-                <entry key="1" type="xstring" value="CO"/>
+                <entry key="array-size" type="xint" value="3"/>
+                <entry key="0" type="xstring" value="CO"/>
+                <entry key="1" type="xstring" value="date"/>
+                <entry key="2" type="xstring" value="SO2"/>
             </config>
             <config key="excluded_names">
                 <entry key="array-size" type="xint" value="0"/>
             </config>
-            <entry key="enforce_option" type="xstring" value="EnforceInclusion"/>
+            <entry key="enforce_option" type="xstring" value="EnforceExclusion"/>
             <config key="name_pattern">
                 <entry key="pattern" type="xstring" value=""/>
-                <entry key="type" type="xstring" value="Wildcard"/>
                 <entry key="caseSensitive" type="xboolean" value="true"/>
                 <entry key="excludeMatching" type="xboolean" value="false"/>
+                <entry key="type" type="xstring" value="Wildcard"/>
             </config>
             <config key="datatype">
                 <config key="typelist"/>
             </config>
         </config>
-        <config key="image format_Internals">
-            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
-            <entry key="EnabledStatus" type="xboolean" value="true"/>
-        </config>
-        <entry key="image format" type="xstring" value="SVG"/>
-        <config key="histogram width_Internals">
-            <entry key="SettingsModelID" type="xstring" value="SMID_integer"/>
-            <entry key="EnabledStatus" type="xboolean" value="true"/>
-        </config>
-        <entry key="histogram width" type="xint" value="200"/>
-        <config key="histogram height_Internals">
-            <entry key="SettingsModelID" type="xstring" value="SMID_integer"/>
-            <entry key="EnabledStatus" type="xboolean" value="true"/>
-        </config>
-        <entry key="histogram height" type="xint" value="100"/>
-        <config key="enable HiLite_Internals">
-            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
-            <entry key="EnabledStatus" type="xboolean" value="true"/>
-        </config>
+        <entry key="num_nominal-values" type="xint" value="20"/>
+        <entry key="num_nominal-values_output" type="xint" value="1000"/>
         <entry key="enable HiLite" type="xboolean" value="false"/>
-        <config key="show min max_Internals">
-            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
-            <entry key="EnabledStatus" type="xboolean" value="true"/>
-        </config>
+        <entry key="image format" type="xstring" value="PNG"/>
+        <entry key="histogram width" type="xint" value="200"/>
+        <entry key="histogram height" type="xint" value="100"/>
         <entry key="show min max" type="xboolean" value="true"/>
     </config>
+    <config key="variables"/>
     <entry key="customDescription" type="xstring" isnull="true" value=""/>
     <entry key="state" type="xstring" value="EXECUTED"/>
     <entry key="factory" type="xstring" value="org.knime.base.node.stats.viz.extended.ExtendedStatisticsNodeFactory"/>
@@ -93,26 +59,26 @@
             <entry key="index" type="xint" value="1"/>
             <entry key="port_spec_class" type="xstring" value="org.knime.core.data.DataTableSpec"/>
             <entry key="port_object_class" type="xstring" value="org.knime.core.node.BufferedDataTable"/>
-            <entry key="port_object_summary" type="xstring" value="Rows: 0, Cols: 16"/>
+            <entry key="port_object_summary" type="xstring" value="Rows: 1, Cols: 16"/>
             <entry key="port_dir_location" type="xstring" value="port_1"/>
         </config>
         <config key="port_2">
             <entry key="index" type="xint" value="2"/>
             <entry key="port_spec_class" type="xstring" value="org.knime.core.data.DataTableSpec"/>
             <entry key="port_object_class" type="xstring" value="org.knime.core.node.BufferedDataTable"/>
-            <entry key="port_object_summary" type="xstring" value="Rows: 1, Cols: 3"/>
+            <entry key="port_object_summary" type="xstring" value="Rows: 2, Cols: 3"/>
             <entry key="port_dir_location" type="xstring" value="port_2"/>
         </config>
         <config key="port_3">
             <entry key="index" type="xint" value="3"/>
             <entry key="port_spec_class" type="xstring" value="org.knime.core.data.DataTableSpec"/>
             <entry key="port_object_class" type="xstring" value="org.knime.core.node.BufferedDataTable"/>
-            <entry key="port_object_summary" type="xstring" value="Rows: 241, Cols: 3"/>
+            <entry key="port_object_summary" type="xstring" value="Rows: 241, Cols: 6"/>
             <entry key="port_dir_location" type="xstring" value="port_3"/>
         </config>
     </config>
     <config key="filestores">
         <entry key="file_store_location" type="xstring" isnull="true" value=""/>
-        <entry key="file_store_id" type="xstring" value="eefdb574-3f3b-4238-a72c-a4558ce98615"/>
+        <entry key="file_store_id" type="xstring" value="00952e68-4fda-4a02-8a7b-227de3287505"/>
     </config>
 </config>

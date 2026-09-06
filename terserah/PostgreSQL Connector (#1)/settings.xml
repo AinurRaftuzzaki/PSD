@@ -340,7 +340,7 @@
                 <entry key="knime.db.connection.jdbc.fetch_size" type="xint" value="10000"/>
                 <entry key="knime.db.dialect.sql.delimiter.identifier.closing" type="xstring" value="&quot;"/>
                 <entry key="knime.db.dialect.sql.delimiter.identifier.opening" type="xstring" value="&quot;"/>
-                <entry key="knime.db.connection.reconnect" type="xboolean" value="false"/>
+                <entry key="knime.db.connection.reconnect" type="xboolean" value="true"/>
                 <entry key="knime.db.connection.statement.cancellation.polling_period" type="xint" value="1000"/>
                 <entry key="knime.db.connection.idle.timeout" type="xint" value="0"/>
                 <entry key="knime.db.connection.metadata.table.types" type="xstring" value="TABLE, VIEW, MATERIALIZED VIEW"/>
@@ -358,7 +358,7 @@
         </config>
         <entry key="host" type="xstring" value="pg-107b65f7-ainurraftuzzaki.d.aivencloud.com"/>
         <entry key="port" type="xint" value="10977"/>
-        <entry key="databaseName" type="xstring" value="defaultdb"/>
+        <entry key="databaseName" type="xstring" value=" defaultdb"/>
         <config key="authentication">
             <entry key="type" type="xstring" value="USER_PWD"/>
             <config key="credentials">
@@ -391,7 +391,7 @@
             <entry key="index" type="xint" value="1"/>
             <entry key="port_spec_class" type="xstring" value="org.knime.database.port.DBSessionPortObjectSpec"/>
             <entry key="port_object_class" type="xstring" value="org.knime.database.port.DBSessionPortObject"/>
-            <entry key="port_object_summary" type="xstring" value="PostgreSQL 97e0abb0-82e9-4e82-941b-88815a7009d4"/>
+            <entry key="port_object_summary" type="xstring" value="PostgreSQL 2555ca9d-7b58-4da4-861b-77e40deef8b1"/>
             <entry key="port_spec_location" type="xstring" value="spec/spec.zip"/>
             <entry key="port_object_location" type="xstring" value="object/portobject.zip"/>
             <entry key="port_dir_location" type="xstring" value="port_1"/>
@@ -399,6 +399,6 @@
     </config>
     <config key="filestores">
         <entry key="file_store_location" type="xstring" isnull="true" value=""/>
-        <entry key="file_store_id" type="xstring" value="f9084f41-c550-4a8c-a9b1-d0b11ac79377"/>
+        <entry key="file_store_id" type="xstring" value="0beed52c-0f53-43a5-913b-b41c9e6240ea"/>
     </config>
 </config>
