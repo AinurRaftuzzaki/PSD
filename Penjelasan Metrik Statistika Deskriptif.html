@@ -641,8 +641,10 @@ document.write(`
 <h2>Kolom <code class="docutils literal notranslate"><span class="pre">CO</span></code><a class="headerlink" href="#kolom-co" title="Link to this heading">#</a></h2>
 <p>Diketahui:
 $<span class="math notranslate nohighlight">\(
+\begin{aligned}
 n &amp;= 365 - 118 = 247 \\
 \bar{x} &amp;= 0.028
+\end{aligned}
 \)</span>$</p>
 <ol class="arabic simple">
 <li><p>Standar Deviasi
@@ -656,33 +658,40 @@ dimana:</p></li>
 </ul>
 <p>Std. Dev. yang tercatat pada tabel adalah <span class="math notranslate nohighlight">\(s = 0.0032\)</span>, sehingga jumlah kuadrat deviasi dapat ditelusuri kembali:
 $<span class="math notranslate nohighlight">\(
+\begin{aligned}
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= s^2 \times (n-1) \\
 \\
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= 0.0032^2 \times (247-1) \\
 \\
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= 0.00251904
+\end{aligned}
 \)</span><span class="math notranslate nohighlight">\(
 \)</span><span class="math notranslate nohighlight">\(
+\begin{aligned}
 s &amp;= \sqrt{\frac{0.00251904}{247-1}}\\
 \\
 s &amp;= \sqrt{0.0000102400}\\
 \\
 s &amp;= 0.0032
+\end{aligned}
 \)</span>$</p>
 <ol class="arabic simple" start="2">
 <li><p>Variansi
 Variansi dapat diketahui dengan mengkuadratkan <code class="docutils literal notranslate"><span class="pre">Standar</span> <span class="pre">Deviasi</span></code>
 $<span class="math notranslate nohighlight">\(
+\begin{aligned}
 v &amp;= s^2\\
 \\
 v &amp;= 0.0032^2\\
 \\
 v &amp;= 1.024E-05
+\end{aligned}
 \)</span>$</p></li>
 <li><p>Skewness
 $<span class="math notranslate nohighlight">\( Skewness = \frac{n}{(n-1)(n-2)} \sum_{i=1}^{n} \left(\frac{x_i - \bar{x}}{s}\right)^3 \)</span><span class="math notranslate nohighlight">\(
 Rumus diatas dapat dikelompokkan menjadi 2 untuk mempermudah perhitungan sehingga menjadi rumus sebagai berikut
 \)</span><span class="math notranslate nohighlight">\(
+\begin{aligned}
 Skewness &amp;= \underbrace{\frac{n}{(n-1)(n-2)}}_{A} \underbrace{\sum_{i=1}^{n}\left(\frac{x_i-\bar{x}}{s}\right)^3}_{B}\\
 \\
 A &amp;= \frac{n}{(n-1)(n-2)}\\
@@ -702,11 +711,13 @@ B &amp;= 16.86096\\
 Skewness &amp;= 0.0040982 \times 16.86096\\
 \\
 Skewness &amp;= 0.0691
+\end{aligned}
 \)</span>$</p></li>
 <li><p>Kurtosis
 $<span class="math notranslate nohighlight">\( Kurtosis = \left[ \frac{n(n+1)}{(n-1)(n-2)(n-3)} \sum \left(\frac{x_i - \bar{x}}{s}\right)^4 \right] - \frac{3(n-1)^2}{(n-2)(n-3)} \)</span><span class="math notranslate nohighlight">\(
 Rumus diatas dapat dikelompokkan menjadi 3 untuk mempermudah perhitungan sehingga menjadi rumus sebagai berikut
 \)</span><span class="math notranslate nohighlight">\(
+\begin{aligned}
 Kurtosis &amp;= \left[ \underbrace{\frac{n(n+1)}{(n-1)(n-2)(n-3)}}_{A} \underbrace{\sum \left(\frac{x_i - \bar{x}}{s}\right)^4}_{B} \right] - \underbrace{\frac{3(n-1)^2}{(n-2)(n-3)}}_{C} \\
 \\
 A &amp;= \frac{247(247+1)}{(247-1)(247-2)(247-3)}\\
@@ -734,10 +745,12 @@ B &amp;= 863.2131\\
 Kurtosis &amp;= 0.0041654 \times 863.2131 - 3.036935\\
 \\
 Kurtosis &amp;= 0.5587
+\end{aligned}
 \)</span>$</p></li>
 <li><p>Overall Sum
 Overall Sum adalah jumlah keseluruhan atau total dari seluruh nilai angka dalam suatu kumpulan data
 $<span class="math notranslate nohighlight">\(
+\begin{aligned}
 OS &amp;= \sum_{i=1}^{n}x_i \\
 \\
 OS &amp;= \bar{x} \times n \\
@@ -745,6 +758,7 @@ OS &amp;= \bar{x} \times n \\
 OS &amp;= 0.028 \times 247 \\
 \\
 OS &amp;= 6.916
+\end{aligned}
 \)</span>$</p></li>
 </ol>
 </section>
@@ -752,36 +766,45 @@ OS &amp;= 6.916
 <h2>Kolom <code class="docutils literal notranslate"><span class="pre">SO2</span></code><a class="headerlink" href="#kolom-so2" title="Link to this heading">#</a></h2>
 <p>Diketahui:
 $<span class="math notranslate nohighlight">\(
+\begin{aligned}
 n &amp;= 365 - 44 = 321 \\
 \bar{x} &amp;= 1.65E-06
+\end{aligned}
 \)</span>$</p>
 <ol class="arabic simple">
 <li><p>Standar Deviasi
 Std. Dev. yang tercatat pada tabel adalah <span class="math notranslate nohighlight">\(s = 6.58E-05\)</span>, sehingga jumlah kuadrat deviasi dapat ditelusuri kembali:
 $<span class="math notranslate nohighlight">\(
+\begin{aligned}
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= s^2 \times (n-1) \\
 \\
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= (6.58E-05)^2 \times (321-1) \\
 \\
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= 1.385485E-06
+\end{aligned}
 \)</span><span class="math notranslate nohighlight">\(
 \)</span><span class="math notranslate nohighlight">\(
+\begin{aligned}
 s &amp;= \sqrt{\frac{1.385485E-06}{321-1}}\\
 \\
 s &amp;= \sqrt{4.32964E-09}\\
 \\
 s &amp;= 6.58E-05
+\end{aligned}
 \)</span>$</p></li>
 <li><p>Variansi
 $<span class="math notranslate nohighlight">\(
+\begin{aligned}
 v &amp;= s^2\\
 \\
 v &amp;= (6.58E-05)^2\\
 \\
 v &amp;= 4.32964E-09
+\end{aligned}
 \)</span>$</p></li>
 <li><p>Skewness
 $<span class="math notranslate nohighlight">\(
+\begin{aligned}
 Skewness &amp;= \underbrace{\frac{n}{(n-1)(n-2)}}_{A} \underbrace{\sum_{i=1}^{n}\left(\frac{x_i-\bar{x}}{s}\right)^3}_{B}\\
 \\
 A &amp;= \frac{321}{(321-1)(321-2)} = \frac{321}{102080}\\
@@ -797,9 +820,11 @@ B &amp;= 474.9105\\
 Skewness &amp;= 0.0031446 \times 474.9105\\
 \\
 Skewness &amp;= 1.4934
+\end{aligned}
 \)</span>$</p></li>
 <li><p>Kurtosis
 $<span class="math notranslate nohighlight">\(
+\begin{aligned}
 A &amp;= \frac{321(321+1)}{(321-1)(321-2)(321-3)}\\
 \\
 A &amp;= \frac{103362}{32461440}\\
@@ -821,14 +846,17 @@ B &amp;= 3595.227\\
 Kurtosis &amp;= 0.0031841 \times 3595.227 - 3.028331\\
 \\
 Kurtosis &amp;= 8.4194
+\end{aligned}
 \)</span>$</p></li>
 <li><p>Overall Sum
 $<span class="math notranslate nohighlight">\(
+\begin{aligned}
 OS &amp;= \bar{x} \times n \\
 \\
 OS &amp;= 1.65E-06 \times 321 \\
 \\
 OS &amp;= 5.2965E-04
+\end{aligned}
 \)</span>$</p></li>
 </ol>
 </section>
@@ -836,36 +864,45 @@ OS &amp;= 5.2965E-04
 <h2>Kolom <code class="docutils literal notranslate"><span class="pre">NO2</span></code><a class="headerlink" href="#kolom-no2" title="Link to this heading">#</a></h2>
 <p>Diketahui:
 $<span class="math notranslate nohighlight">\(
+\begin{aligned}
 n &amp;= 365 - 87 = 278 \\
 \bar{x} &amp;= 6.96E-06
+\end{aligned}
 \)</span>$</p>
 <ol class="arabic simple">
 <li><p>Standar Deviasi
 Std. Dev. yang tercatat pada tabel adalah <span class="math notranslate nohighlight">\(s = 5.07E-06\)</span>, sehingga jumlah kuadrat deviasi dapat ditelusuri kembali:
 $<span class="math notranslate nohighlight">\(
+\begin{aligned}
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= s^2 \times (n-1) \\
 \\
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= (5.07E-06)^2 \times (278-1) \\
 \\
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= 7.120257E-09
+\end{aligned}
 \)</span><span class="math notranslate nohighlight">\(
 \)</span><span class="math notranslate nohighlight">\(
+\begin{aligned}
 s &amp;= \sqrt{\frac{7.120257E-09}{278-1}}\\
 \\
 s &amp;= \sqrt{2.57049E-11}\\
 \\
 s &amp;= 5.07E-06
+\end{aligned}
 \)</span>$</p></li>
 <li><p>Variansi
 $<span class="math notranslate nohighlight">\(
+\begin{aligned}
 v &amp;= s^2\\
 \\
 v &amp;= (5.07E-06)^2\\
 \\
 v &amp;= 2.57049E-11
+\end{aligned}
 \)</span>$</p></li>
 <li><p>Skewness
 $<span class="math notranslate nohighlight">\(
+\begin{aligned}
 Skewness &amp;= \underbrace{\frac{n}{(n-1)(n-2)}}_{A} \underbrace{\sum_{i=1}^{n}\left(\frac{x_i-\bar{x}}{s}\right)^3}_{B}\\
 \\
 A &amp;= \frac{278}{(278-1)(278-2)} = \frac{278}{76452}\\
@@ -881,9 +918,11 @@ B &amp;= -148.1189\\
 Skewness &amp;= 0.0036363 \times (-148.1189)\\
 \\
 Skewness &amp;= -0.5386
+\end{aligned}
 \)</span>$</p></li>
 <li><p>Kurtosis
 $<span class="math notranslate nohighlight">\(
+\begin{aligned}
 A &amp;= \frac{278(278+1)}{(278-1)(278-2)(278-3)}\\
 \\
 A &amp;= \frac{77562}{21024300}\\
@@ -905,14 +944,17 @@ B &amp;= 1393.018\\
 Kurtosis &amp;= 0.0036892 \times 1393.018 - 3.032767\\
 \\
 Kurtosis &amp;= 2.1063
+\end{aligned}
 \)</span>$</p></li>
 <li><p>Overall Sum
 $<span class="math notranslate nohighlight">\(
+\begin{aligned}
 OS &amp;= \bar{x} \times n \\
 \\
 OS &amp;= 6.96E-06 \times 278 \\
 \\
 OS &amp;= 1.93488E-03
+\end{aligned}
 \)</span>$</p></li>
 </ol>
 </section>
