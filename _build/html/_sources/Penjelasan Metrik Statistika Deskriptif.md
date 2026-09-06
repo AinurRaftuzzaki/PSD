@@ -159,8 +159,10 @@ Perhitungan manual di bawah ini menggunakan hasil statistik yang sudah tersedia 
 
 Diketahui:
 $$
+\begin{aligned}
 n &= 365 - 118 = 247 \\
 \bar{x} &= 0.028
+\end{aligned}
 $$
 
 1. Standar Deviasi
@@ -172,34 +174,41 @@ dimana:
 
 Std. Dev. yang tercatat pada tabel adalah $s = 0.0032$, sehingga jumlah kuadrat deviasi dapat ditelusuri kembali:
 $$
+\begin{aligned}
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &= s^2 \times (n-1) \\
 \\
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &= 0.0032^2 \times (247-1) \\
 \\
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &= 0.00251904
+\end{aligned}
 $$
 $$
+\begin{aligned}
 s &= \sqrt{\frac{0.00251904}{247-1}}\\
 \\
 s &= \sqrt{0.0000102400}\\
 \\
 s &= 0.0032
+\end{aligned}
 $$
 
 2. Variansi
 Variansi dapat diketahui dengan mengkuadratkan `Standar Deviasi`
 $$
+\begin{aligned}
 v &= s^2\\
 \\
 v &= 0.0032^2\\
 \\
 v &= 1.024E-05
+\end{aligned}
 $$
 
 3. Skewness
 $$ Skewness = \frac{n}{(n-1)(n-2)} \sum_{i=1}^{n} \left(\frac{x_i - \bar{x}}{s}\right)^3 $$
 Rumus diatas dapat dikelompokkan menjadi 2 untuk mempermudah perhitungan sehingga menjadi rumus sebagai berikut
 $$
+\begin{aligned}
 Skewness &= \underbrace{\frac{n}{(n-1)(n-2)}}_{A} \underbrace{\sum_{i=1}^{n}\left(\frac{x_i-\bar{x}}{s}\right)^3}_{B}\\
 \\
 A &= \frac{n}{(n-1)(n-2)}\\
@@ -219,12 +228,14 @@ B &= 16.86096\\
 Skewness &= 0.0040982 \times 16.86096\\
 \\
 Skewness &= 0.0691
+\end{aligned}
 $$
 
 4. Kurtosis
 $$ Kurtosis = \left[ \frac{n(n+1)}{(n-1)(n-2)(n-3)} \sum \left(\frac{x_i - \bar{x}}{s}\right)^4 \right] - \frac{3(n-1)^2}{(n-2)(n-3)} $$
 Rumus diatas dapat dikelompokkan menjadi 3 untuk mempermudah perhitungan sehingga menjadi rumus sebagai berikut
 $$
+\begin{aligned}
 Kurtosis &= \left[ \underbrace{\frac{n(n+1)}{(n-1)(n-2)(n-3)}}_{A} \underbrace{\sum \left(\frac{x_i - \bar{x}}{s}\right)^4}_{B} \right] - \underbrace{\frac{3(n-1)^2}{(n-2)(n-3)}}_{C} \\
 \\
 A &= \frac{247(247+1)}{(247-1)(247-2)(247-3)}\\
@@ -252,11 +263,13 @@ B &= 863.2131\\
 Kurtosis &= 0.0041654 \times 863.2131 - 3.036935\\
 \\
 Kurtosis &= 0.5587
+\end{aligned}
 $$
 
 5. Overall Sum
 Overall Sum adalah jumlah keseluruhan atau total dari seluruh nilai angka dalam suatu kumpulan data
 $$
+\begin{aligned}
 OS &= \sum_{i=1}^{n}x_i \\
 \\
 OS &= \bar{x} \times n \\
@@ -264,44 +277,54 @@ OS &= \bar{x} \times n \\
 OS &= 0.028 \times 247 \\
 \\
 OS &= 6.916
+\end{aligned}
 $$
 
 ## Kolom `SO2`
 
 Diketahui:
 $$
+\begin{aligned}
 n &= 365 - 44 = 321 \\
 \bar{x} &= 1.65E-06
+\end{aligned}
 $$
 
 1. Standar Deviasi
 Std. Dev. yang tercatat pada tabel adalah $s = 6.58E-05$, sehingga jumlah kuadrat deviasi dapat ditelusuri kembali:
 $$
+\begin{aligned}
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &= s^2 \times (n-1) \\
 \\
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &= (6.58E-05)^2 \times (321-1) \\
 \\
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &= 1.385485E-06
+\end{aligned}
 $$
 $$
+\begin{aligned}
 s &= \sqrt{\frac{1.385485E-06}{321-1}}\\
 \\
 s &= \sqrt{4.32964E-09}\\
 \\
 s &= 6.58E-05
+\end{aligned}
 $$
 
 2. Variansi
 $$
+\begin{aligned}
 v &= s^2\\
 \\
 v &= (6.58E-05)^2\\
 \\
 v &= 4.32964E-09
+\end{aligned}
 $$
 
 3. Skewness
 $$
+\begin{aligned}
 Skewness &= \underbrace{\frac{n}{(n-1)(n-2)}}_{A} \underbrace{\sum_{i=1}^{n}\left(\frac{x_i-\bar{x}}{s}\right)^3}_{B}\\
 \\
 A &= \frac{321}{(321-1)(321-2)} = \frac{321}{102080}\\
@@ -317,10 +340,12 @@ B &= 474.9105\\
 Skewness &= 0.0031446 \times 474.9105\\
 \\
 Skewness &= 1.4934
+\end{aligned}
 $$
 
 4. Kurtosis
 $$
+\begin{aligned}
 A &= \frac{321(321+1)}{(321-1)(321-2)(321-3)}\\
 \\
 A &= \frac{103362}{32461440}\\
@@ -342,53 +367,65 @@ B &= 3595.227\\
 Kurtosis &= 0.0031841 \times 3595.227 - 3.028331\\
 \\
 Kurtosis &= 8.4194
+\end{aligned}
 $$
 
 5. Overall Sum
 $$
+\begin{aligned}
 OS &= \bar{x} \times n \\
 \\
 OS &= 1.65E-06 \times 321 \\
 \\
 OS &= 5.2965E-04
+\end{aligned}
 $$
 
 ## Kolom `NO2`
 
 Diketahui:
 $$
+\begin{aligned}
 n &= 365 - 87 = 278 \\
 \bar{x} &= 6.96E-06
+\end{aligned}
 $$
 
 1. Standar Deviasi
 Std. Dev. yang tercatat pada tabel adalah $s = 5.07E-06$, sehingga jumlah kuadrat deviasi dapat ditelusuri kembali:
 $$
+\begin{aligned}
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &= s^2 \times (n-1) \\
 \\
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &= (5.07E-06)^2 \times (278-1) \\
 \\
 \sum_{i=1}^{n}(x_i-\bar{x})^2 &= 7.120257E-09
+\end{aligned}
 $$
 $$
+\begin{aligned}
 s &= \sqrt{\frac{7.120257E-09}{278-1}}\\
 \\
 s &= \sqrt{2.57049E-11}\\
 \\
 s &= 5.07E-06
+\end{aligned}
 $$
 
 2. Variansi
 $$
+\begin{aligned}
 v &= s^2\\
 \\
 v &= (5.07E-06)^2\\
 \\
 v &= 2.57049E-11
+\end{aligned}
 $$
 
 3. Skewness
 $$
+\begin{aligned}
 Skewness &= \underbrace{\frac{n}{(n-1)(n-2)}}_{A} \underbrace{\sum_{i=1}^{n}\left(\frac{x_i-\bar{x}}{s}\right)^3}_{B}\\
 \\
 A &= \frac{278}{(278-1)(278-2)} = \frac{278}{76452}\\
@@ -404,10 +441,12 @@ B &= -148.1189\\
 Skewness &= 0.0036363 \times (-148.1189)\\
 \\
 Skewness &= -0.5386
+\end{aligned}
 $$
 
 4. Kurtosis
 $$
+\begin{aligned}
 A &= \frac{278(278+1)}{(278-1)(278-2)(278-3)}\\
 \\
 A &= \frac{77562}{21024300}\\
@@ -429,13 +468,16 @@ B &= 1393.018\\
 Kurtosis &= 0.0036892 \times 1393.018 - 3.032767\\
 \\
 Kurtosis &= 2.1063
+\end{aligned}
 $$
 
 5. Overall Sum
 $$
+\begin{aligned}
 OS &= \bar{x} \times n \\
 \\
 OS &= 6.96E-06 \times 278 \\
 \\
 OS &= 1.93488E-03
+\end{aligned}
 $$
