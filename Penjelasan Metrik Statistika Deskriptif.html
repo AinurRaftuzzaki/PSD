@@ -400,7 +400,13 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-2-mengonfigurasi-koneksi-di-dbeaver">Langkah 2: Mengonfigurasi Koneksi di dbeaver</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-3-melakukan-inspeksi-tabel-data-di-dbeaver">Langkah 3: Melakukan Inspeksi Tabel Data di dbeaver</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-4-menyusun-alur-kerja-workflow-di-knime">Langkah 4: Menyusun Alur Kerja (Workflow) di KNIME</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-5-membaca-output-statistika-deskriptif">Langkah 5: Membaca Output Statistika Deskriptif</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-5-membaca-output-statistika-deskriptif">Langkah 5: Membaca Output Statistika Deskriptif</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#perhitungan-manual">Perhitungan Manual</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kolom-co">Kolom <code class="docutils literal notranslate"><span class="pre">CO</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kolom-so2">Kolom <code class="docutils literal notranslate"><span class="pre">SO2</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kolom-no2">Kolom <code class="docutils literal notranslate"><span class="pre">NO2</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -626,6 +632,289 @@ document.write(`
 <p><img alt="Tabel Hasil Output Node Statistics1" src="_images/statistic1.png" />
 <img alt="Tabel Hasil Output Node Statistics2" src="_images/statistic2.png" />
 <img alt="Tabel Hasil Output Node Statistics3" src="_images/statistic3.png" /></p>
+<section id="perhitungan-manual">
+<h3>Perhitungan Manual<a class="headerlink" href="#perhitungan-manual" title="Link to this heading">#</a></h3>
+<p>Perhitungan manual di bawah ini menggunakan hasil statistik yang sudah tersedia pada tabel ringkasan (Mean, Std. Dev., Skewness, Kurtosis) sebagai acuan. Total baris dataset adalah 365 baris, sehingga jumlah data valid (<code class="docutils literal notranslate"><span class="pre">n</span></code>) tiap kolom dihitung dari <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">=</span> <span class="pre">365</span> <span class="pre">-</span> <span class="pre">jumlah</span> <span class="pre">missing</span> <span class="pre">values</span></code>.</p>
+</section>
+</section>
+<section id="kolom-co">
+<h2>Kolom <code class="docutils literal notranslate"><span class="pre">CO</span></code><a class="headerlink" href="#kolom-co" title="Link to this heading">#</a></h2>
+<p>Diketahui:
+$<span class="math notranslate nohighlight">\(
+n &amp;= 365 - 118 = 247 \\
+\bar{x} &amp;= 0.028
+\)</span>$</p>
+<ol class="arabic simple">
+<li><p>Standar Deviasi
+$<span class="math notranslate nohighlight">\( s = \sqrt{\frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n-1}} \)</span>$
+dimana:</p></li>
+</ol>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(x_i\)</span> adalah data ke <span class="math notranslate nohighlight">\(i\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\bar{x}\)</span> adalah rata rata dari <span class="math notranslate nohighlight">\(x\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(n\)</span> adalah jumlah baris (dikarenakan terdapat missing values, <span class="math notranslate nohighlight">\(n = total baris - missing values\)</span>)</p></li>
+</ul>
+<p>Std. Dev. yang tercatat pada tabel adalah <span class="math notranslate nohighlight">\(s = 0.0032\)</span>, sehingga jumlah kuadrat deviasi dapat ditelusuri kembali:
+$<span class="math notranslate nohighlight">\(
+\sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= s^2 \times (n-1) \\
+\\
+\sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= 0.0032^2 \times (247-1) \\
+\\
+\sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= 0.00251904
+\)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\(
+s &amp;= \sqrt{\frac{0.00251904}{247-1}}\\
+\\
+s &amp;= \sqrt{0.0000102400}\\
+\\
+s &amp;= 0.0032
+\)</span>$</p>
+<ol class="arabic simple" start="2">
+<li><p>Variansi
+Variansi dapat diketahui dengan mengkuadratkan <code class="docutils literal notranslate"><span class="pre">Standar</span> <span class="pre">Deviasi</span></code>
+$<span class="math notranslate nohighlight">\(
+v &amp;= s^2\\
+\\
+v &amp;= 0.0032^2\\
+\\
+v &amp;= 1.024E-05
+\)</span>$</p></li>
+<li><p>Skewness
+$<span class="math notranslate nohighlight">\( Skewness = \frac{n}{(n-1)(n-2)} \sum_{i=1}^{n} \left(\frac{x_i - \bar{x}}{s}\right)^3 \)</span><span class="math notranslate nohighlight">\(
+Rumus diatas dapat dikelompokkan menjadi 2 untuk mempermudah perhitungan sehingga menjadi rumus sebagai berikut
+\)</span><span class="math notranslate nohighlight">\(
+Skewness &amp;= \underbrace{\frac{n}{(n-1)(n-2)}}_{A} \underbrace{\sum_{i=1}^{n}\left(\frac{x_i-\bar{x}}{s}\right)^3}_{B}\\
+\\
+A &amp;= \frac{n}{(n-1)(n-2)}\\
+\\
+A &amp;= \frac{247}{(247-1)(247-2)} = \frac{247}{60270}\\
+\\
+A &amp;= 0.0040982\\
+\\
+B &amp;= \sum_{i=1}^{n}\left(\frac{x_i-\bar{x}}{s}\right)^3\\
+\\
+B &amp;= \left(\frac{x_1 - 0.028}{0.0032}\right)^3 + \left(\frac{x_2 - 0.028}{0.0032}\right)^3 + \ldots + \left(\frac{x_n - 0.028}{0.0032}\right)^3\\
+\\
+B &amp;= \frac{Skewness}{A} = \frac{0.0691}{0.0040982}\\
+\\
+B &amp;= 16.86096\\
+\\
+Skewness &amp;= 0.0040982 \times 16.86096\\
+\\
+Skewness &amp;= 0.0691
+\)</span>$</p></li>
+<li><p>Kurtosis
+$<span class="math notranslate nohighlight">\( Kurtosis = \left[ \frac{n(n+1)}{(n-1)(n-2)(n-3)} \sum \left(\frac{x_i - \bar{x}}{s}\right)^4 \right] - \frac{3(n-1)^2}{(n-2)(n-3)} \)</span><span class="math notranslate nohighlight">\(
+Rumus diatas dapat dikelompokkan menjadi 3 untuk mempermudah perhitungan sehingga menjadi rumus sebagai berikut
+\)</span><span class="math notranslate nohighlight">\(
+Kurtosis &amp;= \left[ \underbrace{\frac{n(n+1)}{(n-1)(n-2)(n-3)}}_{A} \underbrace{\sum \left(\frac{x_i - \bar{x}}{s}\right)^4}_{B} \right] - \underbrace{\frac{3(n-1)^2}{(n-2)(n-3)}}_{C} \\
+\\
+A &amp;= \frac{247(247+1)}{(247-1)(247-2)(247-3)}\\
+\\
+A &amp;= \frac{61256}{14705880}\\
+\\
+A &amp;= 0.0041654 \\
+\\
+C &amp;= \frac{3(n-1)^2}{(n-2)(n-3)}\\
+\\
+C &amp;= \frac{3(247-1)^2}{(247-2)(247-3)}\\
+\\
+C &amp;= \frac{181548}{59780}\\
+\\
+C &amp;= 3.036935\\
+\\
+B &amp;= \sum_{i=1}^{n}\left(\frac{x_i-\bar{x}}{s}\right)^4\\
+\\
+B &amp;= \left(\frac{x_1 - 0.028}{0.0032}\right)^4 + \left(\frac{x_2 - 0.028}{0.0032}\right)^4 + \ldots + \left(\frac{x_n - 0.028}{0.0032}\right)^4\\
+\\
+B &amp;= \frac{Kurtosis + C}{A} = \frac{0.5587 + 3.036935}{0.0041654}\\
+\\
+B &amp;= 863.2131\\
+\\
+Kurtosis &amp;= 0.0041654 \times 863.2131 - 3.036935\\
+\\
+Kurtosis &amp;= 0.5587
+\)</span>$</p></li>
+<li><p>Overall Sum
+Overall Sum adalah jumlah keseluruhan atau total dari seluruh nilai angka dalam suatu kumpulan data
+$<span class="math notranslate nohighlight">\(
+OS &amp;= \sum_{i=1}^{n}x_i \\
+\\
+OS &amp;= \bar{x} \times n \\
+\\
+OS &amp;= 0.028 \times 247 \\
+\\
+OS &amp;= 6.916
+\)</span>$</p></li>
+</ol>
+</section>
+<section id="kolom-so2">
+<h2>Kolom <code class="docutils literal notranslate"><span class="pre">SO2</span></code><a class="headerlink" href="#kolom-so2" title="Link to this heading">#</a></h2>
+<p>Diketahui:
+$<span class="math notranslate nohighlight">\(
+n &amp;= 365 - 44 = 321 \\
+\bar{x} &amp;= 1.65E-06
+\)</span>$</p>
+<ol class="arabic simple">
+<li><p>Standar Deviasi
+Std. Dev. yang tercatat pada tabel adalah <span class="math notranslate nohighlight">\(s = 6.58E-05\)</span>, sehingga jumlah kuadrat deviasi dapat ditelusuri kembali:
+$<span class="math notranslate nohighlight">\(
+\sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= s^2 \times (n-1) \\
+\\
+\sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= (6.58E-05)^2 \times (321-1) \\
+\\
+\sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= 1.385485E-06
+\)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\(
+s &amp;= \sqrt{\frac{1.385485E-06}{321-1}}\\
+\\
+s &amp;= \sqrt{4.32964E-09}\\
+\\
+s &amp;= 6.58E-05
+\)</span>$</p></li>
+<li><p>Variansi
+$<span class="math notranslate nohighlight">\(
+v &amp;= s^2\\
+\\
+v &amp;= (6.58E-05)^2\\
+\\
+v &amp;= 4.32964E-09
+\)</span>$</p></li>
+<li><p>Skewness
+$<span class="math notranslate nohighlight">\(
+Skewness &amp;= \underbrace{\frac{n}{(n-1)(n-2)}}_{A} \underbrace{\sum_{i=1}^{n}\left(\frac{x_i-\bar{x}}{s}\right)^3}_{B}\\
+\\
+A &amp;= \frac{321}{(321-1)(321-2)} = \frac{321}{102080}\\
+\\
+A &amp;= 0.0031446\\
+\\
+B &amp;= \left(\frac{x_1 - 1.65E-06}{6.58E-05}\right)^3 + \left(\frac{x_2 - 1.65E-06}{6.58E-05}\right)^3 + \ldots + \left(\frac{x_n - 1.65E-06}{6.58E-05}\right)^3\\
+\\
+B &amp;= \frac{Skewness}{A} = \frac{1.4934}{0.0031446}\\
+\\
+B &amp;= 474.9105\\
+\\
+Skewness &amp;= 0.0031446 \times 474.9105\\
+\\
+Skewness &amp;= 1.4934
+\)</span>$</p></li>
+<li><p>Kurtosis
+$<span class="math notranslate nohighlight">\(
+A &amp;= \frac{321(321+1)}{(321-1)(321-2)(321-3)}\\
+\\
+A &amp;= \frac{103362}{32461440}\\
+\\
+A &amp;= 0.0031841 \\
+\\
+C &amp;= \frac{3(321-1)^2}{(321-2)(321-3)}\\
+\\
+C &amp;= \frac{307200}{101442}\\
+\\
+C &amp;= 3.028331\\
+\\
+B &amp;= \left(\frac{x_1 - 1.65E-06}{6.58E-05}\right)^4 + \left(\frac{x_2 - 1.65E-06}{6.58E-05}\right)^4 + \ldots + \left(\frac{x_n - 1.65E-06}{6.58E-05}\right)^4\\
+\\
+B &amp;= \frac{Kurtosis + C}{A} = \frac{8.4194 + 3.028331}{0.0031841}\\
+\\
+B &amp;= 3595.227\\
+\\
+Kurtosis &amp;= 0.0031841 \times 3595.227 - 3.028331\\
+\\
+Kurtosis &amp;= 8.4194
+\)</span>$</p></li>
+<li><p>Overall Sum
+$<span class="math notranslate nohighlight">\(
+OS &amp;= \bar{x} \times n \\
+\\
+OS &amp;= 1.65E-06 \times 321 \\
+\\
+OS &amp;= 5.2965E-04
+\)</span>$</p></li>
+</ol>
+</section>
+<section id="kolom-no2">
+<h2>Kolom <code class="docutils literal notranslate"><span class="pre">NO2</span></code><a class="headerlink" href="#kolom-no2" title="Link to this heading">#</a></h2>
+<p>Diketahui:
+$<span class="math notranslate nohighlight">\(
+n &amp;= 365 - 87 = 278 \\
+\bar{x} &amp;= 6.96E-06
+\)</span>$</p>
+<ol class="arabic simple">
+<li><p>Standar Deviasi
+Std. Dev. yang tercatat pada tabel adalah <span class="math notranslate nohighlight">\(s = 5.07E-06\)</span>, sehingga jumlah kuadrat deviasi dapat ditelusuri kembali:
+$<span class="math notranslate nohighlight">\(
+\sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= s^2 \times (n-1) \\
+\\
+\sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= (5.07E-06)^2 \times (278-1) \\
+\\
+\sum_{i=1}^{n}(x_i-\bar{x})^2 &amp;= 7.120257E-09
+\)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\(
+s &amp;= \sqrt{\frac{7.120257E-09}{278-1}}\\
+\\
+s &amp;= \sqrt{2.57049E-11}\\
+\\
+s &amp;= 5.07E-06
+\)</span>$</p></li>
+<li><p>Variansi
+$<span class="math notranslate nohighlight">\(
+v &amp;= s^2\\
+\\
+v &amp;= (5.07E-06)^2\\
+\\
+v &amp;= 2.57049E-11
+\)</span>$</p></li>
+<li><p>Skewness
+$<span class="math notranslate nohighlight">\(
+Skewness &amp;= \underbrace{\frac{n}{(n-1)(n-2)}}_{A} \underbrace{\sum_{i=1}^{n}\left(\frac{x_i-\bar{x}}{s}\right)^3}_{B}\\
+\\
+A &amp;= \frac{278}{(278-1)(278-2)} = \frac{278}{76452}\\
+\\
+A &amp;= 0.0036363\\
+\\
+B &amp;= \left(\frac{x_1 - 6.96E-06}{5.07E-06}\right)^3 + \left(\frac{x_2 - 6.96E-06}{5.07E-06}\right)^3 + \ldots + \left(\frac{x_n - 6.96E-06}{5.07E-06}\right)^3\\
+\\
+B &amp;= \frac{Skewness}{A} = \frac{-0.5386}{0.0036363}\\
+\\
+B &amp;= -148.1189\\
+\\
+Skewness &amp;= 0.0036363 \times (-148.1189)\\
+\\
+Skewness &amp;= -0.5386
+\)</span>$</p></li>
+<li><p>Kurtosis
+$<span class="math notranslate nohighlight">\(
+A &amp;= \frac{278(278+1)}{(278-1)(278-2)(278-3)}\\
+\\
+A &amp;= \frac{77562}{21024300}\\
+\\
+A &amp;= 0.0036892 \\
+\\
+C &amp;= \frac{3(278-1)^2}{(278-2)(278-3)}\\
+\\
+C &amp;= \frac{230187}{75900}\\
+\\
+C &amp;= 3.032767\\
+\\
+B &amp;= \left(\frac{x_1 - 6.96E-06}{5.07E-06}\right)^4 + \left(\frac{x_2 - 6.96E-06}{5.07E-06}\right)^4 + \ldots + \left(\frac{x_n - 6.96E-06}{5.07E-06}\right)^4\\
+\\
+B &amp;= \frac{Kurtosis + C}{A} = \frac{2.1063 + 3.032767}{0.0036892}\\
+\\
+B &amp;= 1393.018\\
+\\
+Kurtosis &amp;= 0.0036892 \times 1393.018 - 3.032767\\
+\\
+Kurtosis &amp;= 2.1063
+\)</span>$</p></li>
+<li><p>Overall Sum
+$<span class="math notranslate nohighlight">\(
+OS &amp;= \bar{x} \times n \\
+\\
+OS &amp;= 6.96E-06 \times 278 \\
+\\
+OS &amp;= 1.93488E-03
+\)</span>$</p></li>
+</ol>
 </section>
 </section>
 
@@ -701,7 +990,13 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-2-mengonfigurasi-koneksi-di-dbeaver">Langkah 2: Mengonfigurasi Koneksi di dbeaver</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-3-melakukan-inspeksi-tabel-data-di-dbeaver">Langkah 3: Melakukan Inspeksi Tabel Data di dbeaver</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-4-menyusun-alur-kerja-workflow-di-knime">Langkah 4: Menyusun Alur Kerja (Workflow) di KNIME</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-5-membaca-output-statistika-deskriptif">Langkah 5: Membaca Output Statistika Deskriptif</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-5-membaca-output-statistika-deskriptif">Langkah 5: Membaca Output Statistika Deskriptif</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#perhitungan-manual">Perhitungan Manual</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kolom-co">Kolom <code class="docutils literal notranslate"><span class="pre">CO</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kolom-so2">Kolom <code class="docutils literal notranslate"><span class="pre">SO2</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kolom-no2">Kolom <code class="docutils literal notranslate"><span class="pre">NO2</span></code></a></li>
 </ul>
 </li>
 </ul>
