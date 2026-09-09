@@ -467,19 +467,19 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:00 Job 'j-2609091500154385a857cbf2a11f80f8': send 'start'
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:00 Job 'j-2609091506094232b76c75cac52968e8': send 'start'
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:05 Job 'j-2609091500154385a857cbf2a11f80f8': queued (progress 0%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:04 Job 'j-2609091506094232b76c75cac52968e8': queued (progress 0%)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:11 Job 'j-2609091500154385a857cbf2a11f80f8': queued (progress 0%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:10 Job 'j-2609091506094232b76c75cac52968e8': queued (progress 0%)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:18 Job 'j-2609091500154385a857cbf2a11f80f8': queued (progress 0%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:18 Job 'j-2609091506094232b76c75cac52968e8': queued (progress 0%)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:26 Job 'j-2609091500154385a857cbf2a11f80f8': queued (progress 0%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:26 Job 'j-2609091506094232b76c75cac52968e8': queued (progress 0%)
 </pre></div>
 </div>
 </div>
@@ -1206,6 +1206,26 @@ DatetimeIndex(['2025-08-25', '2025-08-26', '2025-08-27', '2025-08-28',
 </div>
 <div class="cell_output docutils container">
 <img alt="_images/13c5095fa4aaa1a77c4a715a2bf96ee8c5986e96d451049bc839dd25b13b627f.png" src="_images/13c5095fa4aaa1a77c4a715a2bf96ee8c5986e96d451049bc839dd25b13b627f.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">df_co</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"CO_Nunukan_Timeseries.csv"</span><span class="p">)</span>
+<span class="n">df_no2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"NO2_Nunukan_Timeseries.csv"</span><span class="p">)</span>
+<span class="n">df_so2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"SO2_Nunukan_Timeseries.csv"</span><span class="p">)</span>
+
+<span class="n">dataframe_merged</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">"date"</span><span class="p">:</span> <span class="n">df_co</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span>
+    <span class="s2">"CO"</span><span class="p">:</span> <span class="n">df_co</span><span class="p">[</span><span class="s1">'CO'</span><span class="p">],</span>
+    <span class="s2">"NO2"</span><span class="p">:</span> <span class="n">df_no2</span><span class="p">[</span><span class="s1">'NO2'</span><span class="p">],</span>
+    <span class="s2">"SO2"</span><span class="p">:</span> <span class="n">df_so2</span><span class="p">[</span><span class="s1">'SO2'</span><span class="p">]</span>
+<span class="p">})</span>
+
+<span class="n">dataframe_merged</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"Polutan_Nunukan.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="cell docutils container">

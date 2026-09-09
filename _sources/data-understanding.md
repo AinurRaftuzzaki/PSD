@@ -404,6 +404,6 @@ dataframe_merged.to_csv("Polutan_Nunukan.csv", index=False)
 
 ```{code-cell}
 :tags: [hide-input]
-df = pd.read_csv("../../data/polutan/Polutan_Nganjuk.csv")
+df = pd.read_csv("Polutan_Nunukan.csv")
 df.head(5)
 ```
