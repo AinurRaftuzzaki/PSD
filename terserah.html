@@ -467,19 +467,19 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:00 Job 'j-2609060730314e409303ae1f6d9667c0': send 'start'
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:00 Job 'j-26090912160848229c5f0b9554af5e0c': send 'start'
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:04 Job 'j-2609060730314e409303ae1f6d9667c0': queued (progress 0%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:05 Job 'j-26090912160848229c5f0b9554af5e0c': created (progress 0%)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:09 Job 'j-2609060730314e409303ae1f6d9667c0': queued (progress 0%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:10 Job 'j-26090912160848229c5f0b9554af5e0c': queued (progress 0%)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:16 Job 'j-2609060730314e409303ae1f6d9667c0': queued (progress 0%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:17 Job 'j-26090912160848229c5f0b9554af5e0c': queued (progress 0%)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:24 Job 'j-2609060730314e409303ae1f6d9667c0': queued (progress 0%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:25 Job 'j-26090912160848229c5f0b9554af5e0c': queued (progress 0%)
 </pre></div>
 </div>
 </div>
@@ -540,8 +540,10 @@ document.write(`
 
 <span class="n">file_path</span> <span class="o">=</span> <span class="s2">"NO2DiNunukan.nc"</span>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
-<span class="c1"># Ambil NO2</span>
+
+<span class="c1"># Ambil NO2 sebagai masked array, lalu ubah data kosong (masked) jadi NaN</span>
 <span class="n">no2</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"NO2"</span><span class="p">][:]</span>
+<span class="n">no2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">no2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
 <span class="c1"># Ambil Time</span>
 <span class="n">time</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"t"</span><span class="p">][:]</span>
@@ -553,21 +555,27 @@ document.write(`
 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
     <span class="n">dates</span> <span class="o">=</span> <span class="n">time</span>  <span class="c1"># fallback jika tidak ada units</span>
 
-        
 <span class="n">new_dates</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">new_no2</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)):</span>
     <span class="n">new_date</span> <span class="o">=</span> <span class="n">dates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">)</span>
     <span class="n">new_dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_date</span><span class="p">)</span>
-    <span class="n">new_no2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">no2</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+    <span class="n">daily_data</span> <span class="o">=</span> <span class="n">no2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">daily_data</span><span class="p">)):</span>
+        <span class="c1"># Kalau seluruh data hari itu kosong, hasilnya NaN</span>
+        <span class="n">new_no2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># np.nanmean mengabaikan NaN saat menghitung rata-rata</span>
+        <span class="n">new_no2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">daily_data</span><span class="p">))</span>
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
     <span class="s2">"date"</span><span class="p">:</span> <span class="n">new_dates</span><span class="p">,</span>
     <span class="s2">"NO2"</span><span class="p">:</span> <span class="n">new_no2</span>
 <span class="p">})</span>
 
-<span class="c1"># Simpan ke CSV</span>
+<span class="c1"># Simpan ke CSV (NaN otomatis ditulis sebagai kosong/"" oleh pandas)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"NO2_Nunukan_timeseries.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -575,13 +583,16 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">netCDF4</span>
 
 <span class="n">file_path</span> <span class="o">=</span> <span class="s2">"SO2DiNunukan.nc"</span>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
-<span class="c1"># Ambil SO2</span>
+
+<span class="c1"># Ambil SO2 sebagai masked array, lalu ubah data kosong (masked) jadi NaN</span>
 <span class="n">so2</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"SO2"</span><span class="p">][:]</span>
+<span class="n">so2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">so2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
 <span class="c1"># Ambil Time</span>
 <span class="n">time</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"t"</span><span class="p">][:]</span>
@@ -593,21 +604,27 @@ document.write(`
 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
     <span class="n">dates</span> <span class="o">=</span> <span class="n">time</span>  <span class="c1"># fallback jika tidak ada units</span>
 
-        
 <span class="n">new_dates</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">new_no2</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">new_so2</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)):</span>
     <span class="n">new_date</span> <span class="o">=</span> <span class="n">dates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">)</span>
     <span class="n">new_dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_date</span><span class="p">)</span>
-    <span class="n">new_no2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">no2</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+    <span class="n">daily_data</span> <span class="o">=</span> <span class="n">so2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">daily_data</span><span class="p">)):</span>
+        <span class="c1"># Kalau seluruh data hari itu kosong, hasilnya NaN</span>
+        <span class="n">new_so2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># np.nanmean mengabaikan NaN saat menghitung rata-rata</span>
+        <span class="n">new_so2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">daily_data</span><span class="p">))</span>
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
     <span class="s2">"date"</span><span class="p">:</span> <span class="n">new_dates</span><span class="p">,</span>
-    <span class="s2">"SO2"</span><span class="p">:</span> <span class="n">new_no2</span>
+    <span class="s2">"SO2"</span><span class="p">:</span> <span class="n">new_so2</span>
 <span class="p">})</span>
 
-<span class="c1"># Simpan ke CSV</span>
+<span class="c1"># Simpan ke CSV (NaN otomatis ditulis sebagai kosong/"" oleh pandas)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"SO2_Nunukan_timeseries.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -615,13 +632,16 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">netCDF4</span>
 
 <span class="n">file_path</span> <span class="o">=</span> <span class="s2">"CODiNunukan.nc"</span>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
-<span class="c1"># Ambil CO</span>
+
+<span class="c1"># Ambil CO sebagai masked array, lalu ubah data kosong (masked) jadi NaN</span>
 <span class="n">co</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"CO"</span><span class="p">][:]</span>
+<span class="n">co</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">co</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
 <span class="c1"># Ambil Time</span>
 <span class="n">time</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"t"</span><span class="p">][:]</span>
@@ -633,21 +653,27 @@ document.write(`
 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
     <span class="n">dates</span> <span class="o">=</span> <span class="n">time</span>  <span class="c1"># fallback jika tidak ada units</span>
 
-        
 <span class="n">new_dates</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">new_no2</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">new_co</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)):</span>
     <span class="n">new_date</span> <span class="o">=</span> <span class="n">dates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">)</span>
     <span class="n">new_dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_date</span><span class="p">)</span>
-    <span class="n">new_no2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">no2</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+    <span class="n">daily_data</span> <span class="o">=</span> <span class="n">co</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">daily_data</span><span class="p">)):</span>
+        <span class="c1"># Kalau seluruh data hari itu kosong, hasilnya NaN</span>
+        <span class="n">new_co</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># np.nanmean mengabaikan NaN saat menghitung rata-rata</span>
+        <span class="n">new_co</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">daily_data</span><span class="p">))</span>
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
     <span class="s2">"date"</span><span class="p">:</span> <span class="n">new_dates</span><span class="p">,</span>
-    <span class="s2">"CO"</span><span class="p">:</span> <span class="n">new_no2</span>
+    <span class="s2">"CO"</span><span class="p">:</span> <span class="n">new_co</span>
 <span class="p">})</span>
 
-<span class="c1"># Simpan ke CSV</span>
+<span class="c1"># Simpan ke CSV (NaN otomatis ditulis sebagai kosong/"" oleh pandas)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"CO_Nunukan_timeseries.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -841,6 +867,221 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <img alt="_images/7db55747bb00cd667bb806255107d0bd3a297b0f07588db55b5a373f080c0d4e.png" src="_images/7db55747bb00cd667bb806255107d0bd3a297b0f07588db55b5a373f080c0d4e.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"CO_Nunukan_Timeseries.csv"</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'date'</span><span class="p">])</span>
+
+<span class="c1"># Buat rentang tanggal lengkap</span>
+<span class="n">start_date</span> <span class="o">=</span> <span class="s2">"2025-08-25"</span>
+<span class="n">end_date</span>   <span class="o">=</span> <span class="s2">"2026-08-25"</span>
+<span class="n">full_range</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">'D'</span><span class="p">)</span>
+
+<span class="c1"># Cek tanggal yang hilang</span>
+<span class="n">missing_dates</span> <span class="o">=</span> <span class="n">full_range</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'date'</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Jumlah hari missing: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">missing_dates</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Daftar tanggal missing:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">missing_dates</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Jumlah hari missing: 125
+Daftar tanggal missing:
+DatetimeIndex(['2025-08-25', '2025-08-26', '2025-08-27', '2025-08-28',
+               '2025-08-29', '2025-08-30', '2025-08-31', '2025-09-01',
+               '2025-09-02', '2025-09-03',
+               ...
+               '2026-08-16', '2026-08-17', '2026-08-18', '2026-08-19',
+               '2026-08-20', '2026-08-21', '2026-08-22', '2026-08-23',
+               '2026-08-24', '2026-08-25'],
+              dtype='datetime64[ns]', length=125, freq=None)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"SO2_Nunukan_Timeseries.csv"</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'date'</span><span class="p">])</span>
+
+<span class="c1"># Buat rentang tanggal lengkap</span>
+<span class="n">start_date</span> <span class="o">=</span> <span class="s2">"2025-08-25"</span>
+<span class="n">end_date</span>   <span class="o">=</span> <span class="s2">"2026-08-25"</span>
+<span class="n">full_range</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">'D'</span><span class="p">)</span>
+
+<span class="c1"># Cek tanggal yang hilang</span>
+<span class="n">missing_dates</span> <span class="o">=</span> <span class="n">full_range</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'date'</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Jumlah hari missing: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">missing_dates</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Daftar tanggal missing:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">missing_dates</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Jumlah hari missing: 125
+Daftar tanggal missing:
+DatetimeIndex(['2025-08-25', '2025-08-26', '2025-08-27', '2025-08-28',
+               '2025-08-29', '2025-08-30', '2025-08-31', '2025-09-01',
+               '2025-09-02', '2025-09-03',
+               ...
+               '2026-08-16', '2026-08-17', '2026-08-18', '2026-08-19',
+               '2026-08-20', '2026-08-21', '2026-08-22', '2026-08-23',
+               '2026-08-24', '2026-08-25'],
+              dtype='datetime64[ns]', length=125, freq=None)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"NO2_Nunukan_Timeseries.csv"</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'date'</span><span class="p">])</span>
+
+<span class="c1"># Buat rentang tanggal lengkap</span>
+<span class="n">start_date</span> <span class="o">=</span> <span class="s2">"2025-08-25"</span>
+<span class="n">end_date</span>   <span class="o">=</span> <span class="s2">"2026-08-25"</span>
+<span class="n">full_range</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">'D'</span><span class="p">)</span>
+
+<span class="c1"># Cek tanggal yang hilang</span>
+<span class="n">missing_dates</span> <span class="o">=</span> <span class="n">full_range</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'date'</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Jumlah hari missing: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">missing_dates</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Daftar tanggal missing:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">missing_dates</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Jumlah hari missing: 125
+Daftar tanggal missing:
+DatetimeIndex(['2025-08-25', '2025-08-26', '2025-08-27', '2025-08-28',
+               '2025-08-29', '2025-08-30', '2025-08-31', '2025-09-01',
+               '2025-09-02', '2025-09-03',
+               ...
+               '2026-08-16', '2026-08-17', '2026-08-18', '2026-08-19',
+               '2026-08-20', '2026-08-21', '2026-08-22', '2026-08-23',
+               '2026-08-24', '2026-08-25'],
+              dtype='datetime64[ns]', length=125, freq=None)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"CO_Nunukan_Timeseries.csv"</span><span class="p">)</span>
+<span class="n">missing_value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'CO'</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">missing_value</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"NO2_Nunukan_Timeseries.csv"</span><span class="p">)</span>
+<span class="n">missing_value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'NO2'</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">missing_value</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tsfel</span>
+
+<span class="c1"># 1. Load data</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"data_kualitas_udara_sample20.csv"</span><span class="p">)</span>
+<span class="n">kolom_polutan</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"CO"</span><span class="p">,</span> <span class="s2">"SO2"</span><span class="p">,</span> <span class="s2">"NO2"</span><span class="p">,</span> <span class="s2">"PM2.5"</span><span class="p">,</span> <span class="s2">"PM10"</span><span class="p">,</span> <span class="s2">"O3"</span><span class="p">]</span>
+
+<span class="c1"># 2. Definisikan 14 fitur statistik &amp; temporal yang dipilih dari TSFEL</span>
+<span class="c1">#    (statistical + temporal domain, cocok untuk data pendek 20 titik)</span>
+<span class="n">fitur_terpilih</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"statistical"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">"Mean"</span><span class="p">,</span>
+        <span class="s2">"Median"</span><span class="p">,</span>
+        <span class="s2">"Standard deviation"</span><span class="p">,</span>
+        <span class="s2">"Variance"</span><span class="p">,</span>
+        <span class="s2">"Skewness"</span><span class="p">,</span>
+        <span class="s2">"Kurtosis"</span><span class="p">,</span>
+        <span class="s2">"Root mean square"</span><span class="p">,</span>
+        <span class="s2">"Max"</span><span class="p">,</span>
+        <span class="s2">"Min"</span><span class="p">,</span>
+        <span class="s2">"Interquartile range"</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">"temporal"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">"Mean absolute diff"</span><span class="p">,</span>
+        <span class="s2">"Mean diff"</span><span class="p">,</span>
+        <span class="s2">"Slope"</span><span class="p">,</span>
+        <span class="s2">"Zero crossing rate"</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+
+<span class="c1"># 3. Ambil konfigurasi default TSFEL lalu filter hanya 14 fitur di atas</span>
+<span class="n">cfg</span> <span class="o">=</span> <span class="n">tsfel</span><span class="o">.</span><span class="n">get_features_by_domain</span><span class="p">()</span>
+
+<span class="n">nama_fitur_dipilih</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">fitur_terpilih</span><span class="p">[</span><span class="s2">"statistical"</span><span class="p">]</span> <span class="o">+</span> <span class="n">fitur_terpilih</span><span class="p">[</span><span class="s2">"temporal"</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">domain</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+    <span class="k">for</span> <span class="n">nama_fitur</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">domain</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="n">nama_fitur</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">nama_fitur_dipilih</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">cfg</span><span class="p">[</span><span class="n">domain</span><span class="p">][</span><span class="n">nama_fitur</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">domain</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">cfg</span><span class="p">[</span><span class="n">domain</span><span class="p">]</span>
+
+<span class="c1"># 4. Ekstraksi fitur untuk tiap kolom polutan (masing-masing dianggap 1 sinyal time series)</span>
+<span class="n">hasil_semua</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">kolom</span> <span class="ow">in</span> <span class="n">kolom_polutan</span><span class="p">:</span>
+    <span class="n">sinyal</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">kolom</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">fitur_df</span> <span class="o">=</span> <span class="n">tsfel</span><span class="o">.</span><span class="n">time_series_features_extractor</span><span class="p">(</span>
+        <span class="n">cfg</span><span class="p">,</span> <span class="n">sinyal</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span>
+    <span class="p">)</span>
+    <span class="n">fitur_df</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"variabel"</span><span class="p">,</span> <span class="n">kolom</span><span class="p">)</span>
+    <span class="n">hasil_semua</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fitur_df</span><span class="p">)</span>
+
+<span class="n">hasil_akhir</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">hasil_semua</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># 5. Simpan hasil</span>
+<span class="n">hasil_akhir</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"fitur_tsfel_hasil.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Jumlah fitur yang diekstrak: </span><span class="si">{</span><span class="n">hasil_akhir</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">hasil_akhir</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">tsfel</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1"># 1. Load data</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"data_kualitas_udara_sample20.csv"</span><span class="p">)</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named 'tsfel'
+</pre></div>
+</div>
 </div>
 </div>
 
