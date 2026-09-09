@@ -211,3 +211,342 @@ import numpy as np
 df = pd.read_csv("NO2_Nunukan_timeseries.csv")
 df.head(5)
 ```
+
+### Data Yang Hilang
+
+Selain urutan tanggal, kita juga mengecek jumlah baris data yang memiliki nilai konsentrasi polutan kosong (`NaN`).
+
+1. CO
+
+```{code-cell}
+df = pd.read_csv("../../data/polutan/CO_Timeseries.csv")
+missing_value = df['CO'].isna().sum()
+print(missing_value)
+```
+
+Implementasi pada tools `Orange Data Mining`
+```{image} ../../img/polutan/co_missing.png
+:alt: Grafik Data
+:width: 100%
+:align: center
+```
+
+2. SO₂
+
+```{code-cell}
+df = pd.read_csv("../../data/polutan/SO2_Timeseries.csv")
+missing_value = df['SO2'].isna().sum()
+print(missing_value)
+```
+
+Implementasi pada tools `Orange Data Mining`
+
+```{image} ../../img/polutan/so2_missing.png
+:alt: Grafik Data
+:width: 100%
+:align: center
+```
+
+3. NO₂
+
+```{code-cell}
+df = pd.read_csv("../../data/polutan/NO2_Timeseries.csv")
+missing_value = df['NO2'].isna().sum()
+print(missing_value)
+```
+
+Implementasi pada tools `Orange Data Mining`
+
+```{image} ../../img/polutan/no2_missing.png
+:alt: Grafik Data
+:width: 100%
+:align: center
+```
+
+4. O₃
+
+```{code-cell}
+df = pd.read_csv("../../data/polutan/O3_Timeseries.csv")
+missing_value = df['O3'].isna().sum()
+print(missing_value)
+```
+
+Implementasi pada tools `Orange Data Mining`
+
+```{image} ../../img/polutan/o3_missing.png
+:alt: Grafik Data
+:width: 100%
+:align: center
+```
+
+## Outliers
+
+_Outliers_ (pencilan) adalah titik data yang nilainya menyimpang secara drastis atau ekstrem dari mayoritas distribusi data lainnya. Pada data deret waktu kualitas udara, _outlier_ bisa jadi merupakan lonjakan polusi nyata yang terjadi akibat peristiwa tertentu (misalnya kebakaran hutan atau peningkatan aktivitas industri mendadak), atau bisa juga sekadar _noise_ / _error_ pada pembacaan sensor satelit.
+
+Pada tahap _data understanding_ ini, kita mengeksplorasi _outliers_ menggunakan algoritma **Isolation Forest** dari pustaka `scikit-learn`. Algoritma deteksi anomali ini bekerja dengan cara "mengisolasi" observasi melalui pemisahan data secara acak, di mana anomali akan lebih cepat/mudah diisolasi. Kita mengatur parameter _contamination_ (estimasi persentase _outlier_ di dalam dataset) sebesar 5%. Hasil prediksi dari model yang bernilai `-1` menandakan bahwa baris tersebut terdeteksi sebagai _outlier_.
+
+1. CO
+
+```{code-cell}
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.ensemble import IsolationForest
+
+df = pd.read_csv("../../data/polutan/CO_Timeseries.csv")
+df_clean = df.dropna(subset=['CO']).copy()
+
+df_clean['date'] = pd.to_datetime(df_clean['date'])
+df_clean = df_clean.sort_values('date').reset_index(drop=True)
+
+model = IsolationForest(contamination=0.05, random_state=42)  # contamination 0.05 = 5%
+pred = model.fit_predict(df_clean[['CO']])
+
+# Tambahkan hasil prediksi ke dataframe
+df_clean['anomaly'] = pred  # -1 = outlier, 1 = normal
+
+# Nilai -1 merepresentasikan outlier
+outliers_if = df_clean[df_clean['anomaly'] == -1]
+jumlah_outlier = len(outliers_if)
+print("Jumlah outlier:", jumlah_outlier)
+print(outliers_if[['date', 'CO']].head())
+```
+
+```{code-cell}
+# Visualisasi
+plt.figure(figsize=(15, 5))
+plt.plot(df_clean['date'], df_clean['CO'], label="CO", linewidth=1)
+plt.scatter(outliers_if['date'], outliers_if['CO'],
+            color='red', marker='o', label="Outliers (Isolation Forest)")
+plt.title("Deteksi Outlier Data CO (Metode Isolation Forest)")
+plt.xlabel("Tanggal")
+plt.ylabel("Kadar CO")
+plt.legend()
+plt.tight_layout()
+plt.xticks(
+    ticks=[df_clean['date'].iloc[0], df_clean['date'].iloc[-1]],
+    labels=[df_clean['date'].iloc[0].strftime('%Y-%m-%d'),
+            df_clean['date'].iloc[-1].strftime('%Y-%m-%d')]
+)
+plt.show()
+```
+Implementasi pada tools `Orange Data Mining`
+
+```{image} ../../img/polutan/co_outliers.png
+:alt: Grafik Data
+:width: 100%
+:align: center
+:class: mabot-gambar
+```
+
+```{image} ../../img/polutan/sp_co.png
+:alt: Grafik Data
+:width: 100%
+:align: center
+```
+
+
+2. SO₂
+
+```{code-cell}
+import pandas as pd
+from sklearn.ensemble import IsolationForest
+
+df = pd.read_csv("../../data/polutan/SO2_Timeseries.csv")
+df_clean = df.dropna(subset=['SO2']).copy()
+
+df_clean['date'] = pd.to_datetime(df_clean['date'])
+df_clean = df_clean.sort_values('date').reset_index(drop=True)
+
+model = IsolationForest(contamination=0.05, random_state=42)  # contamination 0.05 = 5%
+pred = model.fit_predict(df_clean[['SO2']])
+
+# Tambahkan hasil prediksi ke dataframe
+df_clean['anomaly'] = pred  # -1 = outlier, 1 = normal
+
+# Nilai -1 merepresentasikan outlier
+outliers_if = df_clean[df_clean['anomaly'] == -1]
+jumlah_outlier = len(outliers_if)
+print("Jumlah outlier:", jumlah_outlier)
+print(outliers_if[['date', 'SO2']].head())
+```
+
+```{code-cell}
+# Visualisasi
+plt.figure(figsize=(15, 5))
+plt.plot(df_clean['date'], df_clean['SO2'], label="SO2", linewidth=1)
+plt.scatter(outliers_if['date'], outliers_if['SO2'],
+            color='red', marker='o', label="Outliers (Isolation Forest)")
+plt.title("Deteksi Outlier Data SO2 (Metode Isolation Forest)")
+plt.xlabel("Tanggal")
+plt.ylabel("Kadar SO2")
+plt.legend()
+plt.tight_layout()
+plt.xticks(
+    ticks=[df_clean['date'].iloc[0], df_clean['date'].iloc[-1]],
+    labels=[df_clean['date'].iloc[0].strftime('%Y-%m-%d'),
+            df_clean['date'].iloc[-1].strftime('%Y-%m-%d')]
+)
+plt.show()
+```
+
+Implementasi pada tools `Orange Data Mining`
+
+```{image} ../../img/polutan/so2_outliers.png
+:alt: Grafik Data
+:width: 100%
+:align: center
+:class: mabot-gambar
+```
+
+```{image} ../../img/polutan/sp_so2.png
+:alt: Grafik Data
+:width: 100%
+:align: center
+```
+
+3. NO₂
+
+```{code-cell}
+import pandas as pd
+from sklearn.ensemble import IsolationForest
+
+df = pd.read_csv("../../data/polutan/NO2_Timeseries.csv")
+df_clean = df.dropna(subset=['NO2']).copy()
+df_clean['date'] = pd.to_datetime(df_clean['date'])
+df_clean = df_clean.sort_values('date').reset_index(drop=True)
+
+model = IsolationForest(contamination=0.05, random_state=42)  # contamination 0.05 = 5%
+pred = model.fit_predict(df_clean[['NO2']])
+
+# Tambahkan hasil prediksi ke dataframe
+df_clean['anomaly'] = pred  # -1 = outlier, 1 = normal
+
+# Nilai -1 merepresentasikan outlier
+outliers_if = df_clean[df_clean['anomaly'] == -1]
+jumlah_outlier = len(outliers_if)
+print("Jumlah outlier:", jumlah_outlier)
+print(outliers_if[['date', 'NO2']].head())
+```
+
+```{code-cell}
+# Visualisasi
+plt.figure(figsize=(15, 5))
+plt.plot(df_clean['date'], df_clean['NO2'], label="NO2", linewidth=1)
+plt.scatter(outliers_if['date'], outliers_if['NO2'],
+            color='red', marker='o', label="Outliers (Isolation Forest)")
+plt.title("Deteksi Outlier Data NO2 (Metode Isolation Forest)")
+plt.xlabel("Tanggal")
+plt.ylabel("Kadar NO2")
+plt.legend()
+plt.tight_layout()
+plt.xticks(
+    ticks=[df_clean['date'].iloc[0], df_clean['date'].iloc[-1]],
+    labels=[df_clean['date'].iloc[0].strftime('%Y-%m-%d'),
+            df_clean['date'].iloc[-1].strftime('%Y-%m-%d')]
+)
+plt.show()
+```
+
+Implementasi pada tools `Orange Data Mining`
+
+```{image} ../../img/polutan/no2_outliers.png
+:alt: Grafik Data
+:width: 100%
+:align: center
+:class: mabot-gambar
+```
+
+```{image} ../../img/polutan/sp_no2.png
+:alt: Grafik Data
+:width: 100%
+:align: center
+```
+4. O₃
+
+```{code-cell}
+import pandas as pd
+from sklearn.ensemble import IsolationForest
+
+df = pd.read_csv("../../data/polutan/O3_Timeseries.csv")
+df_clean = df.dropna(subset=['O3']).copy()
+
+df_clean['date'] = pd.to_datetime(df_clean['date'])
+df_clean = df_clean.sort_values('date').reset_index(drop=True)
+
+model = IsolationForest(contamination=0.05, random_state=42)  # contamination 0.05 = 5%
+pred = model.fit_predict(df_clean[['O3']])
+
+# Tambahkan hasil prediksi ke dataframe
+df_clean['anomaly'] = pred  # -1 = outlier, 1 = normal
+
+# Nilai -1 merepresentasikan outlier
+outliers_if = df_clean[df_clean['anomaly'] == -1]
+jumlah_outlier = len(outliers_if)
+print("Jumlah outlier:", jumlah_outlier)
+print(outliers_if[['date', 'O3']].head())
+```
+
+```{code-cell}
+# Visualisasi
+plt.figure(figsize=(15, 5))
+plt.plot(df_clean['date'], df_clean['O3'], label="O3", linewidth=1)
+plt.scatter(outliers_if['date'], outliers_if['O3'],
+            color='red', marker='o', label="Outliers (Isolation Forest)")
+plt.title("Deteksi Outlier Data O3 (Metode Isolation Forest)")
+plt.xlabel("Tanggal")
+plt.ylabel("Kadar O3")
+plt.legend()
+plt.tight_layout()
+plt.xticks(
+    ticks=[df_clean['date'].iloc[0], df_clean['date'].iloc[-1]],
+    labels=[df_clean['date'].iloc[0].strftime('%Y-%m-%d'),
+            df_clean['date'].iloc[-1].strftime('%Y-%m-%d')]
+)
+plt.show()
+```
+
+Implementasi pada tools `Orange Data Mining`
+
+```{image} ../../img/polutan/o3_outliers.png
+:alt: Grafik Data
+:width: 100%
+:align: center
+:class: mabot-gambar
+```
+
+```{image} ../../img/polutan/sp_o3.png
+:alt: Grafik Data
+:width: 100%
+:align: center
+```
+
+## Menggabungkan File CSV
+
+Setelah setiap dataset polutan (O₃, CO, NO₂, dan SO₂) dinormalisasi dan dianalisis nilai kosong serta pencilan (outliers)-nya, langkah selanjutnya adalah menggabungkan keempat file tersebut menjadi satu dataset terpadu. Karena keempat data tersebut direkam dengan rentang waktu harian yang sama, kita dapat menggabungkannya berdasarkan kolom tanggal (`date`). Penggabungan ini akan mempermudah proses analisis multivariat dan pemodelan pada tahap selanjutnya, karena seluruh fitur parameter polutan udara kini berada dalam satu tabel yang terpusat.
+
+Berikut adalah kode Python menggunakan pustaka Pandas untuk menyatukan keempat dataset tersebut dan menyimpannya ke dalam file baru bernama `Polutan_Nganjuk.csv`:
+
+```python
+import pandas as pd
+
+df_o3 = pd.read_csv("O3_Timeseries.csv")
+df_co = pd.read_csv("CO_Timeseries.csv")
+df_no2 = pd.read_csv("NO2_Timeseries.csv")
+df_so2 = pd.read_csv("SO2_Timeseries.csv")
+
+dataframe_merged = pd.DataFrame({
+    "date": df_o3['date'],
+    "O3": df_o3['O3'],
+    "CO": df_co['CO'],
+    "NO2": df_no2['NO2'],
+    "SO2": df_so2['SO2']
+})
+
+dataframe_merged.to_csv("Polutan_Nganjuk.csv", index=False)
+```
+
+```{code-cell}
+:tags: [hide-input]
+df = pd.read_csv("../../data/polutan/Polutan_Nganjuk.csv")
+df.head(5)
+```
