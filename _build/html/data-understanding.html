@@ -784,19 +784,293 @@ Authenticated using device code flow.
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"../../data/polutan/CO_Timeseries.csv"</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"CO_Nunukan_Timeseries.csv"</span><span class="p">)</span>
 <span class="n">missing_value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'CO'</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">missing_value</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>118
+</pre></div>
+</div>
+</div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>SO₂</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"SO2_Nunukan_Timeseries.csv"</span><span class="p">)</span>
+<span class="n">missing_value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'SO2'</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">missing_value</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>44
+</pre></div>
+</div>
+</div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>NO₂</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"NO2_Nunukan_Timeseries.csv"</span><span class="p">)</span>
+<span class="n">missing_value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'NO2'</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">missing_value</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>87
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="outliers">
+<h2>Outliers<a class="headerlink" href="#outliers" title="Link to this heading">#</a></h2>
+<p><em>Outliers</em> (pencilan) adalah titik data yang nilainya menyimpang secara drastis atau ekstrem dari mayoritas distribusi data lainnya. Pada data deret waktu kualitas udara, <em>outlier</em> bisa jadi merupakan lonjakan polusi nyata yang terjadi akibat peristiwa tertentu (misalnya kebakaran hutan atau peningkatan aktivitas industri mendadak), atau bisa juga sekadar <em>noise</em> / <em>error</em> pada pembacaan sensor satelit.</p>
+<p>Pada tahap <em>data understanding</em> ini, kita mengeksplorasi <em>outliers</em> menggunakan algoritma <strong>Isolation Forest</strong> dari pustaka <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>. Algoritma deteksi anomali ini bekerja dengan cara “mengisolasi” observasi melalui pemisahan data secara acak, di mana anomali akan lebih cepat/mudah diisolasi. Kita mengatur parameter <em>contamination</em> (estimasi persentase <em>outlier</em> di dalam dataset) sebesar 5%. Hasil prediksi dari model yang bernilai <code class="docutils literal notranslate"><span class="pre">-1</span></code> menandakan bahwa baris tersebut terdeteksi sebagai <em>outlier</em>.</p>
+<ol class="arabic simple">
+<li><p>CO</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">IsolationForest</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"CO_Nunukan_Timeseries.csv"</span><span class="p">)</span>
+<span class="n">df_clean</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">'CO'</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">])</span>
+<span class="n">df_clean</span> <span class="o">=</span> <span class="n">df_clean</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'date'</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">IsolationForest</span><span class="p">(</span><span class="n">contamination</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># contamination 0.05 = 5%</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[[</span><span class="s1">'CO'</span><span class="p">]])</span>
+
+<span class="c1"># Tambahkan hasil prediksi ke dataframe</span>
+<span class="n">df_clean</span><span class="p">[</span><span class="s1">'anomaly'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred</span>  <span class="c1"># -1 = outlier, 1 = normal</span>
+
+<span class="c1"># Nilai -1 merepresentasikan outlier</span>
+<span class="n">outliers_if</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'anomaly'</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">jumlah_outlier</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Jumlah outlier:"</span><span class="p">,</span> <span class="n">jumlah_outlier</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">[[</span><span class="s1">'date'</span><span class="p">,</span> <span class="s1">'CO'</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Jumlah outlier: 7
+         date        CO
+6  2025-10-12  0.022047
+65 2026-02-23  0.020537
+69 2026-03-13  0.034267
+70 2026-03-14  0.035311
+76 2026-03-22  0.034897
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualisasi</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">'CO'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">"CO"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span> <span class="n">outliers_if</span><span class="p">[</span><span class="s1">'CO'</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="s1">'red'</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'o'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Outliers (Isolation Forest)"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Deteksi Outlier Data CO (Metode Isolation Forest)"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Tanggal"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Kadar CO"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span>
+    <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>
+    <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">),</span>
+            <span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">)]</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/21c0088a9976a3a1706ba0d125e66cd2bad9cbf8476dee4172119bade119ecbd.png" src="_images/21c0088a9976a3a1706ba0d125e66cd2bad9cbf8476dee4172119bade119ecbd.png" />
+</div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>SO₂</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">IsolationForest</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"SO2_Nunukan_Timeseries.csv"</span><span class="p">)</span>
+<span class="n">df_clean</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">'SO2'</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">])</span>
+<span class="n">df_clean</span> <span class="o">=</span> <span class="n">df_clean</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'date'</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">IsolationForest</span><span class="p">(</span><span class="n">contamination</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># contamination 0.05 = 5%</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[[</span><span class="s1">'SO2'</span><span class="p">]])</span>
+
+<span class="c1"># Tambahkan hasil prediksi ke dataframe</span>
+<span class="n">df_clean</span><span class="p">[</span><span class="s1">'anomaly'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred</span>  <span class="c1"># -1 = outlier, 1 = normal</span>
+
+<span class="c1"># Nilai -1 merepresentasikan outlier</span>
+<span class="n">outliers_if</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'anomaly'</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">jumlah_outlier</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Jumlah outlier:"</span><span class="p">,</span> <span class="n">jumlah_outlier</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">[[</span><span class="s1">'date'</span><span class="p">,</span> <span class="s1">'SO2'</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Jumlah outlier: 10
+         date       SO2
+14 2025-10-20  0.000162
+20 2025-10-28  0.000190
+58 2025-12-15 -0.000138
+64 2025-12-23  0.000426
+68 2025-12-27 -0.000123
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualisasi</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">'SO2'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">"SO2"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span> <span class="n">outliers_if</span><span class="p">[</span><span class="s1">'SO2'</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="s1">'red'</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'o'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Outliers (Isolation Forest)"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Deteksi Outlier Data SO2 (Metode Isolation Forest)"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Tanggal"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Kadar SO2"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span>
+    <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>
+    <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">),</span>
+            <span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">)]</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/4db63b00c62b7d3b9ea5f3d2d1df3e8b2298e07c44922f5db2e5b0f2f69acfa7.png" src="_images/4db63b00c62b7d3b9ea5f3d2d1df3e8b2298e07c44922f5db2e5b0f2f69acfa7.png" />
+</div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>NO₂</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">IsolationForest</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"NO2_Nunukan_Timeseries.csv"</span><span class="p">)</span>
+<span class="n">df_clean</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">'NO2'</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">])</span>
+<span class="n">df_clean</span> <span class="o">=</span> <span class="n">df_clean</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'date'</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">IsolationForest</span><span class="p">(</span><span class="n">contamination</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># contamination 0.05 = 5%</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[[</span><span class="s1">'NO2'</span><span class="p">]])</span>
+
+<span class="c1"># Tambahkan hasil prediksi ke dataframe</span>
+<span class="n">df_clean</span><span class="p">[</span><span class="s1">'anomaly'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred</span>  <span class="c1"># -1 = outlier, 1 = normal</span>
+
+<span class="c1"># Nilai -1 merepresentasikan outlier</span>
+<span class="n">outliers_if</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'anomaly'</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">jumlah_outlier</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Jumlah outlier:"</span><span class="p">,</span> <span class="n">jumlah_outlier</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">[[</span><span class="s1">'date'</span><span class="p">,</span> <span class="s1">'NO2'</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Jumlah outlier: 8
+         date       NO2
+14 2025-10-20 -0.000007
+20 2025-11-02  0.000017
+33 2025-11-21 -0.000016
+43 2025-12-07 -0.000004
+90 2026-03-06  0.000019
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualisasi</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">'NO2'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">"NO2"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span> <span class="n">outliers_if</span><span class="p">[</span><span class="s1">'NO2'</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="s1">'red'</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'o'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Outliers (Isolation Forest)"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Deteksi Outlier Data NO2 (Metode Isolation Forest)"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Tanggal"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Kadar NO2"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span>
+    <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>
+    <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">),</span>
+            <span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">)]</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/13c5095fa4aaa1a77c4a715a2bf96ee8c5986e96d451049bc839dd25b13b627f.png" src="_images/13c5095fa4aaa1a77c4a715a2bf96ee8c5986e96d451049bc839dd25b13b627f.png" />
+</div>
+</div>
+</section>
+<section id="menggabungkan-file-csv">
+<h2>Menggabungkan File CSV<a class="headerlink" href="#menggabungkan-file-csv" title="Link to this heading">#</a></h2>
+<p>Setelah setiap dataset polutan (CO, NO₂, dan SO₂) dinormalisasi dan dianalisis nilai kosong serta pencilan (outliers)-nya, langkah selanjutnya adalah menggabungkan keempat file tersebut menjadi satu dataset terpadu. Karena keempat data tersebut direkam dengan rentang waktu harian yang sama, kita dapat menggabungkannya berdasarkan kolom tanggal (<code class="docutils literal notranslate"><span class="pre">date</span></code>). Penggabungan ini akan mempermudah proses analisis multivariat dan pemodelan pada tahap selanjutnya, karena seluruh fitur parameter polutan udara kini berada dalam satu tabel yang terpusat.</p>
+<p>Berikut adalah kode Python menggunakan pustaka Pandas untuk menyatukan keempat dataset tersebut dan menyimpannya ke dalam file baru bernama <code class="docutils literal notranslate"><span class="pre">Polutan_Nunukan.csv</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">df_co</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"CO_Nunukan_Timeseries.csv"</span><span class="p">)</span>
+<span class="n">df_no2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"NO2_Nunukan_Timeseries.csv"</span><span class="p">)</span>
+<span class="n">df_so2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"SO2_Nunukan_imeseries.csv"</span><span class="p">)</span>
+
+<span class="n">dataframe_merged</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">"date"</span><span class="p">:</span> <span class="n">df_o3</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span>
+    <span class="s2">"CO"</span><span class="p">:</span> <span class="n">df_co</span><span class="p">[</span><span class="s1">'CO'</span><span class="p">],</span>
+    <span class="s2">"NO2"</span><span class="p">:</span> <span class="n">df_no2</span><span class="p">[</span><span class="s1">'NO2'</span><span class="p">],</span>
+    <span class="s2">"SO2"</span><span class="p">:</span> <span class="n">df_so2</span><span class="p">[</span><span class="s1">'SO2'</span><span class="p">]</span>
+<span class="p">})</span>
+
+<span class="n">dataframe_merged</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"Polutan_Nunukan.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"../../data/polutan/Polutan_Nganjuk.csv"</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"../../data/polutan/CO_Timeseries.csv"</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">missing_value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'CO'</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="nb">print</span><span class="p">(</span><span class="n">missing_value</span><span class="p">)</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"../../data/polutan/Polutan_Nganjuk.csv"</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 
 <span class="nn">File ~\AppData\Local\Programs\Python\Python39\lib\site-packages\pandas\io\parsers\readers.py:1026,</span> in <span class="ni">read_csv</span><span class="nt">(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, date_format, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options, dtype_backend)</span>
 <span class="g g-Whitespace">   </span><span class="mi">1013</span> <span class="n">kwds_defaults</span> <span class="o">=</span> <span class="n">_refine_defaults_read</span><span class="p">(</span>
@@ -853,325 +1127,10 @@ Authenticated using device code flow.
 <span class="g g-Whitespace">    </span><span class="mi">881</span>         <span class="c1"># Binary mode</span>
 <span class="g g-Whitespace">    </span><span class="mi">882</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
 
-<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: '../../data/polutan/CO_Timeseries.csv'
+<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: '../../data/polutan/Polutan_Nganjuk.csv'
 </pre></div>
 </div>
 </div>
-</div>
-<p>Implementasi pada tools <code class="docutils literal notranslate"><span class="pre">Orange</span> <span class="pre">Data</span> <span class="pre">Mining</span></code></p>
-<a class="reference internal image-reference" href="../../img/polutan/co_missing.png"><img alt="Grafik Data" class="align-center" src="../../img/polutan/co_missing.png" style="width: 100%;" />
-</a>
-<ol class="arabic simple" start="2">
-<li><p>SO₂</p></li>
-</ol>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"../../data/polutan/SO2_Timeseries.csv"</span><span class="p">)</span>
-<span class="n">missing_value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'SO2'</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">missing_value</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Implementasi pada tools <code class="docutils literal notranslate"><span class="pre">Orange</span> <span class="pre">Data</span> <span class="pre">Mining</span></code></p>
-<a class="reference internal image-reference" href="../../img/polutan/so2_missing.png"><img alt="Grafik Data" class="align-center" src="../../img/polutan/so2_missing.png" style="width: 100%;" />
-</a>
-<ol class="arabic simple" start="3">
-<li><p>NO₂</p></li>
-</ol>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"../../data/polutan/NO2_Timeseries.csv"</span><span class="p">)</span>
-<span class="n">missing_value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'NO2'</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">missing_value</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Implementasi pada tools <code class="docutils literal notranslate"><span class="pre">Orange</span> <span class="pre">Data</span> <span class="pre">Mining</span></code></p>
-<a class="reference internal image-reference" href="../../img/polutan/no2_missing.png"><img alt="Grafik Data" class="align-center" src="../../img/polutan/no2_missing.png" style="width: 100%;" />
-</a>
-<ol class="arabic simple" start="4">
-<li><p>O₃</p></li>
-</ol>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"../../data/polutan/O3_Timeseries.csv"</span><span class="p">)</span>
-<span class="n">missing_value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'O3'</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">missing_value</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Implementasi pada tools <code class="docutils literal notranslate"><span class="pre">Orange</span> <span class="pre">Data</span> <span class="pre">Mining</span></code></p>
-<a class="reference internal image-reference" href="../../img/polutan/o3_missing.png"><img alt="Grafik Data" class="align-center" src="../../img/polutan/o3_missing.png" style="width: 100%;" />
-</a>
-</section>
-</section>
-<section id="outliers">
-<h2>Outliers<a class="headerlink" href="#outliers" title="Link to this heading">#</a></h2>
-<p><em>Outliers</em> (pencilan) adalah titik data yang nilainya menyimpang secara drastis atau ekstrem dari mayoritas distribusi data lainnya. Pada data deret waktu kualitas udara, <em>outlier</em> bisa jadi merupakan lonjakan polusi nyata yang terjadi akibat peristiwa tertentu (misalnya kebakaran hutan atau peningkatan aktivitas industri mendadak), atau bisa juga sekadar <em>noise</em> / <em>error</em> pada pembacaan sensor satelit.</p>
-<p>Pada tahap <em>data understanding</em> ini, kita mengeksplorasi <em>outliers</em> menggunakan algoritma <strong>Isolation Forest</strong> dari pustaka <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>. Algoritma deteksi anomali ini bekerja dengan cara “mengisolasi” observasi melalui pemisahan data secara acak, di mana anomali akan lebih cepat/mudah diisolasi. Kita mengatur parameter <em>contamination</em> (estimasi persentase <em>outlier</em> di dalam dataset) sebesar 5%. Hasil prediksi dari model yang bernilai <code class="docutils literal notranslate"><span class="pre">-1</span></code> menandakan bahwa baris tersebut terdeteksi sebagai <em>outlier</em>.</p>
-<ol class="arabic simple">
-<li><p>CO</p></li>
-</ol>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">IsolationForest</span>
-
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"../../data/polutan/CO_Timeseries.csv"</span><span class="p">)</span>
-<span class="n">df_clean</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">'CO'</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-<span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">])</span>
-<span class="n">df_clean</span> <span class="o">=</span> <span class="n">df_clean</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'date'</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">IsolationForest</span><span class="p">(</span><span class="n">contamination</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># contamination 0.05 = 5%</span>
-<span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[[</span><span class="s1">'CO'</span><span class="p">]])</span>
-
-<span class="c1"># Tambahkan hasil prediksi ke dataframe</span>
-<span class="n">df_clean</span><span class="p">[</span><span class="s1">'anomaly'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred</span>  <span class="c1"># -1 = outlier, 1 = normal</span>
-
-<span class="c1"># Nilai -1 merepresentasikan outlier</span>
-<span class="n">outliers_if</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'anomaly'</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">jumlah_outlier</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Jumlah outlier:"</span><span class="p">,</span> <span class="n">jumlah_outlier</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">[[</span><span class="s1">'date'</span><span class="p">,</span> <span class="s1">'CO'</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualisasi</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">'CO'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">"CO"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span> <span class="n">outliers_if</span><span class="p">[</span><span class="s1">'CO'</span><span class="p">],</span>
-            <span class="n">color</span><span class="o">=</span><span class="s1">'red'</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'o'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Outliers (Isolation Forest)"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Deteksi Outlier Data CO (Metode Isolation Forest)"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Tanggal"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Kadar CO"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span>
-    <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>
-    <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">),</span>
-            <span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">)]</span>
-<span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Implementasi pada tools <code class="docutils literal notranslate"><span class="pre">Orange</span> <span class="pre">Data</span> <span class="pre">Mining</span></code></p>
-<a class="mabot-gambar reference internal image-reference" href="../../img/polutan/co_outliers.png"><img alt="Grafik Data" class="mabot-gambar align-center" src="../../img/polutan/co_outliers.png" style="width: 100%;" />
-</a>
-<a class="reference internal image-reference" href="../../img/polutan/sp_co.png"><img alt="Grafik Data" class="align-center" src="../../img/polutan/sp_co.png" style="width: 100%;" />
-</a>
-<ol class="arabic simple" start="2">
-<li><p>SO₂</p></li>
-</ol>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">IsolationForest</span>
-
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"../../data/polutan/SO2_Timeseries.csv"</span><span class="p">)</span>
-<span class="n">df_clean</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">'SO2'</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-<span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">])</span>
-<span class="n">df_clean</span> <span class="o">=</span> <span class="n">df_clean</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'date'</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">IsolationForest</span><span class="p">(</span><span class="n">contamination</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># contamination 0.05 = 5%</span>
-<span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[[</span><span class="s1">'SO2'</span><span class="p">]])</span>
-
-<span class="c1"># Tambahkan hasil prediksi ke dataframe</span>
-<span class="n">df_clean</span><span class="p">[</span><span class="s1">'anomaly'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred</span>  <span class="c1"># -1 = outlier, 1 = normal</span>
-
-<span class="c1"># Nilai -1 merepresentasikan outlier</span>
-<span class="n">outliers_if</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'anomaly'</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">jumlah_outlier</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Jumlah outlier:"</span><span class="p">,</span> <span class="n">jumlah_outlier</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">[[</span><span class="s1">'date'</span><span class="p">,</span> <span class="s1">'SO2'</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualisasi</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">'SO2'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">"SO2"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span> <span class="n">outliers_if</span><span class="p">[</span><span class="s1">'SO2'</span><span class="p">],</span>
-            <span class="n">color</span><span class="o">=</span><span class="s1">'red'</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'o'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Outliers (Isolation Forest)"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Deteksi Outlier Data SO2 (Metode Isolation Forest)"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Tanggal"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Kadar SO2"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span>
-    <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>
-    <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">),</span>
-            <span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">)]</span>
-<span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Implementasi pada tools <code class="docutils literal notranslate"><span class="pre">Orange</span> <span class="pre">Data</span> <span class="pre">Mining</span></code></p>
-<a class="mabot-gambar reference internal image-reference" href="../../img/polutan/so2_outliers.png"><img alt="Grafik Data" class="mabot-gambar align-center" src="../../img/polutan/so2_outliers.png" style="width: 100%;" />
-</a>
-<a class="reference internal image-reference" href="../../img/polutan/sp_so2.png"><img alt="Grafik Data" class="align-center" src="../../img/polutan/sp_so2.png" style="width: 100%;" />
-</a>
-<ol class="arabic simple" start="3">
-<li><p>NO₂</p></li>
-</ol>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">IsolationForest</span>
-
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"../../data/polutan/NO2_Timeseries.csv"</span><span class="p">)</span>
-<span class="n">df_clean</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">'NO2'</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">])</span>
-<span class="n">df_clean</span> <span class="o">=</span> <span class="n">df_clean</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'date'</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">IsolationForest</span><span class="p">(</span><span class="n">contamination</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># contamination 0.05 = 5%</span>
-<span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[[</span><span class="s1">'NO2'</span><span class="p">]])</span>
-
-<span class="c1"># Tambahkan hasil prediksi ke dataframe</span>
-<span class="n">df_clean</span><span class="p">[</span><span class="s1">'anomaly'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred</span>  <span class="c1"># -1 = outlier, 1 = normal</span>
-
-<span class="c1"># Nilai -1 merepresentasikan outlier</span>
-<span class="n">outliers_if</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'anomaly'</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">jumlah_outlier</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Jumlah outlier:"</span><span class="p">,</span> <span class="n">jumlah_outlier</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">[[</span><span class="s1">'date'</span><span class="p">,</span> <span class="s1">'NO2'</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualisasi</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">'NO2'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">"NO2"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span> <span class="n">outliers_if</span><span class="p">[</span><span class="s1">'NO2'</span><span class="p">],</span>
-            <span class="n">color</span><span class="o">=</span><span class="s1">'red'</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'o'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Outliers (Isolation Forest)"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Deteksi Outlier Data NO2 (Metode Isolation Forest)"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Tanggal"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Kadar NO2"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span>
-    <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>
-    <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">),</span>
-            <span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">)]</span>
-<span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Implementasi pada tools <code class="docutils literal notranslate"><span class="pre">Orange</span> <span class="pre">Data</span> <span class="pre">Mining</span></code></p>
-<a class="mabot-gambar reference internal image-reference" href="../../img/polutan/no2_outliers.png"><img alt="Grafik Data" class="mabot-gambar align-center" src="../../img/polutan/no2_outliers.png" style="width: 100%;" />
-</a>
-<a class="reference internal image-reference" href="../../img/polutan/sp_no2.png"><img alt="Grafik Data" class="align-center" src="../../img/polutan/sp_no2.png" style="width: 100%;" />
-</a>
-<ol class="arabic simple" start="4">
-<li><p>O₃</p></li>
-</ol>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">IsolationForest</span>
-
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"../../data/polutan/O3_Timeseries.csv"</span><span class="p">)</span>
-<span class="n">df_clean</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">'O3'</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-<span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">])</span>
-<span class="n">df_clean</span> <span class="o">=</span> <span class="n">df_clean</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'date'</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">IsolationForest</span><span class="p">(</span><span class="n">contamination</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># contamination 0.05 = 5%</span>
-<span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[[</span><span class="s1">'O3'</span><span class="p">]])</span>
-
-<span class="c1"># Tambahkan hasil prediksi ke dataframe</span>
-<span class="n">df_clean</span><span class="p">[</span><span class="s1">'anomaly'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred</span>  <span class="c1"># -1 = outlier, 1 = normal</span>
-
-<span class="c1"># Nilai -1 merepresentasikan outlier</span>
-<span class="n">outliers_if</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'anomaly'</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">jumlah_outlier</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Jumlah outlier:"</span><span class="p">,</span> <span class="n">jumlah_outlier</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">[[</span><span class="s1">'date'</span><span class="p">,</span> <span class="s1">'O3'</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualisasi</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">'O3'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">"O3"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">outliers_if</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span> <span class="n">outliers_if</span><span class="p">[</span><span class="s1">'O3'</span><span class="p">],</span>
-            <span class="n">color</span><span class="o">=</span><span class="s1">'red'</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'o'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Outliers (Isolation Forest)"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Deteksi Outlier Data O3 (Metode Isolation Forest)"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Tanggal"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Kadar O3"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span>
-    <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>
-    <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">),</span>
-            <span class="n">df_clean</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">)]</span>
-<span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Implementasi pada tools <code class="docutils literal notranslate"><span class="pre">Orange</span> <span class="pre">Data</span> <span class="pre">Mining</span></code></p>
-<a class="mabot-gambar reference internal image-reference" href="../../img/polutan/o3_outliers.png"><img alt="Grafik Data" class="mabot-gambar align-center" src="../../img/polutan/o3_outliers.png" style="width: 100%;" />
-</a>
-<a class="reference internal image-reference" href="../../img/polutan/sp_o3.png"><img alt="Grafik Data" class="align-center" src="../../img/polutan/sp_o3.png" style="width: 100%;" />
-</a>
-</section>
-<section id="menggabungkan-file-csv">
-<h2>Menggabungkan File CSV<a class="headerlink" href="#menggabungkan-file-csv" title="Link to this heading">#</a></h2>
-<p>Setelah setiap dataset polutan (O₃, CO, NO₂, dan SO₂) dinormalisasi dan dianalisis nilai kosong serta pencilan (outliers)-nya, langkah selanjutnya adalah menggabungkan keempat file tersebut menjadi satu dataset terpadu. Karena keempat data tersebut direkam dengan rentang waktu harian yang sama, kita dapat menggabungkannya berdasarkan kolom tanggal (<code class="docutils literal notranslate"><span class="pre">date</span></code>). Penggabungan ini akan mempermudah proses analisis multivariat dan pemodelan pada tahap selanjutnya, karena seluruh fitur parameter polutan udara kini berada dalam satu tabel yang terpusat.</p>
-<p>Berikut adalah kode Python menggunakan pustaka Pandas untuk menyatukan keempat dataset tersebut dan menyimpannya ke dalam file baru bernama <code class="docutils literal notranslate"><span class="pre">Polutan_Nganjuk.csv</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-
-<span class="n">df_o3</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"O3_Timeseries.csv"</span><span class="p">)</span>
-<span class="n">df_co</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"CO_Timeseries.csv"</span><span class="p">)</span>
-<span class="n">df_no2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"NO2_Timeseries.csv"</span><span class="p">)</span>
-<span class="n">df_so2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"SO2_Timeseries.csv"</span><span class="p">)</span>
-
-<span class="n">dataframe_merged</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="s2">"date"</span><span class="p">:</span> <span class="n">df_o3</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span>
-    <span class="s2">"O3"</span><span class="p">:</span> <span class="n">df_o3</span><span class="p">[</span><span class="s1">'O3'</span><span class="p">],</span>
-    <span class="s2">"CO"</span><span class="p">:</span> <span class="n">df_co</span><span class="p">[</span><span class="s1">'CO'</span><span class="p">],</span>
-    <span class="s2">"NO2"</span><span class="p">:</span> <span class="n">df_no2</span><span class="p">[</span><span class="s1">'NO2'</span><span class="p">],</span>
-    <span class="s2">"SO2"</span><span class="p">:</span> <span class="n">df_so2</span><span class="p">[</span><span class="s1">'SO2'</span><span class="p">]</span>
-<span class="p">})</span>
-
-<span class="n">dataframe_merged</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"Polutan_Nganjuk.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="cell tag_hide-input docutils container">
-<details class="admonition hide above-input">
-<summary aria-label="Toggle hidden content">
-<p class="collapsed admonition-title">Show code cell source</p>
-<p class="expanded admonition-title">Hide code cell source</p>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"../../data/polutan/Polutan_Nganjuk.csv"</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
 </div>
 </section>
 </section>
