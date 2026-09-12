@@ -74,9 +74,51 @@ for pol in POLLUTANTS:
 | NO2       |      366 |          19 |          5.19 | 2025-09-04            | 2026-06-27             |
 | SO2       |      366 |          19 |          5.19 | 2025-09-08            | 2026-08-09             |
 
-### Grafik CO — sebelum & sesudah perbaikan
+### Grafik CO sebelum & sesudah perbaikan
 
-![Outlier CO](outlier_CO_before_after.png)
+```{code-cell}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.ensemble import IsolationForest
+
+# 1. Load data
+df = pd.read_csv("CO_Nunukan_Timeseries_imputed.csv")
+df_clean = df.dropna(subset=['CO']).copy()
+
+df_clean['date'] = pd.to_datetime(df_clean['date'])
+df_clean = df_clean.sort_values('date').reset_index(drop=True)
+
+# 2. Deteksi outlier dengan Isolation Forest
+model = IsolationForest(contamination=0.05, random_state=42)
+df_clean['anomaly'] = model.fit_predict(df_clean[['CO']])  # -1 = outlier, 1 = normal
+outliers_if = df_clean[df_clean['anomaly'] == -1]
+
+# 3. Perbaikan outlier: ganti jadi NaN, lalu interpolasi
+df_fixed = df_clean.copy()
+df_fixed.loc[df_fixed['anomaly'] == -1, 'CO'] = np.nan
+df_fixed['CO'] = df_fixed['CO'].interpolate(method='linear').ffill().bfill()
+
+# 4. Visualisasi: 2 grafik (sebelum vs sesudah perbaikan)
+fig, axes = plt.subplots(2, 1, figsize=(15, 8), sharex=True)
+
+axes[0].plot(df_clean['date'], df_clean['CO'], label="CO (asli)", linewidth=1)
+axes[0].scatter(outliers_if['date'], outliers_if['CO'],
+                 color='red', marker='o', label="Outlier (Isolation Forest)")
+axes[0].set_title("Sebelum Perbaikan - Deteksi Outlier CO")
+axes[0].set_ylabel("Kadar CO")
+axes[0].legend()
+
+axes[1].plot(df_fixed['date'], df_fixed['CO'], color='green', linewidth=1,
+             label="CO (setelah outlier diganti & diinterpolasi)")
+axes[1].set_title("Sesudah Perbaikan Outlier")
+axes[1].set_xlabel("Tanggal")
+axes[1].set_ylabel("Kadar CO")
+axes[1].legend()
+
+plt.tight_layout()
+plt.show()
+```
 
 > **Catatan tentang lonjakan CO di akhir Agustus 2026**
 > Pada rentang 21–31 Agustus 2026, kadar CO naik tajam dan seluruhnya terdeteksi
@@ -88,16 +130,100 @@ for pol in POLLUTANTS:
 > panas di sekitar Nunukan (Kalimantan Utara) sendiri relatif lebih sedikit
 > dibanding Kalimantan Tengah dan Kalimantan Barat. Karena nilainya jauh di luar
 > pola historis, algoritma outlier tetap menandainya sebagai anomali, sehingga pada
-> data yang sudah "fixed" lonjakan ini diratakan lewat interpolasi — perlu dicatat
+> data yang sudah "fixed" lonjakan ini diratakan lewat interpolasi perlu dicatat
 > di laporan bahwa event asap ini adalah kejadian nyata, bukan noise sensor.
 
-### Grafik NO2 — sebelum & sesudah perbaikan
+### Grafik NO2 sebelum & sesudah perbaikan
 
-![Outlier NO2](outlier_NO2_before_after.png)
+```{code-cell}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.ensemble import IsolationForest
 
-### Grafik SO2 — sebelum & sesudah perbaikan
+# 1. Load data
+df = pd.read_csv("NO2_Nunukan_Timeseries_imputed.csv")
+df_clean = df.dropna(subset=['NO2']).copy()
 
-![Outlier SO2](outlier_SO2_before_after.png)
+df_clean['date'] = pd.to_datetime(df_clean['date'])
+df_clean = df_clean.sort_values('date').reset_index(drop=True)
+
+# 2. Deteksi outlier dengan Isolation Forest
+model = IsolationForest(contamination=0.05, random_state=42)
+df_clean['anomaly'] = model.fit_predict(df_clean[['NO2']])  # -1 = outlier, 1 = normal
+outliers_if = df_clean[df_clean['anomaly'] == -1]
+
+# 3. Perbaikan outlier: ganti jadi NaN, lalu interpolasi
+df_fixed = df_clean.copy()
+df_fixed.loc[df_fixed['anomaly'] == -1, 'NO2'] = np.nan
+df_fixed['NO2'] = df_fixed['NO2'].interpolate(method='linear').ffill().bfill()
+
+# 4. Visualisasi: 2 grafik (sebelum vs sesudah perbaikan)
+fig, axes = plt.subplots(2, 1, figsize=(15, 8), sharex=True)
+
+axes[0].plot(df_clean['date'], df_clean['NO2'], label="NO2 (asli)", linewidth=1)
+axes[0].scatter(outliers_if['date'], outliers_if['NO2'],
+                 color='red', marker='o', label="Outlier (Isolation Forest)")
+axes[0].set_title("Sebelum Perbaikan - Deteksi Outlier NO2")
+axes[0].set_ylabel("Kadar NO2")
+axes[0].legend()
+
+axes[1].plot(df_fixed['date'], df_fixed['NO2'], color='green', linewidth=1,
+             label="NO2 (setelah outlier diganti & diinterpolasi)")
+axes[1].set_title("Sesudah Perbaikan Outlier")
+axes[1].set_xlabel("Tanggal")
+axes[1].set_ylabel("Kadar NO2")
+axes[1].legend()
+
+plt.tight_layout()
+plt.show()
+```
+
+### Grafik SO2 sebelum & sesudah perbaikan
+
+```{code-cell}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.ensemble import IsolationForest
+
+# 1. Load data
+df = pd.read_csv("SO2_Nunukan_Timeseries_imputed.csv")
+df_clean = df.dropna(subset=['SO2']).copy()
+
+df_clean['date'] = pd.to_datetime(df_clean['date'])
+df_clean = df_clean.sort_values('date').reset_index(drop=True)
+
+# 2. Deteksi outlier dengan Isolation Forest
+model = IsolationForest(contamination=0.05, random_state=42)
+df_clean['anomaly'] = model.fit_predict(df_clean[['SO2']])  # -1 = outlier, 1 = normal
+outliers_if = df_clean[df_clean['anomaly'] == -1]
+
+# 3. Perbaikan outlier: ganti jadi NaN, lalu interpolasi
+df_fixed = df_clean.copy()
+df_fixed.loc[df_fixed['anomaly'] == -1, 'SO2'] = np.nan
+df_fixed['SO2'] = df_fixed['SO2'].interpolate(method='linear').ffill().bfill()
+
+# 4. Visualisasi: 2 grafik (sebelum vs sesudah perbaikan)
+fig, axes = plt.subplots(2, 1, figsize=(15, 8), sharex=True)
+
+axes[0].plot(df_clean['date'], df_clean['SO2'], label="SO2 (asli)", linewidth=1)
+axes[0].scatter(outliers_if['date'], outliers_if['SO2'],
+                 color='red', marker='o', label="Outlier (Isolation Forest)")
+axes[0].set_title("Sebelum Perbaikan - Deteksi Outlier SO2")
+axes[0].set_ylabel("Kadar SO2")
+axes[0].legend()
+
+axes[1].plot(df_fixed['date'], df_fixed['SO2'], color='green', linewidth=1,
+             label="SO2 (setelah outlier diganti & diinterpolasi)")
+axes[1].set_title("Sesudah Perbaikan Outlier")
+axes[1].set_xlabel("Tanggal")
+axes[1].set_ylabel("Kadar SO2")
+axes[1].legend()
+
+plt.tight_layout()
+plt.show()
+```
 
 ## 2. Imputasi Missing Value
 
