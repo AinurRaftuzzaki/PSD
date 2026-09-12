@@ -76,7 +76,7 @@ for pol in POLLUTANTS:
 
 ### Grafik CO sebelum & sesudah perbaikan
 
-![Outlier CO](Grafik CO.png)
+![Outlier CO](Grafik_CO.png)
 
 > **Catatan tentang lonjakan CO di akhir Agustus 2026**
 > Pada rentang 21–31 Agustus 2026, kadar CO naik tajam dan seluruhnya terdeteksi
@@ -93,11 +93,11 @@ for pol in POLLUTANTS:
 
 ### Grafik NO2 sebelum & sesudah perbaikan
 
-![Outlier NO2](Grafik NO2.png)
+![Outlier NO2](Grafik_NO2.png)
 
 ### Grafik SO2 sebelum & sesudah perbaikan
 
-![Outlier SO2](Grafik SO2.png)
+![Outlier SO2](Grafik_SO2.png)
 
 ## 2. Imputasi Missing Value
 
