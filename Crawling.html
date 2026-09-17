@@ -468,19 +468,19 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:00 Job 'j-260916103014402290ea987596019e9a': send 'start'
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:00 Job 'j-260917231911454fa2653549bd316e47': send 'start'
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:04 Job 'j-260916103014402290ea987596019e9a': queued (progress 0%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:03 Job 'j-260917231911454fa2653549bd316e47': queued (progress 0%)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:10 Job 'j-260916103014402290ea987596019e9a': queued (progress 0%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:09 Job 'j-260917231911454fa2653549bd316e47': queued (progress 0%)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:16 Job 'j-260916103014402290ea987596019e9a': queued (progress 0%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:15 Job 'j-260917231911454fa2653549bd316e47': queued (progress 0%)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:25 Job 'j-260916103014402290ea987596019e9a': queued (progress 0%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:24 Job 'j-260917231911454fa2653549bd316e47': queued (progress 0%)
 </pre></div>
 </div>
 </div>
@@ -1572,11 +1572,11 @@ Selesai. File disimpan sebagai CO_Nunukan_Timeseries_imputed.csv
 <span class="kn">import</span><span class="w"> </span><span class="nn">tsfel.feature_extraction.features</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tsfel_features</span>
 
 <span class="c1"># ---------- 1. Muat dan bersihkan data ----------</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'NO2_Nunukan_Timeseries_fixed.csv'</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'CO_Nunukan_Timeseries_fixed.csv'</span><span class="p">)</span>
 <span class="n">df</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'date'</span><span class="p">])</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'date'</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="n">target_pollutant</span> <span class="o">=</span> <span class="s1">'NO2'</span>
+<span class="n">target_pollutant</span> <span class="o">=</span> <span class="s1">'CO'</span>
 
 <span class="c1"># --- FIX: paksa kolom target jadi numerik, nilai yang gagal dikonversi -&gt; NaN ---</span>
 <span class="n">df</span><span class="p">[</span><span class="n">target_pollutant</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">target_pollutant</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">'coerce'</span><span class="p">)</span>
@@ -1645,7 +1645,11 @@ Selesai. File disimpan sebagai CO_Nunukan_Timeseries_imputed.csv
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Jumlah nilai non-numerik/kosong yang dikonversi jadi NaN: 0
 Jumlah fitur yang diminta: 68
-Berhasil! Jumlah fitur yang dihasilkan untuk NO2: 68
+Berhasil! Jumlah fitur yang dihasilkan untuk CO: 68
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>c:\Users\Admin\AppData\Local\Programs\Python\Python39\lib\site-packages\tsfel\feature_extraction\features_utils.py:534: RuntimeWarning: invalid value encountered in divide
+  rs = np.divide(r, s)
 </pre></div>
 </div>
 </div>
