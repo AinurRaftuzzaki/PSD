@@ -10,3 +10,4 @@ chapters:
   - file: data-understanding
   - file: Penjelasan Metrik Statistika Deskriptif
   - file: Preprocessing feature extraction
+  - file: K-means
