@@ -57,6 +57,8 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'Preprocessing feature extraction';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -391,6 +393,12 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imputasi-missing-value">2. Imputasi Missing Value</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ekstraksi-fitur-dengan-tsfel">3. Ekstraksi Fitur dengan TSFEL</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hasil-ekstraksi-fitur-per-domain">Hasil ekstraksi fitur per domain</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#penjelasan-domain-tsfel">Penjelasan Domain TSFEL</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#domain-statistical">1. Domain Statistical</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#domain-temporal">2. Domain Temporal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#domain-spectral">3. Domain Spectral</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ringkasan">Ringkasan</a></li>
@@ -980,6 +988,539 @@ tersebut digabungkan ke kelompok <strong>Temporal</strong> sesuai pengelompokan 
 </div>
 </section>
 </section>
+<section id="penjelasan-domain-tsfel">
+<h2>Penjelasan Domain TSFEL<a class="headerlink" href="#penjelasan-domain-tsfel" title="Link to this heading">#</a></h2>
+<p>Pustaka TSFEL membagi 68 fitur deret waktu menjadi tiga domain utama: <strong>Statistik (Statistical)</strong>, <strong>Waktu (Temporal)</strong>, dan <strong>Frekuensi (Spectral)</strong>. Berikut adalah penjabaran lengkap untuk masing-masing fitur beserta rumusnya, serta hasil perhitungannya yang diterapkan pada polutan NO2 (dari <code class="docutils literal notranslate"><span class="pre">NO2_filed.csv</span></code>) yang disajikan pada hasil akhir (<code class="docutils literal notranslate"><span class="pre">NO2_Baron_TSFEL.csv</span></code>).</p>
+<section id="domain-statistical">
+<h3>1. Domain Statistical<a class="headerlink" href="#domain-statistical" title="Link to this heading">#</a></h3>
+<p>Domain statistik mengekstrak metrik kuantitatif dan karakteristik sebaran serta bentuk distribusi dari sinyal deret waktu. Domain ini terdiri dari 17 fitur utama yang fokus pada distribusi.</p>
+<ol class="arabic simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">calc_max</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Nilai maksimum dari deret waktu.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\max(x)\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">5.51000e-05</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">calc_min</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Nilai minimum dari deret waktu.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\min(x)\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">5.12000e-06</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">calc_mean</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Rata-rata (mean) dari deret waktu.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\mu = \frac{1}{N} \sum_{i=1}^N x_i\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">2.84004e-05</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">calc_median</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Nilai tengah (median) dari deret waktu.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\text{median}(x)\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">2.81250e-05</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">calc_std</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Standar deviasi, mengukur tingkat penyebaran data.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\sigma = \sqrt{\frac{1}{N} \sum_{i=1}^N (x_i - \mu)^2}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.01280e-05</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">calc_var</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Varians, kuadrat dari standar deviasi.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\sigma^2 = \frac{1}{N} \sum_{i=1}^N (x_i - \mu)^2\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.02577e-10</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ecdf</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Fungsi distribusi kumulatif empiris.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\hat{F}(t) = \frac{1}{N} \sum_{i=1}^N \mathbf{1}_{x_i \le t}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.50273e-02</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ecdf_percentile</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Nilai ECDF pada persentil tertentu.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(P_{perc}(\hat{F})\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">2.84000e-05</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ecdf_percentile_count</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Jumlah data yang berada di bawah persentil ECDF.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\sum \mathbf{1}_{x_i \le P_{perc}}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.82500e+02</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ecdf_slope</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Kemiringan dari kurva ECDF.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\frac{\Delta y}{\Delta x} \text{ pada } \hat{F}(t)\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">3.47222e+04</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="11">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">hist_mode</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Modus (nilai paling sering muncul) berdasarkan histogram.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\arg\max_j (\text{count}(bin_j))\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">2.76110e-05</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="12">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">interq_range</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Jangkauan interkuartil (IQR), selisih Q3 dan Q1.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(IQR = Q_3 - Q_1\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.45000e-05</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="13">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">kurtosis</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Keruncingan (peakedness) dari distribusi data.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(K = \frac{\frac{1}{N} \sum_{i=1}^N (x_i - \mu)^4}{\sigma^4} - 3\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">-4.15397e-01</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="14">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">skewness</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Kemiringan (asimetri) dari distribusi data.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(S = \frac{\frac{1}{N} \sum_{i=1}^N (x_i - \mu)^3}{\sigma^3}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.02776e-01</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="15">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">mean_abs_deviation</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Rata-rata simpangan absolut dari mean.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(MAD = \frac{1}{N} \sum_{i=1}^N |x_i - \mu|\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">8.22498e-06</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="16">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">median_abs_deviation</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Median dari simpangan absolut dari median.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\text{Median}(|x_i - \text{median}(x)|)\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">7.10833e-06</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="17">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">rms</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Root Mean Square (energi kuadrat rata-rata).</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(RMS = \sqrt{\frac{1}{N} \sum_{i=1}^N x_i^2}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">3.01523e-05</span></code></p></li>
+</ul>
+</section>
+<section id="domain-temporal">
+<h3>2. Domain Temporal<a class="headerlink" href="#domain-temporal" title="Link to this heading">#</a></h3>
+<p>Domain temporal mengevaluasi sinyal dari segi urutan waktunya. Terdiri dari 25 fitur yang mengukur dependensi, jarak, autokorelasi, dan kompleksitas waktu.</p>
+<ol class="arabic simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">abs_energy</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Total energi absolut dari deret waktu.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(E = \sum_{i=1}^N x_i^2\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">3.32752e-07</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">auc</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Area di bawah kurva sinyal (Area Under Curve).</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(AUC = \sum_{i=1}^{N-1} \frac{x_i + x_{i+1}}{2}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.03695e-02</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">autocorr</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Autokorelasi sinyal, kesamaan sinyal dengan versi tertundanya.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(R(\tau) = \sum_{i=1}^{N-\tau} x_i x_{i+\tau}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.70000e+01</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">average_power</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Daya rata-rata dari sinyal waktu.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(P = \frac{1}{N} \sum_{i=1}^N x_i^2\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">9.11650e-10</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">calc_centroid</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Titik pusat dari urutan waktu (Time Centroid).</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(C_t = \frac{\sum t_i \cdot x_i}{\sum x_i}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">2.03671e+02</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">dfa</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Detrended Fluctuation Analysis, untuk mengukur dependensi fraktal.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(F(n) \propto n^\alpha\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.01119e+00</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">distance</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Total jarak (panjang lintasan) antar titik-titik berturutan.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(D = \sum_{i=1}^{N-1} \sqrt{1 + (x_{i+1} - x_i)^2}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">3.65000e+02</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">entropy</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Shannon Entropy, mengukur ketidakpastian sinyal.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(H = -\sum p(x) \log p(x)\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">9.27850e-01</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">higuchi_fractal_dimension</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Dimensi Fraktal Higuchi, mengukur kompleksitas bentuk.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(L(k) \propto k^{-D}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.84022e+00</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">hurst_exponent</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Eksponen Hurst, indikasi memori jangka panjang waktu.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(E[\frac{R(n)}{S(n)}] = C n^H\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">8.03093e-01</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="11">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">lempel_ziv</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Kompleksitas Lempel-Ziv, mengukur tingkat kompresibilitas sinyal.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(LZ = \frac{c(N)}{\frac{N}{\log N}}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.72131e-01</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="12">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">maximum_fractal_length</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Panjang maksimal fraktal di berbagai skala pengukuran.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(L_{max} = \max_k (L(k))\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">-2.69521e+00</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="13">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">mean_abs_diff</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Rata-rata dari perbedaan absolut titik berurutan.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\mu_{\Delta} = \frac{1}{N-1} \sum_{i=1}^{N-1} |x_{i+1} - x_i|\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">4.56367e-06</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="14">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">mean_diff</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Rata-rata perbedaan antara titik berurutan.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\mu_{d} = \frac{1}{N-1} \sum_{i=1}^{N-1} (x_{i+1} - x_i)\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.20548e-08</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="15">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">median_abs_diff</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Median perbedaan absolut berurutan.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\text{Median}(|x_{i+1} - x_i|)\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">2.50000e-06</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="16">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">median_diff</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Median dari selisih titik berurutan.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\text{Median}(x_{i+1} - x_i)\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">4.00000e-07</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="17">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">mse</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Mean Squared Error dari sinyal terhadap rata-ratanya.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(MSE = \frac{1}{N} \sum_{i=1}^N (x_i - \mu)^2\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.28358e+00</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="18">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">negative_turning</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Jumlah titik belok bergradien negatif (puncak yang turun).</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\sum \mathbf{1}_{x_{i-1} &lt; x_i &gt; x_{i+1}}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">6.70000e+01</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="19">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">neighbourhood_peaks</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Jumlah puncak pada area bertetangga yang ditentukan.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\sum \text{Peaks}(x, \text{window})\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.60000e+01</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="20">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">petrosian_fractal_dimension</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Dimensi Fraktal Petrosian.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(D = \frac{\log_{10}(N)}{\log_{10}(N) + \log_{10}(\frac{N}{N + 0.4 N_{\Delta}})}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.02404e+00</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="21">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">pk_pk_distance</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Jarak dari puncak tertinggi ke lembah terendah (Peak-to-Peak).</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(P2P = \max(x) - \min(x)\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">4.99800e-05</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="22">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">positive_turning</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Jumlah titik belok bergradien positif (lembah yang naik).</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\sum \mathbf{1}_{x_{i-1} &gt; x_i &lt; x_{i+1}}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">6.80000e+01</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="23">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">slope</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Kemiringan tren regresi linier secara keseluruhan.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(m = \frac{\sum (t_i - \bar{t})(x_i - \mu)}{\sum (t_i - \bar{t})^2}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">2.85331e-08</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="24">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">sum_abs_diff</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Total akumulasi perbedaan absolut titik berurutan.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(SAD = \sum_{i=1}^{N-1} |x_{i+1} - x_i|\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.66574e-03</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="25">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">zero_cross</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Jumlah titik perpotongan nol (zero-crossing).</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\sum \mathbf{1}_{x_i \cdot x_{i+1} &lt; 0}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">0.00000e+00</span></code></p></li>
+</ul>
+</section>
+<section id="domain-spectral">
+<h3>3. Domain Spectral<a class="headerlink" href="#domain-spectral" title="Link to this heading">#</a></h3>
+<p>Domain spektral mentransformasi data ke domain frekuensi (melalui Fourier/Wavelet). Terdiri dari 26 fitur untuk mengukur sifat periodik, energi spektrum, dan rentang frekuensi.</p>
+<ol class="arabic simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">fundamental_frequency</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Frekuensi dasar yang paling kuat pada spektrum.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(f_0 = \arg\max_f (|X(f)|^2)\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">2.73224e-03</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">max_frequency</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Frekuensi tertinggi pada analisis spektrum daya.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(f_{max} = \max(f)\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">4.34426e-01</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">median_frequency</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Frekuensi yang membagi spektrum daya (energi) menjadi dua bagian sama.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\int_0^{f_{med}} |X(f)|^2 df = \frac{1}{2} \int_0^\infty |X(f)|^2 df\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">4.09836e-02</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">human_range_energy</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Energi sinyal pada jangkauan pendengaran manusia.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(E_h = \sum_{f \in H} |X(f)|^2\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">0.00000e+00</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">lpcc</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Koefisien Linear Prediction Cepstral (LPCC).</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(C_n = -a_n - \sum_{k=1}^{n-1} \frac{k}{n} C_k a_{n-k}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">7.48200e-01</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">mfcc</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Koefisien Mel-Frequency Cepstral (MFCC).</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(c_n = \sum_{k=1}^K (\log S_k) \cos\left[n(k-\frac{1}{2})\frac{\pi}{K}\right]\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">2.43670e+01</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">max_power_spectrum</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Daya tertinggi dari seluruh rentang spektrum frekuensi.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\max_f (|X(f)|^2)\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.22004e+02</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">power_bandwidth</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Lebar pita tempat akumulasi mayoritas kekuatan sinyal (daya).</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(BW = f_{upper} - f_{lower}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">3.22404e-01</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">spectral_centroid</span></code></strong></p>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Pusat massa spektral (frekuensi rata-rata berbobot energi).</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(C_s = \frac{\sum f_k |X(f_k)|}{\sum |X(f_k)|}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.20096e-01</span></code></p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">spectral_decrease</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Tingkat penurunan kekuatan spektral pada frekuensi yang meninggi.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(D_s = \frac{\sum_{k=2}^K \frac{|X(f_k)| - |X(f_1)|}{k-1}}{\sum_{k=2}^K |X(f_k)|}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">-2.52716e+00</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="11">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">spectral_distance</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Jarak spektral, selisih antar kurva densitas spektrum.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(D(X, Y) = \sqrt{\sum (X(f) - Y(f))^2}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">-1.58982e+00</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="12">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">spectral_entropy</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Entropi spektral, seberapa menyebar distribusi energi spektrum.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(H_s = -\sum p_f \log p_f\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">6.21878e-01</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="13">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">spectral_kurtosis</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Kurtosis dari kepadatan daya spektrum.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(K_s = \frac{\sum (f - C_s)^4 |X(f)|^2}{(\sum (f - C_s)^2 |X(f)|^2)^2}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">2.71723e+00</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="14">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">spectral_positive_turning</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Titik belok positif pada kurva spektrum.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\sum \mathbf{1}_{|X(f_{i-1})| &gt; |X(f_i)| &lt; |X(f_{i+1})|}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">6.10000e+01</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="15">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">spectral_roll_off</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Frekuensi roll-off di mana sebagian besar energi spektral terkonsentrasi.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(f_c \text{ dimana } \sum_{f=0}^{f_c} |X(f)|^2 = 0.95 \sum_{f} |X(f)|^2\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">4.34426e-01</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="16">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">spectral_roll_on</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Frekuensi roll-on tempat sebagian kecil energi (misal 5%) terakumulasi.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(f_c \text{ dimana } \sum_{f=0}^{f_c} |X(f)|^2 = 0.05 \sum_{f} |X(f)|^2\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">0.00000e+00</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="17">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">spectral_skewness</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Skewness (kemiringan) dari kepadatan daya spektrum.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(S_s = \frac{\sum (f - C_s)^3 |X(f)|^2}{(\sum (f - C_s)^2 |X(f)|^2)^{3/2}}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.05467e+00</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="18">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">spectral_slope</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Kemiringan dari spektrum daya yang dihitung menggunakan regresi linier.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(m_s = \frac{\sum (f_i - \bar{f})(|X(f_i)| - \overline{|X(f)|})}{\sum (f_i - \bar{f})^2}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">-3.35216e-02</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="19">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">spectral_spread</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Sebaran spektrum atau varians frekuensi di sekeliling pusat massa.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(V_s = \sqrt{\frac{\sum (f_k - C_s)^2 |X(f_k)|}{\sum |X(f_k)|}}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.50384e-01</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="20">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">spectral_variation</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Variasi atau jarak perubahan spektrum pada titik yang berdekatan.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(V = 1 - \frac{\sum X_{t-1}(f) X_t(f)}{\sqrt{\sum X_{t-1}^2 \sum X_t^2}}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">2.64122e-01</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="21">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">spectrogram_mean_coeff</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Koefisien magnitudo rata-rata dari matriks spektrogram.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\frac{1}{T F} \sum_t \sum_f |S(t, f)|\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.21204e-10</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="22">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">wavelet_abs_mean</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Rata-rata magnitudo absolut dari koefisien transformasi wavelet.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\mu_w = \frac{1}{N} \sum |W(a,b)|\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.83560e-06</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="23">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">wavelet_energy</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Energi total yang terkandung di dalam koefisien wavelet.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(E_w = \sum |W(a,b)|^2\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.42750e-05</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="24">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">wavelet_entropy</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Entropi wavelet, ukuran distribusi sebaran energi di ruang waktu-frekuensi.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(H_w = -\sum p_j \log p_j, p_j = \frac{E_j}{E_{tot}}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">2.12394e+00</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="25">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">wavelet_std</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Standar deviasi dari sebaran koefisien wavelet.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\sigma_w = \sqrt{\frac{1}{N} \sum (|W(a,b)| - \mu_w)^2}\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">1.41400e-05</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="26">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">wavelet_var</span></code></strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Penjelasan</strong>: Varians dari koefisien dispersi wavelet.</p></li>
+<li><p><strong>Rumus</strong>: <span class="math notranslate nohighlight">\(\sigma_w^2\)</span></p></li>
+<li><p><strong>Hasil (NO2)</strong>: <code class="docutils literal notranslate"><span class="pre">2.24529e-10</span></code></p></li>
+</ul>
+</section>
+</section>
 <section id="ringkasan">
 <h2>Ringkasan<a class="headerlink" href="#ringkasan" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="table">
@@ -1068,6 +1609,12 @@ tersebut digabungkan ke kelompok <strong>Temporal</strong> sesuai pengelompokan 
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imputasi-missing-value">2. Imputasi Missing Value</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ekstraksi-fitur-dengan-tsfel">3. Ekstraksi Fitur dengan TSFEL</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hasil-ekstraksi-fitur-per-domain">Hasil ekstraksi fitur per domain</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#penjelasan-domain-tsfel">Penjelasan Domain TSFEL</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#domain-statistical">1. Domain Statistical</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#domain-temporal">2. Domain Temporal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#domain-spectral">3. Domain Spectral</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ringkasan">Ringkasan</a></li>
