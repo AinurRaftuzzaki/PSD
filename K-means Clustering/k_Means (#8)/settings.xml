@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="settings.xml">
+    <entry key="node_file" type="xstring" value="settings.xml"/>
+    <config key="flow_stack"/>
+    <config key="internal_node_subsettings">
+        <entry key="memory_policy" type="xstring" value="CacheSmallInMemory"/>
+    </config>
+    <config key="model">
+        <config key="columnFilter">
+            <entry key="mode" type="xstring" value="MANUAL"/>
+            <config key="patternFilter">
+                <entry key="pattern" type="xstring" value=""/>
+                <entry key="isCaseSensitive" type="xboolean" value="false"/>
+                <entry key="isInverted" type="xboolean" value="false"/>
+            </config>
+            <config key="manualFilter">
+                <config key="manuallySelected">
+                    <entry key="array-size" type="xint" value="68"/>
+                    <entry key="0" type="xstring" value="abs_energy"/>
+                    <entry key="1" type="xstring" value="auc"/>
+                    <entry key="2" type="xstring" value="autocorr"/>
+                    <entry key="3" type="xstring" value="average_power"/>
+                    <entry key="4" type="xstring" value="calc_centroid"/>
+                    <entry key="5" type="xstring" value="calc_max"/>
+                    <entry key="6" type="xstring" value="calc_mean"/>
+                    <entry key="7" type="xstring" value="calc_median"/>
+                    <entry key="8" type="xstring" value="calc_min"/>
+                    <entry key="9" type="xstring" value="calc_std"/>
+                    <entry key="10" type="xstring" value="calc_var"/>
+                    <entry key="11" type="xstring" value="dfa"/>
+                    <entry key="12" type="xstring" value="distance"/>
+                    <entry key="13" type="xstring" value="ecdf"/>
+                    <entry key="14" type="xstring" value="ecdf_percentile"/>
+                    <entry key="15" type="xstring" value="ecdf_percentile_count"/>
+                    <entry key="16" type="xstring" value="ecdf_slope"/>
+                    <entry key="17" type="xstring" value="entropy"/>
+                    <entry key="18" type="xstring" value="fundamental_frequency"/>
+                    <entry key="19" type="xstring" value="higuchi_fractal_dimension"/>
+                    <entry key="20" type="xstring" value="hist_mode"/>
+                    <entry key="21" type="xstring" value="human_range_energy"/>
+                    <entry key="22" type="xstring" value="hurst_exponent"/>
+                    <entry key="23" type="xstring" value="interq_range"/>
+                    <entry key="24" type="xstring" value="kurtosis"/>
+                    <entry key="25" type="xstring" value="lempel_ziv"/>
+                    <entry key="26" type="xstring" value="lpcc"/>
+                    <entry key="27" type="xstring" value="max_frequency"/>
+                    <entry key="28" type="xstring" value="max_power_spectrum"/>
+                    <entry key="29" type="xstring" value="maximum_fractal_length"/>
+                    <entry key="30" type="xstring" value="mean_abs_deviation"/>
+                    <entry key="31" type="xstring" value="mean_abs_diff"/>
+                    <entry key="32" type="xstring" value="mean_diff"/>
+                    <entry key="33" type="xstring" value="median_abs_deviation"/>
+                    <entry key="34" type="xstring" value="median_abs_diff"/>
+                    <entry key="35" type="xstring" value="median_diff"/>
+                    <entry key="36" type="xstring" value="median_frequency"/>
+                    <entry key="37" type="xstring" value="mfcc"/>
+                    <entry key="38" type="xstring" value="mse"/>
+                    <entry key="39" type="xstring" value="negative_turning"/>
+                    <entry key="40" type="xstring" value="neighbourhood_peaks"/>
+                    <entry key="41" type="xstring" value="petrosian_fractal_dimension"/>
+                    <entry key="42" type="xstring" value="pk_pk_distance"/>
+                    <entry key="43" type="xstring" value="positive_turning"/>
+                    <entry key="44" type="xstring" value="power_bandwidth"/>
+                    <entry key="45" type="xstring" value="rms"/>
+                    <entry key="46" type="xstring" value="skewness"/>
+                    <entry key="47" type="xstring" value="slope"/>
+                    <entry key="48" type="xstring" value="spectral_centroid"/>
+                    <entry key="49" type="xstring" value="spectral_decrease"/>
+                    <entry key="50" type="xstring" value="spectral_distance"/>
+                    <entry key="51" type="xstring" value="spectral_entropy"/>
+                    <entry key="52" type="xstring" value="spectral_kurtosis"/>
+                    <entry key="53" type="xstring" value="spectral_positive_turning"/>
+                    <entry key="54" type="xstring" value="spectral_roll_off"/>
+                    <entry key="55" type="xstring" value="spectral_roll_on"/>
+                    <entry key="56" type="xstring" value="spectral_skewness"/>
+                    <entry key="57" type="xstring" value="spectral_slope"/>
+                    <entry key="58" type="xstring" value="spectral_spread"/>
+                    <entry key="59" type="xstring" value="spectral_variation"/>
+                    <entry key="60" type="xstring" value="spectrogram_mean_coeff"/>
+                    <entry key="61" type="xstring" value="sum_abs_diff"/>
+                    <entry key="62" type="xstring" value="wavelet_abs_mean"/>
+                    <entry key="63" type="xstring" value="wavelet_energy"/>
+                    <entry key="64" type="xstring" value="wavelet_entropy"/>
+                    <entry key="65" type="xstring" value="wavelet_std"/>
+                    <entry key="66" type="xstring" value="wavelet_var"/>
+                    <entry key="67" type="xstring" value="zero_cross"/>
+                </config>
+                <config key="manuallyDeselected">
+                    <entry key="array-size" type="xint" value="0"/>
+                </config>
+                <entry key="includeUnknownColumns" type="xboolean" value="true"/>
+            </config>
+            <config key="typeFilter">
+                <config key="selectedTypes">
+                    <entry key="array-size" type="xint" value="0"/>
+                </config>
+            </config>
+        </config>
+        <entry key="nrOfClusters" type="xint" value="3"/>
+        <entry key="centroidInitialization" type="xstring" value="RANDOM_INITIALIZATION"/>
+        <entry key="useStaticRandomSeed" type="xboolean" value="true"/>
+        <entry key="seedValue" type="xstring" value="0"/>
+        <entry key="maxIterations" type="xint" value="99"/>
+        <entry key="enableHilite" type="xboolean" value="false"/>
+    </config>
+    <config key="variables"/>
+    <entry key="customDescription" type="xstring" isnull="true" value=""/>
+    <entry key="state" type="xstring" value="EXECUTED"/>
+    <entry key="factory" type="xstring" value="org.knime.base.node.mine.cluster.kmeans.KMeansNodeFactory"/>
+    <entry key="node-name" type="xstring" value="k-Means"/>
+    <entry key="node-bundle-name" type="xstring" value="KNIME Base Nodes"/>
+    <entry key="node-bundle-symbolic-name" type="xstring" value="org.knime.base"/>
+    <entry key="node-bundle-vendor" type="xstring" value="KNIME AG, Zurich, Switzerland"/>
+    <entry key="node-bundle-version" type="xstring" value="5.12.0.v202606261225"/>
+    <entry key="node-feature-name" type="xstring" value="KNIME Base nodes"/>
+    <entry key="node-feature-symbolic-name" type="xstring" value="org.knime.features.base.feature.group"/>
+    <entry key="node-feature-vendor" type="xstring" value="KNIME AG, Zurich, Switzerland"/>
+    <entry key="node-feature-version" type="xstring" value="5.12.0.v202606261225"/>
+    <config key="factory_settings"/>
+    <entry key="name" type="xstring" value="k-Means"/>
+    <entry key="hasContent" type="xboolean" value="true"/>
+    <entry key="isInactive" type="xboolean" value="false"/>
+    <config key="ports">
+        <config key="port_1">
+            <entry key="index" type="xint" value="1"/>
+            <entry key="port_spec_class" type="xstring" value="org.knime.core.data.DataTableSpec"/>
+            <entry key="port_object_class" type="xstring" value="org.knime.core.node.BufferedDataTable"/>
+            <entry key="port_object_summary" type="xstring" value="Rows: 37, Cols: 71"/>
+            <entry key="port_dir_location" type="xstring" value="port_1"/>
+        </config>
+        <config key="port_2">
+            <entry key="index" type="xint" value="2"/>
+            <entry key="port_spec_class" type="xstring" value="org.knime.core.data.DataTableSpec"/>
+            <entry key="port_object_class" type="xstring" value="org.knime.core.node.BufferedDataTable"/>
+            <entry key="port_object_summary" type="xstring" value="Rows: 3, Cols: 68"/>
+            <entry key="port_dir_location" type="xstring" value="port_2"/>
+        </config>
+        <config key="port_3">
+            <entry key="index" type="xint" value="3"/>
+            <entry key="port_spec_class" type="xstring" value="org.knime.core.node.port.pmml.PMMLPortObjectSpec"/>
+            <entry key="port_object_class" type="xstring" value="org.knime.core.node.port.pmml.PMMLPortObject"/>
+            <entry key="port_object_summary" type="xstring" value="PMML document with version 4.2 and models: ClusteringModel"/>
+            <entry key="port_spec_location" type="xstring" value="spec/spec.zip"/>
+            <entry key="port_object_location" type="xstring" value="object/portobject.zip"/>
+            <entry key="port_dir_location" type="xstring" value="port_3"/>
+        </config>
+    </config>
+    <config key="filestores">
+        <entry key="file_store_location" type="xstring" isnull="true" value=""/>
+        <entry key="file_store_id" type="xstring" value="9eb88e81-452d-473b-bbb0-db90b1823248"/>
+    </config>
+</config>

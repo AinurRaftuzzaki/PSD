@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="db_session">
+    <config key="Session Info">
+        <entry key="version" type="xint" value="7"/>
+        <entry key="sessionID" type="xstring" value="65a671e3-86ac-4247-b537-beadac8d9a85"/>
+        <entry key="dbTypeId" type="xstring" value="mysql"/>
+        <entry key="dialectId" type="xstring" value="mysql"/>
+        <entry key="dbURL" type="xstring" value="jdbc:mysql://basisdata2-c.my.id:3306/basisda1_PSD-A"/>
+        <entry key="authenticationType" type="xstring" value="USER_PWD"/>
+        <entry key="dbUser" type="xstring" value="basisda1_PSD-User"/>
+        <entry key="dbPassword" type="xpassword" value="02CgAAAGMq_QxveL1vZ0EBj5DKflnVBg_g9qJud1eZ"/>
+        <entry key="host" type="xstring" value=" basisdata2-c.my.id"/>
+    </config>
+    <config key="Driver Definition">
+        <entry key="driverId" type="xstring" value="built-in-mysql-9.7.0"/>
+        <entry key="driverName" type="xstring" value="Driver for MySQL v.9.7.0"/>
+        <entry key="driverVersion" type="xstring" value="9.7.0"/>
+        <entry key="driverClass" type="xstring" value="com.mysql.cj.jdbc.Driver"/>
+        <entry key="driverDescription" type="xstring" value=""/>
+        <entry key="driverOrigin" type="xstring" value="EXTENSION"/>
+        <entry key="deprecated" type="xboolean" value="false"/>
+    </config>
+    <config key="Attributes">
+        <config key="java.lang.Integer">
+            <entry key="knime.db.connection.jdbc.fetch_size" type="xint" value="10000"/>
+            <entry key="knime.db.connection.statement.cancellation.polling_period" type="xint" value="1000"/>
+            <entry key="knime.db.connection.idle.timeout" type="xint" value="0"/>
+            <entry key="knime.db.connection.metadata.configure.timeout" type="xint" value="3"/>
+            <entry key="knime.db.connection.reconnect.timeout" type="xint" value="0"/>
+        </config>
+        <config key="java.lang.String">
+            <entry key="knime.db.dialect.sql.delimiter.identifier.closing" type="xstring" value="`"/>
+            <entry key="knime.db.dialect.sql.delimiter.identifier.opening" type="xstring" value="`"/>
+            <entry key="knime.db.connection.metadata.table.types" type="xstring" value="TABLE, VIEW"/>
+            <entry key="knime.db.connection.validation_query" type="xstring" value="SELECT 0"/>
+        </config>
+        <config key="java.lang.Boolean">
+            <entry key="knime.db.connection.reconnect" type="xboolean" value="false"/>
+            <entry key="knime.db.connection.metadata.configure.enabled" type="xboolean" value="false"/>
+            <entry key="knime.db.connection.statement.cancellation.enabled" type="xboolean" value="true"/>
+            <entry key="knime.db.dialect.sql.identifier.delimiting.onlyspaces" type="xboolean" value="false"/>
+            <entry key="knime.db.connection.metadata.query.flatten" type="xboolean" value="false"/>
+            <entry key="knime.db.connection.restore" type="xboolean" value="false"/>
+            <entry key="knime.db.connection.logger.enabled" type="xboolean" value="false"/>
+            <entry key="knime.db.agent.writer.fail_on_missing_in_where_clause" type="xboolean" value="true"/>
+        </config>
+        <config key="org.knime.database.util.DerivableProperties">
+            <config key="knime.db.connection.jdbc.properties">
+                <config key="values">
+                    <entry key="useCursorFetch" type="xstring" value="true"/>
+                    <entry key="allowLoadLocalInfile" type="xstring" value="true"/>
+                </config>
+                <config key="types">
+                    <entry key="useCursorFetch" type="xstring" value="LITERAL"/>
+                    <entry key="allowLoadLocalInfile" type="xstring" value="LITERAL"/>
+                </config>
+            </config>
+        </config>
+    </config>
+</config>
