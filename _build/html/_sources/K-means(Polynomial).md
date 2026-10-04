@@ -16,6 +16,7 @@ kernelspec:
 # K-Means Clustering (Polynomial)
 
 ![Workflow K-Means Clustering Polynomial](knime-node1.png)
+
 ![Workflow K-Means Clustering Polynomial](knime-node2.png)
 
 ## Dokumentasi Workflow (KNIME)
@@ -65,7 +66,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 - **Silhouette Coefficient**: 0.471
 
 *Tabel Silhouette Coefficient:*
-```{image} tabel-3-nopca.png
+```{image} tabel-3-nonpca.png
 :alt: Tabel Silhouette Coefficient k=3 tanpa PCA
 :width: 100%
 :align: center
@@ -73,7 +74,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 ```
 
 *Visualisasi Scatter Plot:*
-```{image} sct-3-nopca.png
+```{image} sct-3-nonpca.png
 :alt: Scatter Plot k=3 tanpa PCA
 :width: 100%
 :align: center
@@ -84,7 +85,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 - **Silhouette Coefficient**: 0.486
 
 *Tabel Silhouette Coefficient:*
-```{image} tabel-5-nopca.png
+```{image} tabel-5-nonpca.png
 :alt: Tabel Silhouette Coefficient k=5 tanpa PCA
 :width: 100%
 :align: center
@@ -92,7 +93,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 ```
 
 *Visualisasi Scatter Plot:*
-```{image} sct-5-nopca.png
+```{image} sct-5-nonpca.png
 :alt: Scatter Plot k=5 tanpa PCA
 :width: 100%
 :align: center
@@ -103,7 +104,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 - **Silhouette Coefficient**: 0.537
 
 *Tabel Silhouette Coefficient:*
-```{image} tabel-7-nopca.png
+```{image} tabel-7-nonpca.png
 :alt: Tabel Silhouette Coefficient k=7 tanpa PCA
 :width: 100%
 :align: center
@@ -111,7 +112,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 ```
 
 *Visualisasi Scatter Plot:*
-```{image} sct-7-nopca.png
+```{image} sct-7-nonpca.png
 :alt: Scatter Plot k=7 tanpa PCA
 :width: 100%
 :align: center
