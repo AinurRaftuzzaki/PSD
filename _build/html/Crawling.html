@@ -188,9 +188,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Preprocessing%20feature%20extraction.html">Preprocessing Sebelum Ekstraksi Fitur</a></li>
 <li class="toctree-l2"><a class="reference internal" href="K-means.html">K-Means Clustering</a></li>
 <li class="toctree-l2"><a class="reference internal" href="K-means%28Polynomial%29.html">K-Means Clustering (Polynomial)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Clustering%20Fitur%20TSFEL%20%26%20Klasifikasi%20Tutupan%20Lahan%20Sawah.html">Peta Geospasial Segmentasi Hasil Clustering Daerah</a></li>
-
-
+<li class="toctree-l2"><a class="reference internal" href="Clustering%20Fitur%20TSFEL%20%26%20Klasifikasi%20Tutupan%20Lahan%20Sawah.html">Klasifikasi Spasial Lahan Sawah dan Non-Sawah</a></li>
 </ul>
 </details></li>
 </ul>
@@ -473,19 +471,19 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:00 Job 'j-26100500583444f699bce38d1290a1e0': send 'start'
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:00 Job 'j-26100501315448728880e3fddf631d74': send 'start'
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:02 Job 'j-26100500583444f699bce38d1290a1e0': queued (progress 0%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:03 Job 'j-26100501315448728880e3fddf631d74': queued (progress 0%)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:08 Job 'j-26100500583444f699bce38d1290a1e0': queued (progress 0%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:08 Job 'j-26100501315448728880e3fddf631d74': queued (progress 0%)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:15 Job 'j-26100500583444f699bce38d1290a1e0': queued (progress 0%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:15 Job 'j-26100501315448728880e3fddf631d74': queued (progress 0%)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:23 Job 'j-26100500583444f699bce38d1290a1e0': queued (progress 0%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:23 Job 'j-26100501315448728880e3fddf631d74': queued (progress 0%)
 </pre></div>
 </div>
 </div>
@@ -2861,6 +2859,89 @@ Classification Report:
     accuracy                           1.00        20
    macro avg       1.00      1.00      1.00        20
 weighted avg       1.00      1.00      1.00        20
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">confusion_matrix</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="c1"># 1. Buka file .tif Sentinel-2A dan samakan proyeksi koordinat (CRS)</span>
+<span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">"sentinel2_sawah_nonsawah.tif"</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+  <span class="n">gdf_projected</span> <span class="o">=</span> <span class="n">gdf_gabungan</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+
+  <span class="c1"># Ambil titik tengah (centroid) dari tiap sampel (mendukung Point maupun Polygon)</span>
+  <span class="n">koordinat_sampel</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">centroid</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">geom</span><span class="o">.</span><span class="n">centroid</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">geom</span> <span class="ow">in</span> <span class="n">gdf_projected</span><span class="o">.</span><span class="n">geometry</span>
+  <span class="p">]</span>
+
+  <span class="c1"># Ekstrak nilai piksel dari kelima band Sentinel-2A</span>
+  <span class="n">nilai_band</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">koordinat_sampel</span><span class="p">))</span>
+
+<span class="c1"># 2. Buat tabel DataFrame Fitur</span>
+<span class="n">df_dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">nilai_band</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"B02"</span><span class="p">,</span> <span class="s2">"B03"</span><span class="p">,</span> <span class="s2">"B04"</span><span class="p">,</span> <span class="s2">"B08"</span><span class="p">,</span> <span class="s2">"B11"</span><span class="p">])</span>
+
+<span class="c1"># 3. Tambahkan fitur indeks vegetasi (NDVI) &amp; indeks air (NDWI)</span>
+<span class="n">df_dataset</span><span class="p">[</span><span class="s2">"NDVI"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_dataset</span><span class="p">[</span><span class="s2">"B08"</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_dataset</span><span class="p">[</span><span class="s2">"B04"</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span>
+    <span class="n">df_dataset</span><span class="p">[</span><span class="s2">"B08"</span><span class="p">]</span> <span class="o">+</span> <span class="n">df_dataset</span><span class="p">[</span><span class="s2">"B04"</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1e-6</span>
+<span class="p">)</span>
+<span class="n">df_dataset</span><span class="p">[</span><span class="s2">"NDWI"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_dataset</span><span class="p">[</span><span class="s2">"B03"</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_dataset</span><span class="p">[</span><span class="s2">"B08"</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span>
+    <span class="n">df_dataset</span><span class="p">[</span><span class="s2">"B03"</span><span class="p">]</span> <span class="o">+</span> <span class="n">df_dataset</span><span class="p">[</span><span class="s2">"B08"</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1e-6</span>
+<span class="p">)</span>
+
+<span class="c1"># 4. Masukkan Koordinat &amp; Label Kelas (Sawah = 1, Non-Sawah = 0)</span>
+<span class="n">df_dataset</span><span class="p">[</span><span class="s2">"Longitude"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf_gabungan</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">centroid</span><span class="o">.</span><span class="n">x</span>
+<span class="n">df_dataset</span><span class="p">[</span><span class="s2">"Latitude"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf_gabungan</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">centroid</span><span class="o">.</span><span class="n">y</span>
+<span class="n">df_dataset</span><span class="p">[</span><span class="s2">"Kelas"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf_gabungan</span><span class="p">[</span><span class="s2">"label_teks"</span><span class="p">]</span>
+<span class="n">df_dataset</span><span class="p">[</span><span class="s2">"Target"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf_gabungan</span><span class="p">[</span><span class="s2">"label"</span><span class="p">]</span>
+
+<span class="c1"># Simpan ke CSV (bisa dipakai juga kalau mau diolah di KNIME)</span>
+<span class="n">df_dataset</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"dataset_100sampel_sawah_nonsawah.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Dataset berhasil disimpan ke 'dataset_100sampel_sawah_nonsawah.csv'"</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">df_dataset</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># 5. PROSES KLASIFIKASI 2 KELAS (SAWAH VS NON-SAWAH)</span>
+<span class="c1"># ==============================================================================</span>
+<span class="n">fitur_kolom</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"B02"</span><span class="p">,</span> <span class="s2">"B03"</span><span class="p">,</span> <span class="s2">"B04"</span><span class="p">,</span> <span class="s2">"B08"</span><span class="p">,</span> <span class="s2">"B11"</span><span class="p">,</span> <span class="s2">"NDVI"</span><span class="p">,</span> <span class="s2">"NDWI"</span><span class="p">]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df_dataset</span><span class="p">[</span><span class="n">fitur_kolom</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df_dataset</span><span class="p">[</span><span class="s2">"Kelas"</span><span class="p">]</span>
+
+<span class="c1"># Split 80% Training (41 Sawah + 40 Non-Sawah) &amp; 20% Testing (10 Sawah + 11 Non-Sawah)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">y</span>
+<span class="p">)</span>
+
+<span class="c1"># Latih model Random Forest</span>
+<span class="n">model_rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">model_rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># Evaluasi pada data uji</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">model_rf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="s2">"</span><span class="se">\n</span><span class="s2">=== HASIL EVALUASI KLASIFIKASI 2 KELAS ==="</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Akurasi Testing : </span><span class="si">{</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="w"> </span><span class="n">y_pred</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Confusion Matrix:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Classification Report:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">confusion_matrix</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named 'rasterio'
 </pre></div>
 </div>
 </div>
