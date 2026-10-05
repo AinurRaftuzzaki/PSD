@@ -60,6 +60,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'K-means';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="K-Means Clustering (Polynomial)" href="K-means%28Polynomial%29.html" />
     <link rel="prev" title="Preprocessing Sebelum Ekstraksi Fitur" href="Preprocessing%20feature%20extraction.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -186,6 +187,10 @@
 
 <li class="toctree-l2"><a class="reference internal" href="Preprocessing%20feature%20extraction.html">Preprocessing Sebelum Ekstraksi Fitur</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">K-Means Clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="K-means%28Polynomial%29.html">K-Means Clustering (Polynomial)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Clustering%20Fitur%20TSFEL%20%26%20Klasifikasi%20Tutupan%20Lahan%20Sawah.html">Peta Geospasial Segmentasi Hasil Clustering Daerah</a></li>
+
+
 </ul>
 </details></li>
 </ul>
@@ -534,6 +539,7 @@ cluster_2     1
 Name: count, dtype: int64
 </pre></div>
 </div>
+<img alt="_images/8e82ef1e99c843258f6e08dbc88f9268f20a485496651a6521d947670738629f.png" src="_images/8e82ef1e99c843258f6e08dbc88f9268f20a485496651a6521d947670738629f.png" />
 </div>
 </div>
 </section>
@@ -609,6 +615,21 @@ Name: count, dtype: int64
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Inertia: 413.8895
+
+Jumlah data per cluster:
+cluster_label
+cluster_0    12
+cluster_1     1
+cluster_2     2
+cluster_3     1
+cluster_4    21
+Name: count, dtype: int64
+</pre></div>
+</div>
+<img alt="_images/908797d235ed5a614b6eaf5be8e2673b5dfb6ca46282c13e8c4deac7f008e9bd.png" src="_images/908797d235ed5a614b6eaf5be8e2673b5dfb6ca46282c13e8c4deac7f008e9bd.png" />
 </div>
 </div>
 </section>
@@ -696,6 +717,21 @@ Name: count, dtype: int64
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PCA: 68 fitur -&gt; 37 dimensi
+
+Inertia: 660.2141
+
+Jumlah data per cluster:
+cluster_label
+cluster_0     1
+cluster_1    35
+cluster_2     1
+Name: count, dtype: int64
+</pre></div>
+</div>
+<img alt="_images/8e82ef1e99c843258f6e08dbc88f9268f20a485496651a6521d947670738629f.png" src="_images/8e82ef1e99c843258f6e08dbc88f9268f20a485496651a6521d947670738629f.png" />
+</div>
 </div>
 </section>
 <section id="klastering-5-kelas-dengan-pca">
@@ -782,6 +818,14 @@ Name: count, dtype: int64
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span>  <span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">7</span>
+    <span class="n">CSV_PATH</span> <span class="o">=</span> <span class="n">ekstraksi_fitur_co</span><span class="o">.</span><span class="n">csv</span><span class="s2">"</span>
+                                                     <span class="o">^</span>
+<span class="ne">SyntaxError</span>: EOL while scanning string literal
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 </section>
@@ -834,6 +878,15 @@ Name: count, dtype: int64
         <p class="prev-next-subtitle">previous</p>
         <p class="prev-next-title">Preprocessing Sebelum Ekstraksi Fitur</p>
       </div>
+    </a>
+    <a class="right-next"
+       href="K-means%28Polynomial%29.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">K-Means Clustering (Polynomial)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
