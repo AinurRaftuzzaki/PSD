@@ -40,7 +40,7 @@ cluster_labels = np.random.choice([0, 1, 2], size=37, p=[0.5, 0.3, 0.2])
 m_cluster = folium.Map(tiles="OpenStreetMap")
 
 folium.TileLayer(
-    tiles='[https://mt1.google.com/vt/lyrs=y&x=](https://mt1.google.com/vt/lyrs=y&x=){x}&y={y}&z={z}',
+    tiles='https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
     attr='Google Satellite',
     name='Google Satellite Hybrid',
     overlay=False,
@@ -107,7 +107,7 @@ m = folium.Map(location=[4.093314711269619, 117.62314629620484], zoom_start=13, 
 
 # Layer Google Satellite Hybrid
 folium.TileLayer(
-    tiles='[https://mt1.google.com/vt/lyrs=y&x=](https://mt1.google.com/vt/lyrs=y&x=){x}&y={y}&z={z}',
+    tiles='https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
     attr='Google Satellite',
     name='Google Satellite Hybrid',
     overlay=False,
@@ -133,6 +133,7 @@ if path_nonsawah:
 folium.LayerControl(collapsed=False).add_to(m)
 m.add_child(MeasureControl())
 
+m
 ```
 
 ## 2.2 Model Klasifikasi 2 Kelas Sentinel-2A (.TIF)
