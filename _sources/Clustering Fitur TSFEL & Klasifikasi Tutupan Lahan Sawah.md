@@ -1,186 +1,297 @@
-### Peta Geospasial Segmentasi Hasil Clustering Daerah
+---
+jupytext:
+  formats: md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.11.5
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+---
 
-Berikut adalah peta geospasial interaktif segmentasi 37 daerah sampel berdasarkan label hasil *clustering*:
+# Klasifikasi Spasial Lahan Sawah dan Non-Sawah
 
-```{code-cell} ipython3
-:tags: [remove-input]
+Bagian ini mendokumentasikan tahapan akuisisi citra satelit optik **Sentinel-2A (Level-2A)** dalam format GeoTIFF (`.tif`) melalui **openEO**, ekstraksi nilai spektral pada **102 titik sampel** (51 sampel Sawah dan 51 sampel Non-Sawah) yang telah dilabeli melalui **QGIS**, hingga pemodelan klasifikasi biner (2 kelas).
 
-import folium
-from folium.plugins import MeasureControl
+## Instalasi Library Yang Digunakan
+
+```bash
+pip install geopandas
+```
+
+```bash
+pip install openeo
+```
+
+```bash
+pip install scikit-learn
+```
+
+## 1. Desain Pengambilan Sampel (Ground Truth)
+
+Pengambilan sampel dilakukan secara spasial dengan membagi objek pengamatan ke dalam dua kelas seimbang (*balanced dataset*) dalam format vektor (`Shapefile` / `GeoJSON`):
+
+| Kelas Target | Kode Label | Jumlah Sampel | Karakteristik Objek |
+| :--- | :---: | :---: | :--- |
+| **Sawah** | `1` | 51 Sampel | Petak lahan pertanian padi aktif (fase vegetatif, genangan air/tanam, maupun pematangan) |
+| **Non-Sawah** | `0` | 51 Sampel | Permukiman/bangunan, jalan raya, badan air permanen, dan vegetasi non-pertanian |
+| **Total** | — | **102 Sampel** | Digabungkan menjadi satu *GeoDataFrame* berproyeksi `EPSG:4326` |
+
+```python
+import geopandas as gpd
+import openeo
 import pandas as pd
-import numpy as np
 
-data_37_daerah = [
-    ("Baron, Nganjuk", -7.6000, 112.0833), ("Nunukan, Kaltara", 4.1333, 117.6500),
-    ("Sreseh, Sampang", -7.1667, 113.1167), ("Manyar, Gresik", -7.1167, 112.6000),
-    ("Kamal, Bangkalan", -7.1667, 112.7167), ("Kedungpring, Lamongan", -7.2167, 112.2000),
-    ("Gresik Kota, Gresik", -7.1500, 112.6500), ("Waru, Pamekasan", -6.9500, 113.5667),
-    ("Paciran, Lamongan", -6.8833, 112.3500), ("Kertosono, Nganjuk", -7.5833, 112.1000),
-    ("Jabon, Sidoarjo", -7.5500, 112.7500), ("Menganti, Gresik", -7.2500, 112.5833),
-    ("Banyu Ajuh, Kamal", -7.1680, 112.7180), ("Bandung Jogoroto, Jombang", -7.5833, 112.2833),
-    ("Widang, Tuban", -7.0167, 112.1333), ("Sidoarjo, Wonoayu", -7.4500, 112.6167),
-    ("Kwanyar, Bangkalan", -7.1500, 112.8667), ("Sambeng, Lamongan", -7.2833, 112.2333),
-    ("Kalianget, Sumenep", -7.0500, 113.9167), ("Cerme, Gresik", -7.2167, 112.5500),
-    ("Tikala, Manado", 1.4833, 124.8500), ("Kerek, Tuban", -6.8333, 111.8833),
-    ("Kwanyar, Bangkalan (2)", -7.1520, 112.8680), ("Wonokromo, Surabaya", -7.3000, 112.7333),
-    ("Asemrowo, Surabaya", -7.2500, 112.7167), ("Kota Sumenep", -7.0167, 113.8667),
-    ("Socah, Bangkalan", -7.0833, 112.7167), ("Pilangkenceng, Madiun", -7.5333, 111.6667),
-    ("Tanah Merah, Bangkalan", -7.0833, 112.8167), ("Labang, Bangkalan", -7.1167, 112.7500),
-    ("Widodaren, Ngawi", -7.3833, 111.2333), ("Bangkalan Kota", -7.0333, 112.7500),
-    ("Warudoyong, Sukabumi", -6.9333, 106.9167), ("Kamal, Bangkalan (2)", -7.1650, 112.7150),
-    ("Banyuajuh Kamal (2)", -7.1690, 112.7190), ("Dukun, Gresik", -7.0000, 112.5167),
-    ("Kecamatan Bangkalan", -7.0350, 112.7550)
-]
+# ==============================================================================
+# 1. BACA KEDUA FILE ZIP (SAWAH & NON-SAWAH) DAN BERI LABEL OTOMATIS
+# ==============================================================================
+# Sesuaikan nama file zip non-sawah milikmu di baris kedua
+gdf_sawah = gpd.read_file("Sawah-baron.zip").to_crs("EPSG:4326")
+gdf_nonsawah = gpd.read_file("nonsawah-baron.zip").to_crs("EPSG:4326")
 
-# Generate Label Kluster Hasil PCA/K-Means (k=3)
-np.random.seed(42)
-cluster_labels = np.random.choice([0, 1, 2], size=37, p=[0.5, 0.3, 0.2])
+# Beri kolom label secara otomatis
+gdf_sawah["label_teks"] = "Sawah"
+gdf_sawah["label"] = 1
 
-# INISIALISASI PETA FOLIUM
-m_cluster = folium.Map(tiles="OpenStreetMap")
+gdf_nonsawah["label_teks"] = "Non-Sawah"
+gdf_nonsawah["label"] = 0
 
-folium.TileLayer(
-    tiles='[https://mt1.google.com/vt/lyrs=y&x=](https://mt1.google.com/vt/lyrs=y&x=){x}&y={y}&z={z}',
-    attr='Google Satellite',
-    name='Google Satellite Hybrid',
-    overlay=False,
-    control=True
-).add_to(m_cluster)
+# Gabungkan keduanya menjadi 1 GeoDataFrame (51 + 51 = 102 sampel)
+gdf_gabungan = gpd.GeoDataFrame(
+    pd.concat([gdf_sawah, gdf_nonsawah], ignore_index=True), crs="EPSG:4326"
+)
 
-colors = {0: 'green', 1: 'orange', 2: 'red'}
-cluster_names = {
-    0: 'Cluster 0 (Polusi Rendah)',
-    1: 'Cluster 1 (Polusi Sedang)',
-    2: 'Cluster 2 (Polusi Tinggi)'
+print(f"Jumlah sampel Sawah     : {len(gdf_sawah)}")
+print(f"Jumlah sampel Non-Sawah : {len(gdf_nonsawah)}")
+print(f"Total sampel gabungan   : {len(gdf_gabungan)}")
+
+# ==============================================================================
+# 2. AMBIL BATAS KOORDINAT GABUNGAN (BOUNDING BOX) UNTUK OPENEO
+# ==============================================================================
+minx, miny, maxx, maxy = gdf_gabungan.total_bounds
+buffer_deg = 0.005  # Tambahan margin ~500 meter agar titik di tepi tetap masuk
+
+bbox = {
+    "west": float(minx - buffer_deg),
+    "south": float(miny - buffer_deg),
+    "east": float(maxx + buffer_deg),
+    "north": float(maxy + buffer_deg),
 }
+print("Bounding Box Gabungan:", bbox)
 
-all_coords = []
+# ==============================================================================
+# 3. KONEKSI KE OPENEO & UNDUH SENTINEL-2A FORMAT GEOTIFF (.tif)
+# ==============================================================================
+conn = openeo.connect("openeo.dataspace.copernicus.eu")
+conn.authenticate_oidc()
 
-# Feature Groups per Kluster
-for k in range(3):
-    fg = folium.FeatureGroup(name=cluster_names[k]).add_to(m_cluster)
-    for idx, (nama_daerah, lat, lon) in enumerate(data_37_daerah):
-        all_coords.append((lat, lon))
-        lbl = cluster_labels[idx]
-        if lbl == k:
-            folium.CircleMarker(
-                location=[lat, lon],
-                radius=7,
-                popup=f"<b>No:</b> {idx+1}<br><b>Daerah:</b> {nama_daerah}<br><b>Status:</b> {cluster_names[lbl]}",
-                color=colors[lbl],
-                fill=True,
-                fill_color=colors[lbl],
-                fill_opacity=0.85
-            ).add_to(fg)
+datacube = conn.load_collection(
+    "SENTINEL2_L2A",
+    spatial_extent=bbox,
+    temporal_extent=["2026-05-01", "2026-09-30"],  # Rentang waktu minim awan
+    bands=[
+        "B02",
+        "B03",
+        "B04",
+        "B08",
+        "B11",
+    ],  # Blue, Green, Red, NIR, SWIR
+    max_cloud_cover=10,
+)
 
-# FIT BOUNDS OTOMATIS SUPAYA NUNUKAN, MANADO, SUKABUMI & JATIM MUNCUL BERSAMAAN
-m_cluster.fit_bounds(all_coords)
+# Ambil median waktu agar bebas tutupan awan
+composite_s2 = datacube.median_time()
 
-folium.LayerControl(collapsed=False).add_to(m_cluster)
-m_cluster.add_child(MeasureControl())
-
-m_cluster
+# Unduh menjadi file GeoTIFF (.tif)
+nama_tif = "sentinel2_sawah_nonsawah.tif"
+print("Mengunduh citra Sentinel-2A (.tif)...")
+composite_s2.download(nama_tif, format="GTiff")
+print(f"Berhasil diunduh: {nama_tif}")
 ```
 
-## 2.1 Visualisasi Peta Geospasial Interaktif Sample Sawah & Non-Sawah
-Di bawah ini adalah peta geospasial interaktif berbasis **Folium (Leaflet.js)** yang menampilkan 50 titik sampel area **Sawah** (kuning/hijau) dari `50sawah.qgs` dan 50 titik sampel area **Non-Sawah** (merah) dari `Non Sawah asli.qgs`[cite: 18, 19]. Peta ini dapat di-zoom, digeser, dan dipilih layernya[cite: 18, 19].
-
-```{code-cell} ipython3
-:tags: [hide-input]
-
-import os
-import folium
-from folium.plugins import MeasureControl
-import numpy as np
-import pandas as pd
-from pathlib import Path
-
-# DETEKSI LOKASI FILE GEOJSON
-current_dir = Path.cwd()
-search_dirs = [current_dir, current_dir / "Tugas", Path("D:/PSD/Tugas")]
-
-path_sawah = next((d / "sawah.geojson" for d in search_dirs if (d / "sawah.geojson").exists()), None)
-path_nonsawah = next((d / "non-sawah.geojson" for d in search_dirs if (d / "non-sawah.geojson").exists()), None)
-
-# INISIALISASI PETA FOLIUM (Pusat Koordinat Area Sawah Nunukan)
-m = folium.Map(location=[4.093314711269619, 117.62314629620484], zoom_start=13, tiles="OpenStreetMap")
-
-# Layer Google Satellite Hybrid
-folium.TileLayer(
-    tiles='[https://mt1.google.com/vt/lyrs=y&x=](https://mt1.google.com/vt/lyrs=y&x=){x}&y={y}&z={z}',
-    attr='Google Satellite',
-    name='Google Satellite Hybrid',
-    overlay=False,
-    control=True
-).add_to(m)
-
-# TAMPILKAN LAYER SAWAH (POLYGON/POINT DARI QGIS)
-if path_sawah:
-    folium.GeoJson(
-        str(path_sawah),
-        name='50 Sampel Sawah (Hijau)',
-        style_function=lambda x: {'fillColor': '#00ff00', 'color': '#006400', 'weight': 2, 'fillOpacity': 0.6}
-    ).add_to(m)
-
-# TAMPILKAN LAYER NON-SAWAH
-if path_nonsawah:
-    folium.GeoJson(
-        str(path_nonsawah),
-        name='50 Sampel Non-Sawah (Merah)',
-        style_function=lambda x: {'fillColor': '#ff0000', 'color': '#8b0000', 'weight': 2, 'fillOpacity': 0.6}
-    ).add_to(m)
-
-folium.LayerControl(collapsed=False).add_to(m)
-m.add_child(MeasureControl())
+**Output:**
 
 ```
+Jumlah sampel Sawah     : 51
+Jumlah sampel Non-Sawah : 51
+Total sampel gabungan   : 102
+Bounding Box Gabungan: {'west': 112.0286883, 'south': -7.5874895, 'east': 112.0537555, 'north': -7.5647792}
+Authenticated using refresh token.
+Mengunduh citra Sentinel-2A (.tif)...
+Berhasil diunduh: sentinel2_sawah_nonsawah.tif
+```
 
-## 2.2 Model Klasifikasi 2 Kelas Sentinel-2A (.TIF)
-Proses ekstraksi reflektansi pita spektral B4 (Red) dan B8 (Near-Infrared / NIR) citra Sentinel-2A dimanfaatkan untuk menghitung Formulasi Indeks Vegetasi
+## 2. Akuisisi Citra Sentinel-2A (`.tif`) via openEO dan Ekstraksi Fitur
 
-```{code-cell} ipython3
-:tags: [hide-input]
+Akuisisi citra dilakukan menggunakan *bounding box* gabungan dari ke-102 titik sampel pada koleksi **`SENTINEL2_L2A`** (*Bottom-of-Atmosphere Reflectance*) dengan batas tutupan awan maksimum `< 10%` dan agregasi temporal `median_time()` untuk menghasilkan komposit citra bebas awan berformat **GeoTIFF (`.tif`)**.
 
-import pandas as pd
+### Fitur Spektral dan Indeks Turunan yang Diekstrak:
+1. **Band Spektral Utama:**
+   * `B02` (*Blue* - 490 nm), `B03` (*Green* - 560 nm), `B04` (*Red* - 665 nm) dengan resolusi spasial 10 meter.
+   * `B08` (*Near Infrared / NIR* - 842 nm) untuk mendeteksi pantulan klorofil tanaman padi.
+   * `B11` (*Short-Wave Infrared / SWIR* - 1610 nm) untuk mendeteksi kelembapan tanah dan genangan air.
+2. **Normalized Difference Vegetation Index (NDVI):**
+
+   $$\text{NDVI} = \frac{B08 - B04}{B08 + B04}$$
+
+3. **Normalized Difference Water Index (NDWI):**
+
+   $$\text{NDWI} = \frac{B03 - B08}{B03 + B08}$$
+
+```python
 import numpy as np
-from sklearn.model_selection import train_test_split
+import rasterio
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.model_selection import train_test_split
 
-# 1. GENERATE / EKSTRAKSI FITUR REFLOKTANSI SENTINEL-2A (50 SAWAH & 50 NON-SAWAH)
-np.random.seed(42)
+# 1. Buka file .tif Sentinel-2A dan samakan proyeksi koordinat (CRS)
+with rasterio.open("sentinel2_sawah_nonsawah.tif") as src:
+  gdf_projected = gdf_gabungan.to_crs(src.crs)
 
-# Sampel Reflektansi Spektral Sawah (B4 Red & B8 NIR)
-sawah_b4 = np.random.uniform(0.02, 0.08, 50)  # Band 4 Red (Rendah di area vegetasi)
-sawah_b8 = np.random.uniform(0.35, 0.65, 50)  # Band 8 NIR (Tinggi di vegetasi lebat)
-sawah_ndvi = (sawah_b8 - sawah_b4) / (sawah_b8 + sawah_b4)
+  # Ambil titik tengah (centroid) dari tiap sampel (mendukung Point maupun Polygon)
+  koordinat_sampel = [
+      (geom.centroid.x, geom.centroid.y) for geom in gdf_projected.geometry
+  ]
 
-# Sampel Reflektansi Spektral Non-Sawah
-nonsawah_b4 = np.random.uniform(0.12, 0.30, 50)  # Band 4 Red
-nonsawah_b8 = np.random.uniform(0.15, 0.28, 50)  # Band 8 NIR
-nonsawah_ndvi = (nonsawah_b8 - nonsawah_b4) / (nonsawah_b8 + nonsawah_b4)
+  # Ekstrak nilai piksel dari kelima band Sentinel-2A
+  nilai_band = list(src.sample(koordinat_sampel))
 
-# 2. PEMBENTUKAN DATAFRAME FITUR
-df_sawah = pd.DataFrame({'B4_Red': sawah_b4, 'B8_NIR': sawah_b8, 'NDVI': sawah_ndvi, 'Label': 'Sawah'})
-df_nonsawah = pd.DataFrame({'B4_Red': nonsawah_b4, 'B8_NIR': nonsawah_b8, 'NDVI': nonsawah_ndvi, 'Label': 'Non-Sawah'})
-df_geo = pd.concat([df_sawah, df_nonsawah], ignore_index=True)
+# 2. Buat tabel DataFrame Fitur
+df_dataset = pd.DataFrame(nilai_band, columns=["B02", "B03", "B04", "B08", "B11"])
 
-# 3. PEMBAGIAN DATASET (80% TRAIN, 20% TEST)
-X = df_geo[['B4_Red', 'B8_NIR', 'NDVI']]
-y = df_geo['Label']
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+# 3. Tambahkan fitur indeks vegetasi (NDVI) & indeks air (NDWI)
+df_dataset["NDVI"] = (df_dataset["B08"] - df_dataset["B04"]) / (
+    df_dataset["B08"] + df_dataset["B04"] + 1e-6
+)
+df_dataset["NDWI"] = (df_dataset["B03"] - df_dataset["B08"]) / (
+    df_dataset["B03"] + df_dataset["B08"] + 1e-6
+)
 
-# 4. PELATIHAN MODEL RANDOM FOREST
-clf = RandomForestClassifier(n_estimators=100, random_state=42)
-clf.fit(X_train, y_train)
+# 4. Masukkan Koordinat & Label Kelas (Sawah = 1, Non-Sawah = 0)
+df_dataset["Longitude"] = gdf_gabungan.geometry.centroid.x
+df_dataset["Latitude"] = gdf_gabungan.geometry.centroid.y
+df_dataset["Kelas"] = gdf_gabungan["label_teks"]
+df_dataset["Target"] = gdf_gabungan["label"]
 
-# 5. EVALUASI PREDIKSI
-y_pred = clf.predict(X_test)
+# Simpan ke CSV (bisa dipakai juga kalau mau diolah di KNIME)
+df_dataset.to_csv("dataset_100sampel_sawah_nonsawah.csv", index=False)
+print("Dataset berhasil disimpan ke 'dataset_100sampel_sawah_nonsawah.csv'")
+display(df_dataset.head())
 
-print("=== HASIL EVALUASI MODEL KLASIFIKASI SAWAH VS NON-SAWAH ===")
-print("\nConfusion Matrix:")
-print(confusion_matrix(y_test, y_pred))
-print("\nClassification Report:")
-print(classification_report(y_test, y_pred))
+# ==============================================================================
+# 5. PROSES KLASIFIKASI 2 KELAS (SAWAH VS NON-SAWAH)
+# ==============================================================================
+fitur_kolom = ["B02", "B03", "B04", "B08", "B11", "NDVI", "NDWI"]
+X = df_dataset[fitur_kolom]
+y = df_dataset["Kelas"]
 
+# Split 80% Training (41 Sawah + 40 Non-Sawah) & 20% Testing (10 Sawah + 11 Non-Sawah)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
+
+# Latih model Random Forest
+model_rf = RandomForestClassifier(n_estimators=100, random_state=42)
+model_rf.fit(X_train, y_train)
+
+# Evaluasi pada data uji
+y_pred = model_rf.predict(X_test)
+print(
+    "\n=== HASIL EVALUASI KLASIFIKASI 2 KELAS ==="
+)
+print(f"Akurasi Testing : {accuracy_score(y_test, y_pred) * 100:.2f}%")
+print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("\nClassification Report:\n", classification_report(y_test, y_pred))
+```
+
+**Output:**
+
+```
+Dataset berhasil disimpan ke 'dataset_100sampel_sawah_nonsawah.csv'
+```
+
+**Output:**
+
+```{code-cell} ipython3
+:tags: [hide-input]
+import pandas as pd
+df_ekstraksi_cek_poly = pd.read_csv("dataset_100sampel_sawah_nonsawah.csv")
+df_ekstraksi_cek_poly.head(5)
+```
+
+## 3. Hasil Evaluasi Klasifikasi 2 Kelas (Random Forest)
+
+Dataset 100 sampel dibagi menggunakan skema *Stratified Train-Test Split* dengan proporsi **80% Data Latih (81 sampel: 41 Sawah, 40 Non-Sawah)** dan **20% Data Uji (21 sampel: 10 Sawah, 11 Non-Sawah)**.
+
+```{code-cell} ipython3
+import matplotlib.colors as mcolors
+import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import (
+    ConfusionMatrixDisplay,
+    accuracy_score,
+    classification_report,
+    confusion_matrix,
+)
+from sklearn.model_selection import train_test_split
+
+# 1. Muat dataset dari CSV
+df_dataset = pd.read_csv("dataset_100sampel_sawah_nonsawah.csv")
+
+# 2. Siapkan fitur dan target
+fitur_kolom = [c for c in ["B02", "B03", "B04", "B08", "B11", "NDVI", "NDWI"] if c in df_dataset.columns]
+X = df_dataset[fitur_kolom]
+y = df_dataset["Kelas"]
+
+# 3. Split 80% Training & 20% Testing
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
+
+# 4. Latih model Random Forest
+model_rf = RandomForestClassifier(n_estimators=100, random_state=42)
+model_rf.fit(X_train, y_train)
+y_pred = model_rf.predict(X_test)
+
+print(f"Akurasi Testing : {accuracy_score(y_test, y_pred) * 100:.2f}%")
+print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("\nClassification Report:\n", classification_report(y_test, y_pred))
+```
+
+```{code-cell} ipython3
+# ==============================================================================
+# A. VISUALISASI CONFUSION MATRIX & FEATURE IMPORTANCE
+# ==============================================================================
+fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
+
+# 1. Plot Confusion Matrix
+ConfusionMatrixDisplay.from_predictions(
+    y_test, y_pred, cmap="Greens", ax=axes[0], colorbar=False
+)
+axes[0].set_title("Confusion Matrix (Data Uji 21 Sampel)")
+
+# 2. Plot Tingkat Kepentingan Fitur (Band & Indeks Spektral)
+importances = model_rf.feature_importances_
+indices = np.argsort(importances)
+axes[1].barh(
+    range(len(indices)),
+    importances[indices],
+    color="#2ecc71",
+    edgecolor="black",
+)
+axes[1].set_yticks(range(len(indices)))
+axes[1].set_yticklabels([fitur_kolom[i] for i in indices])
+axes[1].set_xlabel("Nilai Kepentingan (Importance)")
+axes[1].set_title("Kontribusi Fitur Spektral Sentinel-2A")
+
+plt.tight_layout()
+plt.show()
 ```
