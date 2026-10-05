@@ -36,9 +36,9 @@ Pengambilan sampel dilakukan secara spasial dengan membagi objek pengamatan ke d
 
 | Kelas Target | Kode Label | Jumlah Sampel | Karakteristik Objek |
 | :--- | :---: | :---: | :--- |
-| **Sawah** | `1` | 51 Sampel | Petak lahan pertanian padi aktif (fase vegetatif, genangan air/tanam, maupun pematangan) |
-| **Non-Sawah** | `0` | 51 Sampel | Permukiman/bangunan, jalan raya, badan air permanen, dan vegetasi non-pertanian |
-| **Total** | — | **102 Sampel** | Digabungkan menjadi satu *GeoDataFrame* berproyeksi `EPSG:4326` |
+| **Sawah** | `1` | 50 Sampel | Petak lahan pertanian padi aktif (fase vegetatif, genangan air/tanam, maupun pematangan) |
+| **Non-Sawah** | `0` | 50 Sampel | Permukiman/bangunan, jalan raya, badan air permanen, dan vegetasi non-pertanian |
+| **Total** | — | **100 Sampel** | Digabungkan menjadi satu *GeoDataFrame* berproyeksi `EPSG:4326` |
 
 ```python
 import geopandas as gpd
@@ -115,9 +115,9 @@ print(f"Berhasil diunduh: {nama_tif}")
 **Output:**
 
 ```
-Jumlah sampel Sawah     : 51
-Jumlah sampel Non-Sawah : 51
-Total sampel gabungan   : 102
+Jumlah sampel Sawah     : 50
+Jumlah sampel Non-Sawah : 50
+Total sampel gabungan   : 100
 Bounding Box Gabungan: {'west': 112.0286883, 'south': -7.5874895, 'east': 112.0537555, 'north': -7.5647792}
 Authenticated using refresh token.
 Mengunduh citra Sentinel-2A (.tif)...
