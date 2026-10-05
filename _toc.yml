@@ -12,3 +12,4 @@ chapters:
   - file: Preprocessing feature extraction
   - file: K-means
   - file: K-means(Polynomial)
+  - file: Sawah

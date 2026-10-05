@@ -405,6 +405,11 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Authenticated using refresh token.
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -465,20 +470,19 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:00 Job 'j-2609111246254e8cb05cc0ca6fffc983': send 'start'
-0:00:05 Job 'j-2609111246254e8cb05cc0ca6fffc983': queued (progress 0%)
-0:00:10 Job 'j-2609111246254e8cb05cc0ca6fffc983': queued (progress 0%)
-0:00:17 Job 'j-2609111246254e8cb05cc0ca6fffc983': queued (progress 0%)
-0:00:25 Job 'j-2609111246254e8cb05cc0ca6fffc983': queued (progress 0%)
-0:00:35 Job 'j-2609111246254e8cb05cc0ca6fffc983': queued (progress 0%)
-0:00:48 Job 'j-2609111246254e8cb05cc0ca6fffc983': queued (progress 0%)
-0:01:03 Job 'j-2609111246254e8cb05cc0ca6fffc983': queued (progress 0%)
-0:01:23 Job 'j-2609111246254e8cb05cc0ca6fffc983': running (progress N/A)
-0:01:47 Job 'j-2609111246254e8cb05cc0ca6fffc983': running (progress N/A)
-0:02:17 Job 'j-2609111246254e8cb05cc0ca6fffc983': running (progress N/A)
-0:02:54 Job 'j-2609111246254e8cb05cc0ca6fffc983': running (progress N/A)
-0:03:41 Job 'j-2609111246254e8cb05cc0ca6fffc983': running (progress N/A)
-0:04:40 Job 'j-2609111246254e8cb05cc0ca6fffc983': finished (progress 100%)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:00 Job 'j-26100500370640f5b35a3f629bf2e90e': send 'start'
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:02 Job 'j-26100500370640f5b35a3f629bf2e90e': queued (progress 0%)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:08 Job 'j-26100500370640f5b35a3f629bf2e90e': queued (progress 0%)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:14 Job 'j-26100500370640f5b35a3f629bf2e90e': queued (progress 0%)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0:00:23 Job 'j-26100500370640f5b35a3f629bf2e90e': queued (progress 0%)
 </pre></div>
 </div>
 </div>
@@ -2333,6 +2337,463 @@ Jumlah NaN/non-numerik pada CO: 0
 
 Berhasil! Total kolom akhir yang dihasilkan: 204
 File berhasil disimpan sebagai: All-Pollutants-Linear-TSFEL.csv
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">openeo</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># 1. BACA KEDUA FILE ZIP (SAWAH &amp; NON-SAWAH) DAN BERI LABEL OTOMATIS</span>
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># Sesuaikan nama file zip non-sawah milikmu di baris kedua</span>
+<span class="n">gdf_sawah</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">"mystorage/sawah.zip"</span><span class="p">)</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">"EPSG:4326"</span><span class="p">)</span>
+<span class="n">gdf_nonsawah</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">"mystorage/rumah.zip"</span><span class="p">)</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">"EPSG:4326"</span><span class="p">)</span>
+
+<span class="c1"># Beri kolom label secara otomatis</span>
+<span class="n">gdf_sawah</span><span class="p">[</span><span class="s2">"label_teks"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Sawah"</span>
+<span class="n">gdf_sawah</span><span class="p">[</span><span class="s2">"label"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">gdf_nonsawah</span><span class="p">[</span><span class="s2">"label_teks"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Non-Sawah"</span>
+<span class="n">gdf_nonsawah</span><span class="p">[</span><span class="s2">"label"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1"># Gabungkan keduanya menjadi 1 GeoDataFrame (50 + 50 = 100 sampel)</span>
+<span class="n">gdf_gabungan</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">gdf_sawah</span><span class="p">,</span> <span class="n">gdf_nonsawah</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">crs</span><span class="o">=</span><span class="s2">"EPSG:4326"</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Jumlah sampel Sawah     : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf_sawah</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Jumlah sampel Non-Sawah : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf_nonsawah</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Total sampel gabungan   : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf_gabungan</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># 2. AMBIL BATAS KOORDINAT GABUNGAN (BOUNDING BOX) UNTUK OPENEO</span>
+<span class="c1"># ==============================================================================</span>
+<span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span> <span class="o">=</span> <span class="n">gdf_gabungan</span><span class="o">.</span><span class="n">total_bounds</span>
+<span class="n">buffer_deg</span> <span class="o">=</span> <span class="mf">0.005</span>  <span class="c1"># Tambahan margin ~500 meter agar titik di tepi tetap masuk</span>
+
+<span class="n">bbox</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"west"</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">minx</span> <span class="o">-</span> <span class="n">buffer_deg</span><span class="p">),</span>
+    <span class="s2">"south"</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">miny</span> <span class="o">-</span> <span class="n">buffer_deg</span><span class="p">),</span>
+    <span class="s2">"east"</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">maxx</span> <span class="o">+</span> <span class="n">buffer_deg</span><span class="p">),</span>
+    <span class="s2">"north"</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">maxy</span> <span class="o">+</span> <span class="n">buffer_deg</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Bounding Box Gabungan:"</span><span class="p">,</span> <span class="n">bbox</span><span class="p">)</span>
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># 3. KONEKSI KE OPENEO &amp; UNDUH SENTINEL-2A FORMAT GEOTIFF (.tif)</span>
+<span class="c1"># ==============================================================================</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">openeo</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">"openeo.dataspace.copernicus.eu"</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">authenticate_oidc</span><span class="p">()</span>
+
+<span class="n">datacube</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">load_collection</span><span class="p">(</span>
+    <span class="s2">"SENTINEL2_L2A"</span><span class="p">,</span>
+    <span class="n">spatial_extent</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
+    <span class="n">temporal_extent</span><span class="o">=</span><span class="p">[</span><span class="s2">"2026-05-01"</span><span class="p">,</span> <span class="s2">"2026-09-30"</span><span class="p">],</span>  <span class="c1"># Rentang waktu minim awan</span>
+    <span class="n">bands</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">"B02"</span><span class="p">,</span>
+        <span class="s2">"B03"</span><span class="p">,</span>
+        <span class="s2">"B04"</span><span class="p">,</span>
+        <span class="s2">"B08"</span><span class="p">,</span>
+        <span class="s2">"B11"</span><span class="p">,</span>
+    <span class="p">],</span>  <span class="c1"># Blue, Green, Red, NIR, SWIR</span>
+    <span class="n">max_cloud_cover</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Ambil median waktu agar bebas tutupan awan</span>
+<span class="n">composite_s2</span> <span class="o">=</span> <span class="n">datacube</span><span class="o">.</span><span class="n">median_time</span><span class="p">()</span>
+
+<span class="c1"># Unduh menjadi file GeoTIFF (.tif)</span>
+<span class="n">nama_tif</span> <span class="o">=</span> <span class="s2">"sentinel2_sawah_nonsawah.tif"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Mengunduh citra Sentinel-2A (.tif)..."</span><span class="p">)</span>
+<span class="n">composite_s2</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">nama_tif</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"GTiff"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Berhasil diunduh: </span><span class="si">{</span><span class="n">nama_tif</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">DataSourceError</span><span class="g g-Whitespace">                           </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">9</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1"># ==============================================================================</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="c1"># 1. BACA KEDUA FILE ZIP (SAWAH &amp; NON-SAWAH) DAN BERI LABEL OTOMATIS</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="c1"># ==============================================================================</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="c1"># Sesuaikan nama file zip non-sawah milikmu di baris kedua</span>
+<span class="ne">----&gt; </span><span class="mi">9</span> <span class="n">gdf_sawah</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">"mystorage/sawah.zip"</span><span class="p">)</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">"EPSG:4326"</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">gdf_nonsawah</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">"mystorage/rumah.zip"</span><span class="p">)</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">"EPSG:4326"</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="c1"># Beri kolom label secara otomatis</span>
+
+<span class="nn">File c:\Users\Admin\AppData\Local\Programs\Python\Python39\lib\site-packages\geopandas\io\file.py:294,</span> in <span class="ni">_read_file</span><span class="nt">(filename, bbox, mask, columns, rows, engine, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">291</span>             <span class="n">from_bytes</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="g g-Whitespace">    </span><span class="mi">293</span> <span class="k">if</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">"pyogrio"</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">294</span>     <span class="k">return</span> <span class="n">_read_file_pyogrio</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">295</span>         <span class="n">filename</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">rows</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="g g-Whitespace">    </span><span class="mi">296</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">298</span> <span class="k">elif</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">"fiona"</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">299</span>     <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_file_like</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+
+<span class="nn">File c:\Users\Admin\AppData\Local\Programs\Python\Python39\lib\site-packages\geopandas\io\file.py:547,</span> in <span class="ni">_read_file_pyogrio</span><span class="nt">(path_or_bytes, bbox, mask, rows, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">538</span>     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">539</span>         <span class="s2">"The 'include_fields' and 'ignore_fields' keywords are deprecated, and "</span>
+<span class="g g-Whitespace">    </span><span class="mi">540</span>         <span class="s2">"will be removed in a future release. You can use the 'columns' keyword "</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">543</span>         <span class="n">stacklevel</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">544</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">545</span>     <span class="n">kwargs</span><span class="p">[</span><span class="s2">"columns"</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"include_fields"</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">547</span> <span class="k">return</span> <span class="n">pyogrio</span><span class="o">.</span><span class="n">read_dataframe</span><span class="p">(</span><span class="n">path_or_bytes</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File c:\Users\Admin\AppData\Local\Programs\Python\Python39\lib\site-packages\pyogrio\geopandas.py:275,</span> in <span class="ni">read_dataframe</span><span class="nt">(path_or_buffer, layer, encoding, columns, read_geometry, force_2d, skip_features, max_features, where, bbox, mask, fids, sql, sql_dialect, fid_as_index, use_arrow, on_invalid, arrow_to_pandas_kwargs, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">270</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">use_arrow</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">271</span>     <span class="c1"># For arrow, datetimes are read as is.</span>
+<span class="g g-Whitespace">    </span><span class="mi">272</span>     <span class="c1"># For numpy IO, datetimes are read as string values to preserve timezone info</span>
+<span class="g g-Whitespace">    </span><span class="mi">273</span>     <span class="c1"># as numpy does not directly support timezones.</span>
+<span class="g g-Whitespace">    </span><span class="mi">274</span>     <span class="n">kwargs</span><span class="p">[</span><span class="s2">"datetime_as_string"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="ne">--&gt; </span><span class="mi">275</span> <span class="n">result</span> <span class="o">=</span> <span class="n">read_func</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">276</span>     <span class="n">path_or_buffer</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">277</span>     <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">278</span>     <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">279</span>     <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">280</span>     <span class="n">read_geometry</span><span class="o">=</span><span class="n">read_geometry</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">281</span>     <span class="n">force_2d</span><span class="o">=</span><span class="n">gdal_force_2d</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">282</span>     <span class="n">skip_features</span><span class="o">=</span><span class="n">skip_features</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">283</span>     <span class="n">max_features</span><span class="o">=</span><span class="n">max_features</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">284</span>     <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">285</span>     <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">286</span>     <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">287</span>     <span class="n">fids</span><span class="o">=</span><span class="n">fids</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">288</span>     <span class="n">sql</span><span class="o">=</span><span class="n">sql</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">289</span>     <span class="n">sql_dialect</span><span class="o">=</span><span class="n">sql_dialect</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">290</span>     <span class="n">return_fids</span><span class="o">=</span><span class="n">fid_as_index</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">291</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">292</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">294</span> <span class="k">if</span> <span class="n">use_arrow</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">295</span>     <span class="kn">import</span><span class="w"> </span><span class="nn">pyarrow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pa</span>
+
+<span class="nn">File c:\Users\Admin\AppData\Local\Programs\Python\Python39\lib\site-packages\pyogrio\raw.py:198,</span> in <span class="ni">read</span><span class="nt">(path_or_buffer, layer, encoding, columns, read_geometry, force_2d, skip_features, max_features, where, bbox, mask, fids, sql, sql_dialect, return_fids, datetime_as_string, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">59</span><span class="w"> </span><span class="sd">"""Read OGR data source into numpy arrays.</span>
+<span class="g g-Whitespace">     </span><span class="mi">60</span><span class="sd"> </span>
+<span class="g g-Whitespace">     </span><span class="mi">61</span><span class="sd"> IMPORTANT: non-linear geometry types (e.g., MultiSurface) are converted</span>
+<span class="sd">   (...)</span>
+<span class="g g-Whitespace">    </span><span class="mi">194</span><span class="sd"> </span>
+<span class="g g-Whitespace">    </span><span class="mi">195</span><span class="sd"> """</span>
+<span class="g g-Whitespace">    </span><span class="mi">196</span> <span class="n">dataset_kwargs</span> <span class="o">=</span> <span class="n">_preprocess_options_key_value</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="k">if</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="p">{}</span>
+<span class="ne">--&gt; </span><span class="mi">198</span> <span class="k">return</span> <span class="n">ogr_read</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">199</span>     <span class="n">get_vsi_path_or_buffer</span><span class="p">(</span><span class="n">path_or_buffer</span><span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">200</span>     <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">201</span>     <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">202</span>     <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">203</span>     <span class="n">read_geometry</span><span class="o">=</span><span class="n">read_geometry</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">204</span>     <span class="n">force_2d</span><span class="o">=</span><span class="n">force_2d</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">205</span>     <span class="n">skip_features</span><span class="o">=</span><span class="n">skip_features</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">206</span>     <span class="n">max_features</span><span class="o">=</span><span class="n">max_features</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">207</span>     <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">208</span>     <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">209</span>     <span class="n">mask</span><span class="o">=</span><span class="n">_mask_to_wkb</span><span class="p">(</span><span class="n">mask</span><span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">210</span>     <span class="n">fids</span><span class="o">=</span><span class="n">fids</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">211</span>     <span class="n">sql</span><span class="o">=</span><span class="n">sql</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">212</span>     <span class="n">sql_dialect</span><span class="o">=</span><span class="n">sql_dialect</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">213</span>     <span class="n">return_fids</span><span class="o">=</span><span class="n">return_fids</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">214</span>     <span class="n">dataset_kwargs</span><span class="o">=</span><span class="n">dataset_kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">215</span>     <span class="n">datetime_as_string</span><span class="o">=</span><span class="n">datetime_as_string</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">216</span> <span class="p">)</span>
+
+<span class="nn">File pyogrio/_io.pyx:1313,</span> in <span class="ni">pyogrio._io.ogr_read</span><span class="nt">()</span>
+
+<span class="nn">File pyogrio/_io.pyx:232,</span> in <span class="ni">pyogrio._io.ogr_open</span><span class="nt">()</span>
+
+<span class="ne">DataSourceError</span>: '/vsizip/mystorage/sawah.zip' does not exist in the file system, and is not recognized as a supported dataset name.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">folium</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">folium.plugins</span><span class="w"> </span><span class="kn">import</span> <span class="n">MeasureControl</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># DETEKSI LOKASI FILE GEOJSON</span>
+<span class="n">current_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
+<span class="n">search_dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">current_dir</span><span class="p">,</span> <span class="n">current_dir</span> <span class="o">/</span> <span class="s2">"materi"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"D:/PSD/Tugas"</span><span class="p">)]</span>
+
+<span class="n">path_sawah</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">d</span> <span class="o">/</span> <span class="s2">"sawah.geojson"</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">search_dirs</span> <span class="k">if</span> <span class="p">(</span><span class="n">d</span> <span class="o">/</span> <span class="s2">"sawah.geojson"</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()),</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">path_nonsawah</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">d</span> <span class="o">/</span> <span class="s2">"nonsawah.geojson"</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">search_dirs</span> <span class="k">if</span> <span class="p">(</span><span class="n">d</span> <span class="o">/</span> <span class="s2">"nonsawah.geojson"</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()),</span> <span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># INISIALISASI PETA FOLIUM (Pusat Koordinat Area Sawah Nunukan)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1036</span><span class="p">,</span> <span class="mf">117.4892</span><span class="p">],</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">tiles</span><span class="o">=</span><span class="s2">"OpenStreetMap"</span><span class="p">)</span>
+
+<span class="c1"># Layer Google Satellite Hybrid</span>
+<span class="n">folium</span><span class="o">.</span><span class="n">TileLayer</span><span class="p">(</span>
+    <span class="n">tiles</span><span class="o">=</span><span class="s1">'[https://mt1.google.com/vt/lyrs=y&amp;x=](https://mt1.google.com/vt/lyrs=y&amp;x=)</span><span class="si">{x}</span><span class="s1">&amp;y=</span><span class="si">{y}</span><span class="s1">&amp;z=</span><span class="si">{z}</span><span class="s1">'</span><span class="p">,</span>
+    <span class="n">attr</span><span class="o">=</span><span class="s1">'Google Satellite'</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s1">'Google Satellite Hybrid'</span><span class="p">,</span>
+    <span class="n">overlay</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">control</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="c1"># TAMPILKAN LAYER SAWAH (POLYGON/POINT DARI QGIS)</span>
+<span class="k">if</span> <span class="n">path_sawah</span><span class="p">:</span>
+    <span class="n">folium</span><span class="o">.</span><span class="n">GeoJson</span><span class="p">(</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">path_sawah</span><span class="p">),</span>
+        <span class="n">name</span><span class="o">=</span><span class="s1">'50 Sampel Sawah (Hijau)'</span><span class="p">,</span>
+        <span class="n">style_function</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">{</span><span class="s1">'fillColor'</span><span class="p">:</span> <span class="s1">'#00ff00'</span><span class="p">,</span> <span class="s1">'color'</span><span class="p">:</span> <span class="s1">'#006400'</span><span class="p">,</span> <span class="s1">'weight'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'fillOpacity'</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">}</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="c1"># TAMPILKAN LAYER NON-SAWAH</span>
+<span class="k">if</span> <span class="n">path_nonsawah</span><span class="p">:</span>
+    <span class="n">folium</span><span class="o">.</span><span class="n">GeoJson</span><span class="p">(</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">path_nonsawah</span><span class="p">),</span>
+        <span class="n">name</span><span class="o">=</span><span class="s1">'50 Sampel Non-Sawah (Merah)'</span><span class="p">,</span>
+        <span class="n">style_function</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">{</span><span class="s1">'fillColor'</span><span class="p">:</span> <span class="s1">'#ff0000'</span><span class="p">,</span> <span class="s1">'color'</span><span class="p">:</span> <span class="s1">'#8b0000'</span><span class="p">,</span> <span class="s1">'weight'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'fillOpacity'</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">}</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="n">folium</span><span class="o">.</span><span class="n">LayerControl</span><span class="p">(</span><span class="n">collapsed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">MeasureControl</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><span style="color:#565656">Make this Notebook Trusted to load map: File -> Trust Notebook</span><iframe srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    
+    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
+    
+            &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
+            &lt;style&gt;
+                #map_48f3c8c7c783ad52ad3bd9dc45396e72 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            &lt;/style&gt;
+
+            &lt;style&gt;html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            &lt;/style&gt;
+
+            &lt;style&gt;#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            &lt;/style&gt;
+
+            &lt;script&gt;
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            &lt;/script&gt;
+
+        
+    &lt;script src=&quot;https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.css&quot;/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    
+    
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_48f3c8c7c783ad52ad3bd9dc45396e72&quot; &gt;&lt;/div&gt;
+        
+&lt;/body&gt;
+&lt;script&gt;
+    
+    
+            var map_48f3c8c7c783ad52ad3bd9dc45396e72 = L.map(
+                &quot;map_48f3c8c7c783ad52ad3bd9dc45396e72&quot;,
+                {
+                    center: [0.1036, 117.4892],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  &quot;zoom&quot;: 13,
+  &quot;zoomControl&quot;: true,
+  &quot;preferCanvas&quot;: false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_353da7840b215b579d7a08bacfdcbc77 = L.tileLayer(
+                &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
+                {
+  &quot;minZoom&quot;: 0,
+  &quot;maxZoom&quot;: 19,
+  &quot;maxNativeZoom&quot;: 19,
+  &quot;noWrap&quot;: false,
+  &quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;,
+  &quot;subdomains&quot;: &quot;abc&quot;,
+  &quot;detectRetina&quot;: false,
+  &quot;tms&quot;: false,
+  &quot;opacity&quot;: 1,
+}
+
+            );
+        
+    
+            tile_layer_353da7840b215b579d7a08bacfdcbc77.addTo(map_48f3c8c7c783ad52ad3bd9dc45396e72);
+        
+    
+            var tile_layer_327a2f502237d7673fb615db50c433ad = L.tileLayer(
+                &quot;[https://mt1.google.com/vt/lyrs=y\u0026x=](https://mt1.google.com/vt/lyrs=y\u0026x=){x}\u0026y={y}\u0026z={z}&quot;,
+                {
+  &quot;minZoom&quot;: 0,
+  &quot;maxZoom&quot;: 18,
+  &quot;maxNativeZoom&quot;: 18,
+  &quot;noWrap&quot;: false,
+  &quot;attribution&quot;: &quot;Google Satellite&quot;,
+  &quot;subdomains&quot;: &quot;abc&quot;,
+  &quot;detectRetina&quot;: false,
+  &quot;tms&quot;: false,
+  &quot;opacity&quot;: 1,
+}
+
+            );
+        
+    
+            tile_layer_327a2f502237d7673fb615db50c433ad.addTo(map_48f3c8c7c783ad52ad3bd9dc45396e72);
+        
+    
+            var layer_control_a116bc8cb02d00454c37cfeab04dab3a_layers = {
+                base_layers : {
+                    &quot;openstreetmap&quot; : tile_layer_353da7840b215b579d7a08bacfdcbc77,
+                    &quot;Google Satellite Hybrid&quot; : tile_layer_327a2f502237d7673fb615db50c433ad,
+                },
+                overlays :  {
+                },
+            };
+            let layer_control_a116bc8cb02d00454c37cfeab04dab3a = L.control.layers(
+                layer_control_a116bc8cb02d00454c37cfeab04dab3a_layers.base_layers,
+                layer_control_a116bc8cb02d00454c37cfeab04dab3a_layers.overlays,
+                {
+  &quot;position&quot;: &quot;topright&quot;,
+  &quot;collapsed&quot;: false,
+  &quot;autoZIndex&quot;: true,
+}
+            ).addTo(map_48f3c8c7c783ad52ad3bd9dc45396e72);
+
+        
+    
+            var measure_control_929425db4662b5787b673cd0cfd0941f = new L.Control.Measure(
+                {
+  &quot;position&quot;: &quot;topright&quot;,
+  &quot;primaryLengthUnit&quot;: &quot;meters&quot;,
+  &quot;secondaryLengthUnit&quot;: &quot;miles&quot;,
+  &quot;primaryAreaUnit&quot;: &quot;sqmeters&quot;,
+  &quot;secondaryAreaUnit&quot;: &quot;acres&quot;,
+});
+            map_48f3c8c7c783ad52ad3bd9dc45396e72.addControl(measure_control_929425db4662b5787b673cd0cfd0941f);
+
+            // Workaround for using this plugin with Leaflet&gt;=1.8.0
+            // https://github.com/ljagis/leaflet-measure/issues/171
+            L.Control.Measure.include({
+                _setCaptureMarkerIcon: function () {
+                    // disable autopan
+                    this._captureMarker.options.autoPanOnFocus = false;
+                    // default function
+                    this._captureMarker.setIcon(
+                        L.divIcon({
+                            iconSize: this._map.getSize().multiplyBy(2)
+                        })
+                    );
+                },
+            });
+
+        
+&lt;/script&gt;
+&lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">confusion_matrix</span>
+
+<span class="c1"># 1. GENERATE / EKSTRAKSI FITUR REFLOKTANSI SENTINEL-2A (50 SAWAH &amp; 50 NON-SAWAH)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Sampel Reflektansi Spektral Sawah (B4 Red &amp; B8 NIR)</span>
+<span class="n">sawah_b4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.08</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>  <span class="c1"># Band 4 Red (Rendah di area vegetasi)</span>
+<span class="n">sawah_b8</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>  <span class="c1"># Band 8 NIR (Tinggi di vegetasi lebat)</span>
+<span class="n">sawah_ndvi</span> <span class="o">=</span> <span class="p">(</span><span class="n">sawah_b8</span> <span class="o">-</span> <span class="n">sawah_b4</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">sawah_b8</span> <span class="o">+</span> <span class="n">sawah_b4</span><span class="p">)</span>
+
+<span class="c1"># Sampel Reflektansi Spektral Non-Sawah</span>
+<span class="n">nonsawah_b4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.12</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>  <span class="c1"># Band 4 Red</span>
+<span class="n">nonsawah_b8</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.28</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>  <span class="c1"># Band 8 NIR</span>
+<span class="n">nonsawah_ndvi</span> <span class="o">=</span> <span class="p">(</span><span class="n">nonsawah_b8</span> <span class="o">-</span> <span class="n">nonsawah_b4</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nonsawah_b8</span> <span class="o">+</span> <span class="n">nonsawah_b4</span><span class="p">)</span>
+
+<span class="c1"># 2. PEMBENTUKAN DATAFRAME FITUR</span>
+<span class="n">df_sawah</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'B4_Red'</span><span class="p">:</span> <span class="n">sawah_b4</span><span class="p">,</span> <span class="s1">'B8_NIR'</span><span class="p">:</span> <span class="n">sawah_b8</span><span class="p">,</span> <span class="s1">'NDVI'</span><span class="p">:</span> <span class="n">sawah_ndvi</span><span class="p">,</span> <span class="s1">'Label'</span><span class="p">:</span> <span class="s1">'Sawah'</span><span class="p">})</span>
+<span class="n">df_nonsawah</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'B4_Red'</span><span class="p">:</span> <span class="n">nonsawah_b4</span><span class="p">,</span> <span class="s1">'B8_NIR'</span><span class="p">:</span> <span class="n">nonsawah_b8</span><span class="p">,</span> <span class="s1">'NDVI'</span><span class="p">:</span> <span class="n">nonsawah_ndvi</span><span class="p">,</span> <span class="s1">'Label'</span><span class="p">:</span> <span class="s1">'Non-Sawah'</span><span class="p">})</span>
+<span class="n">df_geo</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_sawah</span><span class="p">,</span> <span class="n">df_nonsawah</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># 3. PEMBAGIAN DATASET (80% TRAIN, 20% TEST)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df_geo</span><span class="p">[[</span><span class="s1">'B4_Red'</span><span class="p">,</span> <span class="s1">'B8_NIR'</span><span class="p">,</span> <span class="s1">'NDVI'</span><span class="p">]]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df_geo</span><span class="p">[</span><span class="s1">'Label'</span><span class="p">]</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># 4. PELATIHAN MODEL RANDOM FOREST</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># 5. EVALUASI PREDIKSI</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== HASIL EVALUASI MODEL KLASIFIKASI SAWAH VS NON-SAWAH ==="</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Confusion Matrix:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Classification Report:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== HASIL EVALUASI MODEL KLASIFIKASI SAWAH VS NON-SAWAH ===
+
+Confusion Matrix:
+[[10  0]
+ [ 0 10]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+   Non-Sawah       1.00      1.00      1.00        10
+       Sawah       1.00      1.00      1.00        10
+
+    accuracy                           1.00        20
+   macro avg       1.00      1.00      1.00        20
+weighted avg       1.00      1.00      1.00        20
 </pre></div>
 </div>
 </div>
