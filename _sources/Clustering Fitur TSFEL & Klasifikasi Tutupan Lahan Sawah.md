@@ -97,13 +97,13 @@ from pathlib import Path
 
 # DETEKSI LOKASI FILE GEOJSON
 current_dir = Path.cwd()
-search_dirs = [current_dir, current_dir / "materi", Path("D:/PSD/Tugas")]
+search_dirs = [current_dir, current_dir / "Tugas", Path("D:/PSD/Tugas")]
 
 path_sawah = next((d / "sawah.geojson" for d in search_dirs if (d / "sawah.geojson").exists()), None)
-path_nonsawah = next((d / "nonsawah.geojson" for d in search_dirs if (d / "nonsawah.geojson").exists()), None)
+path_nonsawah = next((d / "non-sawah.geojson" for d in search_dirs if (d / "non-sawah.geojson").exists()), None)
 
 # INISIALISASI PETA FOLIUM (Pusat Koordinat Area Sawah Nunukan)
-m = folium.Map(location=[0.1036, 117.4892], zoom_start=13, tiles="OpenStreetMap")
+m = folium.Map(location=[4.093314711269619, 117.62314629620484], zoom_start=13, tiles="OpenStreetMap")
 
 # Layer Google Satellite Hybrid
 folium.TileLayer(
@@ -133,7 +133,6 @@ if path_nonsawah:
 folium.LayerControl(collapsed=False).add_to(m)
 m.add_child(MeasureControl())
 
-m
 ```
 
 ## 2.2 Model Klasifikasi 2 Kelas Sentinel-2A (.TIF)
