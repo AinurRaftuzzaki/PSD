@@ -26,8 +26,6 @@ nbclient.exceptions.CellTimeoutError: A cell timed out while it was being execut
 The message was: Cell execution timed out.
 Here is a preview of the cell contents:
 -------------------
-import openeo
-
-connection = openeo.connect("openeo.dataspace.copernicus.eu").authenticate_oidc()
+job = s5post.execute_batch(title="NO2 in Nunukan", outputfile="NO2DiNunukan.nc")
 -------------------
 
