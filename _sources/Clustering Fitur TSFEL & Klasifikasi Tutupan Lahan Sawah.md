@@ -49,8 +49,8 @@ import pandas as pd
 # 1. BACA KEDUA FILE ZIP (SAWAH & NON-SAWAH) DAN BERI LABEL OTOMATIS
 # ==============================================================================
 # Sesuaikan nama file zip non-sawah milikmu di baris kedua
-gdf_sawah = gpd.read_file("Sawah-baron.zip").to_crs("EPSG:4326")
-gdf_nonsawah = gpd.read_file("nonsawah-baron.zip").to_crs("EPSG:4326")
+gdf_sawah = gpd.read_file("Sawah.zip").to_crs("EPSG:4326")
+gdf_nonsawah = gpd.read_file("Non-sawah.zip").to_crs("EPSG:4326")
 
 # Beri kolom label secara otomatis
 gdf_sawah["label_teks"] = "Sawah"

@@ -458,8 +458,8 @@ document.write(`
 <span class="c1"># 1. BACA KEDUA FILE ZIP (SAWAH &amp; NON-SAWAH) DAN BERI LABEL OTOMATIS</span>
 <span class="c1"># ==============================================================================</span>
 <span class="c1"># Sesuaikan nama file zip non-sawah milikmu di baris kedua</span>
-<span class="n">gdf_sawah</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">"Sawah-baron.zip"</span><span class="p">)</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">"EPSG:4326"</span><span class="p">)</span>
-<span class="n">gdf_nonsawah</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">"nonsawah-baron.zip"</span><span class="p">)</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">"EPSG:4326"</span><span class="p">)</span>
+<span class="n">gdf_sawah</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">"Sawah.zip"</span><span class="p">)</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">"EPSG:4326"</span><span class="p">)</span>
+<span class="n">gdf_nonsawah</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">"Non-sawah.zip"</span><span class="p">)</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">"EPSG:4326"</span><span class="p">)</span>
 
 <span class="c1"># Beri kolom label secara otomatis</span>
 <span class="n">gdf_sawah</span><span class="p">[</span><span class="s2">"label_teks"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Sawah"</span>
@@ -711,7 +711,7 @@ document.write(`
 </section>
 <section id="hasil-evaluasi-klasifikasi-2-kelas-random-forest">
 <h2>3. Hasil Evaluasi Klasifikasi 2 Kelas (Random Forest)<a class="headerlink" href="#hasil-evaluasi-klasifikasi-2-kelas-random-forest" title="Link to this heading">#</a></h2>
-<p>Dataset 102 sampel dibagi menggunakan skema <em>Stratified Train-Test Split</em> dengan proporsi <strong>80% Data Latih (81 sampel: 41 Sawah, 40 Non-Sawah)</strong> dan <strong>20% Data Uji (21 sampel: 10 Sawah, 11 Non-Sawah)</strong>.</p>
+<p>Dataset 100 sampel dibagi menggunakan skema <em>Stratified Train-Test Split</em> dengan proporsi <strong>80% Data Latih (81 sampel: 41 Sawah, 40 Non-Sawah)</strong> dan <strong>20% Data Uji (21 sampel: 10 Sawah, 11 Non-Sawah)</strong>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mcolors</span>
