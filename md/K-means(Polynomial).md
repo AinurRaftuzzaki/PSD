@@ -15,9 +15,9 @@ kernelspec:
 
 # K-Means Clustering (Polynomial)
 
-![Workflow K-Means Clustering Polynomial](knime-node1.png)
+![Workflow K-Means Clustering Polynomial](../images/knime-node1.png)
 
-![Workflow K-Means Clustering Polynomial](knime-node2.png)
+![Workflow K-Means Clustering Polynomial](../images/knime-node2.png)
 
 ## Dokumentasi Workflow (KNIME)
 
@@ -66,7 +66,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 - **Silhouette Coefficient**: 0.471
 
 *Tabel Silhouette Coefficient:*
-```{image} tabel-3-nonpca.png
+```{image} ../images/tabel-3-nonpca.png
 :alt: Tabel Silhouette Coefficient k=3 tanpa PCA
 :width: 100%
 :align: center
@@ -74,7 +74,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 ```
 
 *Visualisasi Scatter Plot:*
-```{image} sct-3-nonpca.png
+```{image} ../images/sct-3-nonpca.png
 :alt: Scatter Plot k=3 tanpa PCA
 :width: 100%
 :align: center
@@ -85,7 +85,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 - **Silhouette Coefficient**: 0.486
 
 *Tabel Silhouette Coefficient:*
-```{image} tabel-5-nonpca.png
+```{image} ../images/tabel-5-nonpca.png
 :alt: Tabel Silhouette Coefficient k=5 tanpa PCA
 :width: 100%
 :align: center
@@ -93,7 +93,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 ```
 
 *Visualisasi Scatter Plot:*
-```{image} sct-5-nonpca.png
+```{image} ../images/sct-5-nonpca.png
 :alt: Scatter Plot k=5 tanpa PCA
 :width: 100%
 :align: center
@@ -104,7 +104,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 - **Silhouette Coefficient**: 0.537
 
 *Tabel Silhouette Coefficient:*
-```{image} tabel-7-nonpca.png
+```{image} ../images/tabel-7-nonpca.png
 :alt: Tabel Silhouette Coefficient k=7 tanpa PCA
 :width: 100%
 :align: center
@@ -112,7 +112,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 ```
 
 *Visualisasi Scatter Plot:*
-```{image} sct-7-nonpca.png
+```{image} ../images/sct-7-nonpca.png
 :alt: Scatter Plot k=7 tanpa PCA
 :width: 100%
 :align: center
@@ -125,7 +125,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 - **Silhouette Coefficient**: 0.471
 
 *Tabel Silhouette Coefficient:*
-```{image} tabel-3-pca203.png
+```{image} ../images/tabel-3-pca203.png
 :alt: Tabel Silhouette Coefficient k=3 PCA 203
 :width: 100%
 :align: center
@@ -133,7 +133,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 ```
 
 *Visualisasi Scatter Plot:*
-```{image} sct-3-pca203.png
+```{image} ../images/sct-3-pca203.png
 :alt: Scatter Plot k=3 PCA 203
 :width: 100%
 :align: center
@@ -144,7 +144,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 - **Silhouette Coefficient**: 0.486
 
 *Tabel Silhouette Coefficient:*
-```{image} tabel-5-pca203.png
+```{image} ../images/tabel-5-pca203.png
 :alt: Tabel Silhouette Coefficient k=5 PCA 203
 :width: 100%
 :align: center
@@ -152,7 +152,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 ```
 
 *Visualisasi Scatter Plot:*
-```{image} sct-5-pca203.png
+```{image} ../images/sct-5-pca203.png
 :alt: Scatter Plot k=5 PCA 203
 :width: 100%
 :align: center
@@ -163,7 +163,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 - **Silhouette Coefficient**: 0.537
 
 *Tabel Silhouette Coefficient:*
-```{image} tabel-7-pca203.png
+```{image} ../images/tabel-7-pca203.png
 :alt: Tabel Silhouette Coefficient k=7 PCA 203
 :width: 100%
 :align: center
@@ -171,7 +171,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 ```
 
 *Visualisasi Scatter Plot:*
-```{image} sct-7-pca203.png
+```{image} ../images/sct-7-pca203.png
 :alt: Scatter Plot k=7 PCA 203
 :width: 100%
 :align: center
@@ -184,7 +184,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 - **Silhouette Coefficient**: 0.471
 
 *Tabel Silhouette Coefficient:*
-```{image} tabel-3-pca74.png
+```{image} ../images/tabel-3-pca74.png
 :alt: Tabel Silhouette Coefficient k=3 PCA 74
 :width: 100%
 :align: center
@@ -192,7 +192,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 ```
 
 *Visualisasi Scatter Plot:*
-```{image} sct-3-pca74.png
+```{image} ../images/sct-3-pca74.png
 :alt: Scatter Plot k=3 PCA 74
 :width: 100%
 :align: center
@@ -203,7 +203,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 - **Silhouette Coefficient**: 0.486
 
 *Tabel Silhouette Coefficient:*
-```{image} tabel-5-pca74.png
+```{image} ../images/tabel-5-pca74.png
 :alt: Tabel Silhouette Coefficient k=5 PCA 74
 :width: 100%
 :align: center
@@ -211,7 +211,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 ```
 
 *Visualisasi Scatter Plot:*
-```{image} sct-5-pca74.png
+```{image} ../images/sct-5-pca74.png
 :alt: Scatter Plot k=5 PCA 74
 :width: 100%
 :align: center
@@ -222,7 +222,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 - **Silhouette Coefficient**: 0.537
 
 *Tabel Silhouette Coefficient:*
-```{image} tabel-7-pca74.png
+```{image} ../images/tabel-7-pca74.png
 :alt: Tabel Silhouette Coefficient k=7 PCA 74
 :width: 100%
 :align: center
@@ -230,7 +230,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 ```
 
 *Visualisasi Scatter Plot:*
-```{image} sct-7-pca74.png
+```{image} ../images/sct-7-pca74.png
 :alt: Scatter Plot k=7 PCA 74
 :width: 100%
 :align: center
@@ -243,7 +243,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 - **Silhouette Coefficient**: 0.471
 
 *Tabel Silhouette Coefficient:*
-```{image} tabel-3-pca37.png
+```{image} ../images/tabel-3-pca37.png
 :alt: Tabel Silhouette Coefficient k=3 PCA 37
 :width: 100%
 :align: center
@@ -251,7 +251,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 ```
 
 *Visualisasi Scatter Plot:*
-```{image} sct-3-pca37.png
+```{image} ../images/sct-3-pca37.png
 :alt: Scatter Plot k=3 PCA 37
 :width: 100%
 :align: center
@@ -262,7 +262,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 - **Silhouette Coefficient**: 0.486
 
 *Tabel Silhouette Coefficient:*
-```{image} tabel-5-pca37.png
+```{image} ../images/tabel-5-pca37.png
 :alt: Tabel Silhouette Coefficient k=5 PCA 37
 :width: 100%
 :align: center
@@ -270,7 +270,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 ```
 
 *Visualisasi Scatter Plot:*
-```{image} sct-5-pca37.png
+```{image} ../images/sct-5-pca37.png
 :alt: Scatter Plot k=5 PCA 37
 :width: 100%
 :align: center
@@ -281,7 +281,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 - **Silhouette Coefficient**: 0.537
 
 *Tabel Silhouette Coefficient:*
-```{image} tabel-7-pca37.png
+```{image} ../images/tabel-7-pca37.png
 :alt: Tabel Silhouette Coefficient k=7 PCA 37
 :width: 100%
 :align: center
@@ -289,7 +289,7 @@ Pada bagian ini, evaluasi pembentukan klaster diukur menggunakan rata-rata *Silh
 ```
 
 *Visualisasi Scatter Plot:*
-```{image} sct-7-pca37.png
+```{image} ../images/sct-7-pca37.png
 :alt: Scatter Plot k=7 PCA 37
 :width: 100%
 :align: center

@@ -2,14 +2,14 @@
 # Learn more at https://jupyterbook.org/customize/toc.html
 
 format: jb-book
-root: intro
+root: md/intro
 chapters:
-- file: markdown
+- file: md/markdown
   sections:
-  - file: bussiness-understanding
-  - file: data-understanding
-  - file: Penjelasan Metrik Statistika Deskriptif
-  - file: Preprocessing feature extraction
-  - file: K-means
-  - file: K-means(Polynomial)
-  - file: Clustering Fitur TSFEL & Klasifikasi Tutupan Lahan Sawah
+  - file: md/bussiness-understanding
+  - file: md/data-understanding
+  - file: md/Penjelasan Metrik Statistika Deskriptif
+  - file: md/Preprocessing feature extraction
+  - file: md/K-means
+  - file: md/K-means(Polynomial)
+  - file: md/Clustering Fitur TSFEL & Klasifikasi Tutupan Lahan Sawah

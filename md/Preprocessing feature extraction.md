@@ -30,7 +30,7 @@ CONTAMINATION = 0.05
 
 for pol in POLLUTANTS:
     # 1. Load data hasil imputasi missing value
-    df = pd.read_csv(f"{pol}_Nunukan_Timeseries_imputed.csv")
+    df = pd.read_csv(f"../csv/{pol}_Nunukan_Timeseries_imputed.csv")
     df = df.dropna(subset=[pol]).copy()
     df["date"] = pd.to_datetime(df["date"])
     df = df.sort_values("date").reset_index(drop=True)
@@ -63,7 +63,7 @@ for pol in POLLUTANTS:
     plt.tight_layout()
     plt.savefig(f"outlier_{pol}_before_after.png", dpi=150)
 
-    df_fixed[["date", pol]].to_csv(f"{pol}_Nunukan_Timeseries_fixed.csv", index=False)
+    df_fixed[["date", pol]].to_csv(f"../csv/{pol}_Nunukan_Timeseries_fixed.csv", index=False)
 ```
 
 **Ringkasan outlier yang terdeteksi:**
@@ -76,7 +76,7 @@ for pol in POLLUTANTS:
 
 ### Grafik CO sebelum & sesudah perbaikan
 
-![Grafik CO](Grafik_CO.png)
+![Grafik CO](../images/Grafik_CO.png)
 
 > **Catatan tentang lonjakan CO di akhir Agustus 2026**
 > Pada rentang 21–31 Agustus 2026, kadar CO naik tajam dan seluruhnya terdeteksi
@@ -93,11 +93,11 @@ for pol in POLLUTANTS:
 
 ### Grafik NO2 sebelum & sesudah perbaikan
 
-![Grafik NO2](Grafik_NO2.png)
+![Grafik NO2](../images/Grafik_NO2.png)
 
 ### Grafik SO2 sebelum & sesudah perbaikan
 
-![Grafik SO2](Grafik_SO2.png)
+![Grafik SO2](../images/Grafik_SO2.png)
 
 ## 2. Imputasi Missing Value
 
@@ -154,7 +154,7 @@ def extract_one(fn_name, signal, fs):
 
 
 for pol in POLLUTANTS:
-    df = pd.read_csv(f"{pol}_Nunukan_Timeseries_fixed.csv")
+    df = pd.read_csv(f"../csv/{pol}_Nunukan_Timeseries_fixed.csv")
     df["date"] = pd.to_datetime(df["date"])
     df = df.sort_values("date").reset_index(drop=True)
     df[pol] = pd.to_numeric(df[pol], errors="coerce")
@@ -167,7 +167,7 @@ for pol in POLLUTANTS:
     signal_1d = df_clean[pol].astype(float).values
 
     row = {fn_name: extract_one(fn_name, signal_1d, fs) for fn_name in FEATURE_LIST}
-    pd.DataFrame([row]).to_csv(f"{pol}_Nunukan_TSFEL.csv", index=False)
+    pd.DataFrame([row]).to_csv(f"../csv/{pol}_Nunukan_TSFEL.csv", index=False)
 ```
 
 ### Hasil ekstraksi fitur per domain
