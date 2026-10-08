@@ -49,7 +49,7 @@ import pandas as pd
 # 1. BACA KEDUA FILE ZIP (SAWAH & NON-SAWAH) DAN BERI LABEL OTOMATIS
 # ==============================================================================
 # Sesuaikan nama file zip non-sawah milikmu di baris kedua
-gdf_sawah = gpd.read_file("Sawah.zip").to_crs("EPSG:4326")
+gdf_sawah = gpd.read_file("sawah.zip").to_crs("EPSG:4326")
 gdf_nonsawah = gpd.read_file("Non-sawah.zip").to_crs("EPSG:4326")
 
 # Beri kolom label secara otomatis
@@ -59,7 +59,7 @@ gdf_sawah["label"] = 1
 gdf_nonsawah["label_teks"] = "Non-Sawah"
 gdf_nonsawah["label"] = 0
 
-# Gabungkan keduanya menjadi 1 GeoDataFrame (51 + 51 = 102 sampel)
+# Gabungkan keduanya menjadi 1 GeoDataFrame (50 + 50 = 100 sampel)
 gdf_gabungan = gpd.GeoDataFrame(
     pd.concat([gdf_sawah, gdf_nonsawah], ignore_index=True), crs="EPSG:4326"
 )
@@ -126,7 +126,7 @@ Berhasil diunduh: sentinel2_sawah_nonsawah.tif
 
 ## 2. Akuisisi Citra Sentinel-2A (`.tif`) via openEO dan Ekstraksi Fitur
 
-Akuisisi citra dilakukan menggunakan *bounding box* gabungan dari ke-102 titik sampel pada koleksi **`SENTINEL2_L2A`** (*Bottom-of-Atmosphere Reflectance*) dengan batas tutupan awan maksimum `< 10%` dan agregasi temporal `median_time()` untuk menghasilkan komposit citra bebas awan berformat **GeoTIFF (`.tif`)**.
+Akuisisi citra dilakukan menggunakan *bounding box* gabungan dari ke-100 titik sampel pada koleksi **`SENTINEL2_L2A`** (*Bottom-of-Atmosphere Reflectance*) dengan batas tutupan awan maksimum `< 10%` dan agregasi temporal `median_time()` untuk menghasilkan komposit citra bebas awan berformat **GeoTIFF (`.tif`)**.
 
 ### Fitur Spektral dan Indeks Turunan yang Diekstrak:
 1. **Band Spektral Utama:**
@@ -189,7 +189,7 @@ fitur_kolom = ["B02", "B03", "B04", "B08", "B11", "NDVI", "NDWI"]
 X = df_dataset[fitur_kolom]
 y = df_dataset["Kelas"]
 
-# Split 80% Training (41 Sawah + 40 Non-Sawah) & 20% Testing (10 Sawah + 11 Non-Sawah)
+# Split 80% Training (40 Sawah + 40 Non-Sawah) & 20% Testing (10 Sawah + 10 Non-Sawah)
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42, stratify=y
 )
@@ -225,7 +225,7 @@ df_ekstraksi_cek_poly.head(5)
 
 ## 3. Hasil Evaluasi Klasifikasi 2 Kelas (Random Forest)
 
-Dataset 100 sampel dibagi menggunakan skema *Stratified Train-Test Split* dengan proporsi **80% Data Latih (81 sampel: 41 Sawah, 40 Non-Sawah)** dan **20% Data Uji (21 sampel: 10 Sawah, 11 Non-Sawah)**.
+Dataset 100 sampel dibagi menggunakan skema *Stratified Train-Test Split* dengan proporsi **80% Data Latih (80 sampel: 40 Sawah, 40 Non-Sawah)** dan **20% Data Uji (20 sampel: 10 Sawah, 10 Non-Sawah)**.
 
 ```{code-cell} ipython3
 import matplotlib.colors as mcolors
@@ -276,7 +276,7 @@ fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
 ConfusionMatrixDisplay.from_predictions(
     y_test, y_pred, cmap="Greens", ax=axes[0], colorbar=False
 )
-axes[0].set_title("Confusion Matrix (Data Uji 21 Sampel)")
+axes[0].set_title("Confusion Matrix (Data Uji 20 Sampel)")
 
 # 2. Plot Tingkat Kepentingan Fitur (Band & Indeks Spektral)
 importances = model_rf.feature_importances_
