@@ -178,7 +178,7 @@ df_dataset["Kelas"] = gdf_gabungan["label_teks"]
 df_dataset["Target"] = gdf_gabungan["label"]
 
 # Simpan ke CSV (bisa dipakai juga kalau mau diolah di KNIME)
-df_dataset.to_csv("dataset_100sampel_sawah_nonsawah.csv", index=False)
+df_dataset.to_csv("../csv/dataset_100sampel_sawah_nonsawah.csv", index=False)
 print("Dataset berhasil disimpan ke 'dataset_100sampel_sawah_nonsawah.csv'")
 display(df_dataset.head())
 
@@ -219,7 +219,7 @@ Dataset berhasil disimpan ke 'dataset_100sampel_sawah_nonsawah.csv'
 ```{code-cell} ipython3
 :tags: [hide-input]
 import pandas as pd
-df_ekstraksi_cek_poly = pd.read_csv("dataset_100sampel_sawah_nonsawah.csv")
+df_ekstraksi_cek_poly = pd.read_csv("../csv/dataset_100sampel_sawah_nonsawah.csv")
 df_ekstraksi_cek_poly.head(5)
 ```
 
@@ -244,7 +244,7 @@ from sklearn.metrics import (
 from sklearn.model_selection import train_test_split
 
 # 1. Muat dataset dari CSV
-df_dataset = pd.read_csv("dataset_100sampel_sawah_nonsawah.csv")
+df_dataset = pd.read_csv("../csv/dataset_100sampel_sawah_nonsawah.csv")
 
 # 2. Siapkan fitur dan target
 fitur_kolom = [c for c in ["B02", "B03", "B04", "B08", "B11", "NDVI", "NDWI"] if c in df_dataset.columns]

@@ -85,7 +85,7 @@ Sebelum menyambungkan koneksi melalui aplikasi apa pun, kita membutuhkan informa
    * **SSL mode:** `require`
 4. Pastikan Anda telah mengunduh sertifikat SSL (klik **Show** pada bagian *CA certificate* kemudian unduh) apabila *client* yang Anda gunakan mensyaratkannya.
 
-![Aiven PostgreSQL Console](aiven.png)
+![Aiven PostgreSQL Console](../images/aiven.png)
 
 ---
 ## Langkah 2: Mengonfigurasi Koneksi di dbeaver
@@ -100,7 +100,7 @@ dbeaver digunakan untuk meninjau tabel beserta datanya secara langsung sebelum d
    * **Password:** Tempelkan (*paste*) kata sandi dari langkah 1, dan centang opsi **Save password?**.
 4. Klik **Finish** guna menyimpan konfigurasi dan memulai koneksi.
 
-![Konfigurasi Session Manager pgAdmin](dbeaver.png)
+![Konfigurasi Session Manager pgAdmin](../images/dbeaver.png)
 
 ---
 
@@ -112,7 +112,7 @@ Setelah koneksi berhasil, kita perlu memverifikasi ketersediaan data mentah bese
 3. Pastikan kolom data deret waktu (*time-series*) telah ditampilkan dengan tepat, yang meliputi kolom `date`, `no2`, `co`, dan `so2` .
 4. Perlu diketahui bahwa pada tahapan ini merupakan hal yang lumrah bila dijumpai nilai `[null]`. Nantinya, nilai tersebut akan teridentifikasi sebagai *missing values* pada saat tahap analisis.
 
-![Tampilan Data Polutan di pgAdmin](dbeaver_data.png)
+![Tampilan Data Polutan di pgAdmin](../images/dbeaver_data.png)
 
 ---
 
@@ -131,7 +131,7 @@ Beralih menuju KNIME Analytics Platform guna menarik data dari database dan mela
    * Lakukan klik ganda pada **DB Table Selector**, kemudian pilih skema `public` serta tabel `polutan`.
 5. Klik kanan pada **DB Reader** lalu pilih opsi **Execute**. Jika prosesnya berhasil, lampu indikator di bagian bawah *node* akan berubah menjadi hijau.
 
-![Alur Kerja Database dan Statistik di KNIME](knime_node.png)
+![Alur Kerja Database dan Statistik di KNIME](../images/knime_node.png)
 
 ---
 
@@ -147,9 +147,9 @@ Setelah data berhasil dimuat ke dalam KNIME, tahapan yang terakhir adalah menjal
    * **No. missings:** Menyatakan jumlah data yang kosong (sebagai contoh, pada gas $CO$ terdapat 73 data yang kosong).
    * **Histogram:** Menyajikan visualisasi mengenai sebaran datanya.
 
-![Tabel Hasil Output Node Statistics1](statistic1.png)
-![Tabel Hasil Output Node Statistics2](statistic2.png)
-![Tabel Hasil Output Node Statistics3](statistic3.png)
+![Tabel Hasil Output Node Statistics1](../images/statistic1.png)
+![Tabel Hasil Output Node Statistics2](../images/statistic2.png)
+![Tabel Hasil Output Node Statistics3](../images/statistic3.png)
 
 ### Perhitungan Manual
 

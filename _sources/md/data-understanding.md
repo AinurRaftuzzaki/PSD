@@ -54,7 +54,7 @@ Klik link autentikasi lalu login menggunakan akun Copernicus.
 
 Setelah berhasil masuk, langkah selanjutnya adalah menentukan wilayah spesifik. Titik koordinat wilayah Nunukan (Poligon) didapatkan menggunakan alat bantu pemetaan [geojson.io](https://geojson.io) dengan menggambar kotak di atas wilayah yang diinginkan kemudian menyalin koordinatnya.
 
-![Grafik Data](geojson.png)
+![Grafik Data](../images/geojson.png)
 
 Koordinat yang didapatkan dimasukkan ke dalam variabel aoi (Area of Interest). Satelit Sentinel-5P kemudian diminta untuk mengambil data polutan berdasarkan bounding box wilayah tersebut dengan menyesuaikan variabel s5post atribut bands.
 
@@ -174,7 +174,7 @@ df = pd.DataFrame({
 })
 
 # Simpan ke CSV
-df.to_csv("NO2_Nunukan_timeseries.csv", index=False)
+df.to_csv("../csv/NO2_Nunukan_timeseries.csv", index=False)
 ```
 ## Hasil CSV
 
@@ -186,7 +186,7 @@ Pada tahap terakhir, kita memuat file CSV (CO, SO₂, dan NO₂) yang telah dira
 
 import pandas as pd
 import numpy as np
-df = pd.read_csv("CO_Nunukan_timeseries.csv")
+df = pd.read_csv("../csv/CO_Nunukan_timeseries.csv")
 df.head(5)
 ```
 
@@ -197,7 +197,7 @@ df.head(5)
 
 import pandas as pd
 import numpy as np
-df = pd.read_csv("SO2_Nunukan_timeseries.csv")
+df = pd.read_csv("../csv/SO2_Nunukan_timeseries.csv")
 df.head(5)
 ```
 
@@ -208,7 +208,7 @@ df.head(5)
 
 import pandas as pd
 import numpy as np
-df = pd.read_csv("NO2_Nunukan_timeseries.csv")
+df = pd.read_csv("../csv/NO2_Nunukan_timeseries.csv")
 df.head(5)
 ```
 
@@ -219,7 +219,7 @@ Selain urutan tanggal, kita juga mengecek jumlah baris data yang memiliki nilai 
 1. CO
 
 ```{code-cell}
-df = pd.read_csv("CO_Nunukan_Timeseries.csv")
+df = pd.read_csv("../csv/CO_Nunukan_timeseries.csv")
 missing_value = df['CO'].isna().sum()
 print(missing_value)
 ```
@@ -227,7 +227,7 @@ print(missing_value)
 2. SO₂
 
 ```{code-cell}
-df = pd.read_csv("SO2_Nunukan_Timeseries.csv")
+df = pd.read_csv("../csv/SO2_Nunukan_timeseries.csv")
 missing_value = df['SO2'].isna().sum()
 print(missing_value)
 ```
@@ -235,7 +235,7 @@ print(missing_value)
 3. NO₂
 
 ```{code-cell}
-df = pd.read_csv("NO2_Nunukan_Timeseries.csv")
+df = pd.read_csv("../csv/NO2_Nunukan_timeseries.csv")
 missing_value = df['NO2'].isna().sum()
 print(missing_value)
 ```
@@ -253,7 +253,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.ensemble import IsolationForest
 
-df = pd.read_csv("CO_Nunukan_Timeseries.csv")
+df = pd.read_csv("../csv/CO_Nunukan_timeseries.csv")
 df_clean = df.dropna(subset=['CO']).copy()
 
 df_clean['date'] = pd.to_datetime(df_clean['date'])
@@ -298,7 +298,7 @@ plt.show()
 import pandas as pd
 from sklearn.ensemble import IsolationForest
 
-df = pd.read_csv("SO2_Nunukan_Timeseries.csv")
+df = pd.read_csv("../csv/SO2_Nunukan_timeseries.csv")
 df_clean = df.dropna(subset=['SO2']).copy()
 
 df_clean['date'] = pd.to_datetime(df_clean['date'])
@@ -342,7 +342,7 @@ plt.show()
 import pandas as pd
 from sklearn.ensemble import IsolationForest
 
-df = pd.read_csv("NO2_Nunukan_Timeseries.csv")
+df = pd.read_csv("../csv/NO2_Nunukan_timeseries.csv")
 df_clean = df.dropna(subset=['NO2']).copy()
 df_clean['date'] = pd.to_datetime(df_clean['date'])
 df_clean = df_clean.sort_values('date').reset_index(drop=True)
@@ -388,9 +388,9 @@ Berikut adalah kode Python menggunakan pustaka Pandas untuk menyatukan keempat d
 ```python
 import pandas as pd
 
-df_co = pd.read_csv("CO_Nunukan_Timeseries.csv")
-df_no2 = pd.read_csv("NO2_Nunukan_Timeseries.csv")
-df_so2 = pd.read_csv("SO2_Nunukan_imeseries.csv")
+df_co = pd.read_csv("../csv/CO_Nunukan_timeseries.csv")
+df_no2 = pd.read_csv("../csv/NO2_Nunukan_timeseries.csv")
+df_so2 = pd.read_csv("../csv/SO2_Nunukan_timeseries.csv")
 
 dataframe_merged = pd.DataFrame({
     "date": df_o3['date'],
@@ -399,11 +399,11 @@ dataframe_merged = pd.DataFrame({
     "SO2": df_so2['SO2']
 })
 
-dataframe_merged.to_csv("Polutan_Nunukan.csv", index=False)
+dataframe_merged.to_csv("../csv/Polutan_Nunukan.csv", index=False)
 ```
 
 ```{code-cell}
 :tags: [hide-input]
-df = pd.read_csv("Polutan_Nunukan.csv")
+df = pd.read_csv("../csv/Polutan_Nunukan.csv")
 df.head(5)
 ```

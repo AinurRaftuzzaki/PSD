@@ -15,7 +15,7 @@ kernelspec:
 
 # K-Means Clustering
 
-![Workflow K-Means Clustering](kmeans.png)
+![Workflow K-Means Clustering](../images/kmeans.png)
 
 ## Dokumentasi Workflow (KNIME)
 
@@ -70,7 +70,7 @@ Pada bagian ini, evaluasi pembentukan klaster (diukur menggunakan rata-rata *Sil
 ### 1. Klastering 3 Kelas (Tanpa PCA)
 *Tabel Silhouette Coefficient untuk k=3 tanpa PCA:*
 
-```{image} 3-tanpa.png
+```{image} ../images/3-tanpa.png
 :alt: Workflow K-Means Clustering
 :width: 100%
 :align: center
@@ -78,7 +78,7 @@ Pada bagian ini, evaluasi pembentukan klaster (diukur menggunakan rata-rata *Sil
 ```
 
 *Visualisasi Scatter Plot untuk k=3 tanpa PCA:*
-```{image} sct-3.png
+```{image} ../images/sct-3.png
 :alt: Workflow K-Means Clustering
 :width: 100%
 :align: center
@@ -94,7 +94,7 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 
 
-CSV_PATH = "ekstraksi_fitur_co.csv"                      
+CSV_PATH = "../csv/ekstraksi_fitur_co.csv"                      
 KOLOM_NAMA = "nama"                         
 KOLOM_FITUR = """abs_energy auc autocorr average_power calc_centroid calc_max calc_mean
 calc_median calc_min calc_std calc_var dfa distance ecdf ecdf_percentile ecdf_percentile_count
@@ -154,7 +154,7 @@ plt.show()
 
 *Tabel Silhouette Coefficient untuk k=5 tanpa PCA:*
 
-```{image} 5-tanpa.png
+```{image} ../images/5-tanpa.png
 :alt: Workflow K-Means Clustering
 :width: 100%
 :align: center
@@ -163,7 +163,7 @@ plt.show()
 
 *Visualisasi Scatter Plot untuk k=5 tanpa PCA:*
 
-```{image} sct-5.png
+```{image} ../images/sct-5.png
 :alt: Workflow K-Means Clustering
 :width: 100%
 :align: center
@@ -178,7 +178,7 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 
 
-CSV_PATH = "ekstraksi_fitur_co.csv"                      
+CSV_PATH = "../csv/ekstraksi_fitur_co.csv"                      
 KOLOM_NAMA = "nama"                         
 KOLOM_FITUR = """abs_energy auc autocorr average_power calc_centroid calc_max calc_mean
 calc_median calc_min calc_std calc_var dfa distance ecdf ecdf_percentile ecdf_percentile_count
@@ -237,7 +237,7 @@ plt.show()
 
 *Tabel Silhouette Coefficient untuk k=3 dengan PCA:*
 
-```{image} 3-pca.png
+```{image} ../images/3-pca.png
 :alt: Workflow K-Means Clustering
 :width: 100%
 :align: center
@@ -246,7 +246,7 @@ plt.show()
 
 *Visualisasi Scatter Plot untuk k=3 dengan PCA:*
 
-```{image} sct-3-pca.png
+```{image} ../images/sct-3-pca.png
 :alt: Workflow K-Means Clustering
 :width: 100%
 :align: center
@@ -262,7 +262,7 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
-CSV_PATH = "ekstraksi_fitur_co.csv"               
+CSV_PATH = "../csv/ekstraksi_fitur_co.csv"               
 KOLOM_NAMA = "nama"                               
 KOLOM_FITUR = """abs_energy auc autocorr average_power calc_centroid calc_max calc_mean
 calc_median calc_min calc_std calc_var dfa distance ecdf ecdf_percentile ecdf_percentile_count
@@ -333,7 +333,7 @@ plt.show()
 
 *Tabel Silhouette Coefficient untuk k=5 dengan PCA:*
 
-```{image} 5-pca.png
+```{image} ../images/5-pca.png
 :alt: Workflow K-Means Clustering
 :width: 100%
 :align: center
@@ -342,7 +342,7 @@ plt.show()
 
 *Visualisasi Scatter Plot untuk k=5 dengan PCA:*
 
-```{image} sct-5-pca.png
+```{image} ../images/sct-5-pca.png
 :alt: Workflow K-Means Clustering
 :width: 100%
 :align: center
@@ -358,7 +358,7 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
-CSV_PATH = ekstraksi_fitur_co.csv"               
+CSV_PATH = "../csv/ekstraksi_fitur_co.csv"               
 KOLOM_NAMA = "nama"                               
 KOLOM_FITUR = """abs_energy auc autocorr average_power calc_centroid calc_max calc_mean
 calc_median calc_min calc_std calc_var dfa distance ecdf ecdf_percentile ecdf_percentile_count
