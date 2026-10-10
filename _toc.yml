@@ -13,3 +13,4 @@ chapters:
   - file: md/K-means
   - file: md/K-means(Polynomial)
   - file: md/Clustering Fitur TSFEL & Klasifikasi Tutupan Lahan Sawah
+  - file: md/klasifikasi-spasial-tutupan-lahan-knn
