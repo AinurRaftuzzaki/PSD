@@ -25,6 +25,11 @@ jobs:
       - name: Build Jupyter Book
         run: jupyter-book build .
 
+      - name: Copy interactive maps to build output
+        run: |
+          mkdir -p _build/html/md
+          cp md/*.html _build/html/md/ 2>/dev/null || true
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
