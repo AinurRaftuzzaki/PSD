@@ -19,7 +19,7 @@ Dokumentasi ini menyajikan alur lengkap (*end-to-end pipeline*) klasifikasi spas
 > [!TIP]
 > **Aplikasi Web Interaktif (Streamlit Cloud)**:  
 > Seluruh visualisasi spasial, kedua peta interaktif, dan evaluasi performa model dapat dieksplorasi secara dinamis pada aplikasi web:  
-> 🌐 **[https://klasifikasi-spasial-tutupan-lahan-jawatimur.streamlit.app/](https://klasifikasi-spasial-tutupan-lahan-jawatimur.streamlit.app/)**
+> 🌐 **[https://klasifikasi-lahan-jawatimur.streamlit.app/](https://klasifikasi-lahan-jawatimur.streamlit.app/)**
 
 Alur kerja mencakup:
 1. **Data Understanding**: Pemahaman domain 6 kelas tutupan lahan, karakteristik spektral band Sentinel-2A, formula indeks vegetasi, air, & lahan terbangun, serta struktur data ground truth hasil crawling lokal.
@@ -514,7 +514,7 @@ Berbeda dengan Random Forest yang memiliki kalkulasi *Gini Impurity reduction*, 
 > [!NOTE]
 > **Dashboard Web Streamlit**:  
 > Seluruh visualisasi spasial, kontrol layer, dan metrik interaktif dapat diakses pada web:  
-> 🔗 **[https://klasifikasi-spasial-tutupan-lahan-jawatimur.streamlit.app/](https://klasifikasi-spasial-tutupan-lahan-jawatimur.streamlit.app/)**
+> 🔗 **[https://klasifikasi-lahan-jawatimur.streamlit.app/](https://klasifikasi-lahan-jawatimur.streamlit.app/)**
 
 Visualisasi spasial dibangun menggunakan pustaka **Folium** (berbasis *Leaflet.js*).
 
@@ -798,7 +798,7 @@ peta
     <div style="background: #f6f8fa; padding: 10px 16px; border-bottom: 1px solid #d0d7de; display: flex; justify-content: space-between; align-items: center; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; font-size: 13px;">
         <span><b>Peta Interaktif 1:</b> Evaluasi Poligon Sampel & Hasil Prediksi K-Nearest Neighbors (Folium)</span>
         <div>
-            <a href="https://klasifikasi-spasial-tutupan-lahan-jawatimur.streamlit.app/" target="_blank" style="color: #0F766E; text-decoration: none; font-weight: 600; padding: 4px 10px; background: #E7F4F2; border: 1px solid #99F6E4; border-radius: 4px; margin-right: 6px;">🚀 Buka di Web Streamlit</a>
+            <a href="https://klasifikasi-lahan-jawatimur.streamlit.app/" target="_blank" style="color: #0F766E; text-decoration: none; font-weight: 600; padding: 4px 10px; background: #E7F4F2; border: 1px solid #99F6E4; border-radius: 4px; margin-right: 6px;">🚀 Buka di Web Streamlit</a>
             <a href="peta_klasifikasi_knn.html" target="_blank" style="color: #0969da; text-decoration: none; font-weight: 600; padding: 4px 10px; background: white; border: 1px solid #d0d7de; border-radius: 4px;">↗ Layar Penuh</a>
         </div>
     </div>
@@ -1017,7 +1017,7 @@ peta
     <div style="background: #f6f8fa; padding: 10px 16px; border-bottom: 1px solid #d0d7de; display: flex; justify-content: space-between; align-items: center; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; font-size: 13px;">
         <span><b>Peta Interaktif 2:</b> Klasifikasi Tutupan Lahan Skala Regional Jawa Timur (Folium ImageOverlay - KNN)</span>
         <div>
-            <a href="https://klasifikasi-spasial-tutupan-lahan-jawatimur.streamlit.app/" target="_blank" style="color: #0F766E; text-decoration: none; font-weight: 600; padding: 4px 10px; background: #E7F4F2; border: 1px solid #99F6E4; border-radius: 4px; margin-right: 6px;">🚀 Buka di Web Streamlit</a>
+            <a href="https://klasifikasi-lahan-jawatimur.streamlit.app/" target="_blank" style="color: #0F766E; text-decoration: none; font-weight: 600; padding: 4px 10px; background: #E7F4F2; border: 1px solid #99F6E4; border-radius: 4px; margin-right: 6px;">🚀 Buka di Web Streamlit</a>
             <a href="hasil_klasifikasi_knn.html" target="_blank" style="color: #0969da; text-decoration: none; font-weight: 600; padding: 4px 10px; background: white; border: 1px solid #d0d7de; border-radius: 4px;">↗ Layar Penuh</a>
         </div>
     </div>
@@ -1035,4 +1035,4 @@ peta
    * Kelas transisi air dan lahan basah (**Danau** dan **Sawah**) memiliki tantangan tumpang tindih jarak dengan perairan laut dangkal dan vegetasi basah, yang diatasi secara efektif melalui pembobotan jarak $1 / d$.
 3. **Pemberantasan Spatial Data Leakage**: Agregasi piksel menjadi centroid pada 309 poligon unik menjamin bahwa model mengevaluasi objek secara objektif pada tingkat bentang lahan, bukan sekadar menghafal piksel tetangga yang bersebelahan.
 4. **Fitur Paling Berpengaruh**: Berdasarkan *Permutation Feature Importance*, band **B03 (Green - 19.28%)**, **B02 (Blue - 18.32%)**, dan indeks **NDBI (17.44%)** menjadi prediktor paling menentukan dalam menyusun topologi jarak terdekat pada ruang fitur multi-spektral.
-5. **Eksplorasi Spasial Terbuka**: Seluruh hasil klasifikasi spasial, peta evaluasi poligon, serta peta tutupan lahan skala regional Jawa Timur dapat diakses dan dieksplorasi secara daring di: **[https://klasifikasi-spasial-tutupan-lahan-jawatimur.streamlit.app/](https://klasifikasi-spasial-tutupan-lahan-jawatimur.streamlit.app/)**.
+5. **Eksplorasi Spasial Terbuka**: Seluruh hasil klasifikasi spasial, peta evaluasi poligon, serta peta tutupan lahan skala regional Jawa Timur dapat diakses dan dieksplorasi secara daring di: **[https://klasifikasi-lahan-jawatimur.streamlit.app/](https://klasifikasi-lahan-jawatimur.streamlit.app/)**.
