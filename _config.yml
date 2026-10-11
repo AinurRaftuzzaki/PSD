@@ -5,11 +5,19 @@ title: My sample book
 author: The Jupyter Book Community
 logo: images/logo.png
 
-# Force re-execution of notebooks on each build.
-# See https://jupyterbook.org/content/execute.html
+# Notebook execution (off for fast, reliable CI deployment)
 execute:
-  execute_notebooks: auto
+  execute_notebooks: 'off'
   allow_errors: true
+
+exclude_patterns:
+  - Crawling.ipynb
+  - notebooks.ipynb
+  - non-sawah.qmd
+  - sawah.qmd
+  - terserah/**
+  - K-means Clustering/**
+
 
 # Define the name of the latex output file for PDF builds
 latex:

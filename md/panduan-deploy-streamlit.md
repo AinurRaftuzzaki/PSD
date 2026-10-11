@@ -483,7 +483,7 @@ Streamlit Community Cloud ([share.streamlit.io](https://share.streamlit.io/)) me
 1. Buat repositori baru di GitHub (misal: `klasifikasi-spasial-jatim-streamlit`).
 2. Pastikan file `.gitignore` dibuat agar file besar yang tidak digunakan di runtime (seperti file zip mentah atau GeoTIFF ratusan MB) tidak ikut terunggah:
 
-```gitignore
+```text
 # .gitignore
 .venv/
 __pycache__/
@@ -508,10 +508,10 @@ git push -u origin main
 1. Kunjungi [https://share.streamlit.io/](https://share.streamlit.io/) dan login menggunakan akun **GitHub** Anda.
 2. Klik tombol **"Create app"** (atau **"New app"**).
 3. Isi formulir konfigurasi deployment:
-   * **Repository**: Pilih repositori GitHub Anda (misal: `<username>/klasifikasi-spasial-jatim-streamlit`).
+   * **Repository**: Pilih repositori GitHub Anda (misal: `AinurRaftuzzaki/PSD`).
    * **Branch**: `main`.
-   * **Main file path**: `app.py` (atau `streamlit_app.py` sesuai nama file utama Anda).
-   * **App URL (opsional)**: Tentukan subdomain khusus (misal: `klasifikasi-spasial-jatim.streamlit.app`).
+   * **Main file path**: `streamlit_app.py`.
+   * **App URL (opsional)**: Tentukan subdomain khusus (misal: `klasifikasi-lahan-jawatimur.streamlit.app`).
 4. Klik tombol **"Deploy!"**.
 
 ### Tahap 3: Pemantauan Build & Peluncuran
@@ -519,7 +519,7 @@ git push -u origin main
 1. Buka tab **"Manage app"** di pojok kanan bawah untuk memantau proses instalasi *dependencies* dari `requirements.txt`.
 2. Setelah proses instalasi selesai (biasanya berlangsung 1–2 menit), aplikasi akan langsung aktif dan dapat diakses publik melalui tautan:
    ```text
-   https://<nama-subdomain>.streamlit.app
+   https://klasifikasi-lahan-jawatimur.streamlit.app
    ```
 
 ---
