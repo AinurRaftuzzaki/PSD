@@ -1,4 +1,4 @@
-﻿"""
+"""
 Klasifikasi Spasial Tutupan Lahan Jawa Timur
 Model: K-Nearest Neighbors (KNN) — k=7, distance weights, euclidean
 Sensor: Sentinel-2A MSI Level-2A BOA Surface Reflectance
@@ -81,22 +81,13 @@ LAYOUT = dict(
     legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor="rgba(255,255,255,.1)"),
 )
 
-@st.cache_data(show_spinner="Memuat dataset piksel Sentinel-2A...")
+@st.cache_data(show_spinner="Memuat data centroid poligon...")
 def load_centroid():
-    df = pd.read_csv("hasil_s2_piksel/piksel_s2.csv")
-    df = df.replace([np.inf, -np.inf], np.nan).dropna(subset=["B02","B03","B04","B08","B11","NDVI","NDWI"])
-    eps = 1e-9
-    if "MNDWI" not in df.columns:
-        df["MNDWI"] = (df["B03"] - df["B11"]) / (df["B03"] + df["B11"] + eps)
-    if "NDBI" not in df.columns:
-        df["NDBI"] = (df["B11"] - df["B08"]) / (df["B11"] + df["B08"] + eps)
-    df = df.replace([np.inf, -np.inf], np.nan).dropna(subset=FITUR)
-    agg  = df.groupby("poligon_id")[FITUR].mean()
-    info = df.groupby("poligon_id").agg(
-        label=("label","first"), label_teks=("label_teks","first"),
-        n_piksel=("label","size"), lon=("lon","mean"), lat=("lat","mean"),
-    )
-    return info.join(agg).reset_index()
+    # Menggunakan data centroid yang sudah di-pre-compute (bukan piksel_s2.csv 162MB)
+    cen = pd.read_csv("csv/centroid_poligon_knn.csv")
+    cen = cen.replace([np.inf, -np.inf], np.nan).dropna(subset=FITUR)
+    return cen
+
 
 @st.cache_resource(show_spinner="Melatih model KNN...")
 def train_knn(n):
