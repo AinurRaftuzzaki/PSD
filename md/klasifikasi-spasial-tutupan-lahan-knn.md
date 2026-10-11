@@ -810,204 +810,74 @@ peta
 
 ### 5.2. Peta 2: Klasifikasi Tutupan Lahan Skala Regional Jawa Timur (Folium ImageOverlay)
 
-Peta kedua menghasilkan visualisasi inferensi spasial per piksel skala regional mencakup seluruh daratan Provinsi Jawa Timur:
-1. **Mozaik Citra Satelit Esri (Zoom 10)**: Diunduh secara paralel menghasilkan mozaik resolusi $3072 \times 1792$ piksel.
-2. **Masking Batas Daratan**: Menggunakan file GeoJSON batas resmi provinsi Jawa Timur (`jawa_timur_provinsi.geojson`) yang dirasterisasi menggunakan fungsi `rasterize`.
-3. **Penyelarasan Spektral Citra Nyata**: Memetakan nilai RGB citra satelit ke 9 fitur Sentinel-2A menggunakan regresi Random Forest.
-4. **Prediksi Per Piksel Menggunakan Model KNN Terstandarisasi**: Mengklasifikasikan piksel daratan secara granular menggunakan model KNN ($k=7$, *distance weights*).
-5. **Pewarnaan Palet RGBA Semitransparan**:
-   * **Sawah**: Kuning (`#FFD92F`)
-   * **Bangunan**: Merah (`#E41A1C`)
-   * **Mangrove**: Ungu (`#8E44AD`)
-   * **Lahan Hijau / Hutan**: Hijau Tua (`#2E7D32`)
-   * **Perairan Terbuka / Laut**: Biru Tua (`#0D47A1`)
-   * **Danau**: Biru Muda (`#4FC3F7`)
-6. **Integrasi Folium ImageOverlay**: Citra raster RGBA diposisikan di atas citra satelit Esri dengan opasitas dinamis $65\%$, dilengkapi pengalih basemap (*Esri Satellite* dan *Google Hybrid*) serta kontrol layer titik sampel ground truth.
+Peta kedua memetakan inferensi per piksel skala regional se-Jawa Timur dari citra komposit Sentinel-2A L2A openEO (`jatim_250m.tif`).
+
+Fitur Peta 2:
+* **Basemap Satelit Stabil**: Menggunakan **Esri World Imagery** dan **OpenStreetMap** bebas dari kendala pemblokiran URL.
+* **Lapisan Klasifikasi Terpisah (*Toggleable*)**: Masing-masing kelas tutupan lahan dijadikan layer `ImageOverlay` tersendiri, sehingga pengguna dapat memfilter sebaran Sawah, Bangunan, atau Hutan secara independen melalui panel kontrol di pojok kanan atas.
+* **Opasitas Transparan Semu**: Disetel pada opasitas $65\%$ sehingga bentang relief muka bumi asli tetap terlihat di bawah hasil klasifikasi.
 
 ```python
-"""
-Klasifikasi Per Piksel Skala Regional Jawa Timur (Folium ImageOverlay) berbasis KNN
-"""
-
-from concurrent.futures import ThreadPoolExecutor
-import io
-import math
-import os
-from pathlib import Path
-import folium
+# Pembuatan Peta Regional (Cell 14 pada notebook)
+import rasterio
 from folium.raster_layers import ImageOverlay
-import geopandas as gpd
-import joblib
-import numpy as np
-import pandas as pd
-from PIL import Image
-from rasterio.features import rasterize
-from rasterio.transform import from_bounds
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
 
-AOI = [111.0, -8.85, 114.65, -6.75]  # [barat, selatan, timur, utara]
-FITUR = ["B02", "B03", "B04", "B08", "B11", "NDVI", "NDWI", "MNDWI", "NDBI"]
+with rasterio.open('hasil_s2_piksel/jatim_250m.tif') as src:
+    b2  = src.read(1).astype(float)
+    b3  = src.read(2).astype(float)
+    b4  = src.read(3).astype(float)
+    b8  = src.read(4).astype(float)
+    b11 = src.read(5).astype(float)
+    bounds     = src.bounds
+    img_bounds = [[bounds.bottom, bounds.left], [bounds.top, bounds.right]]
+    center_lat = (bounds.bottom + bounds.top)  / 2
+    center_lon = (bounds.left   + bounds.right) / 2
 
-WARNA_KELAS = {
-    "Sawah": "#FFD92F",
-    "Bangunan": "#E41A1C",
-    "Mangrove": "#8E44AD",
-    "Hutan": "#2E7D32",
-    "Laut": "#0D47A1",
-    "Danau": "#4FC3F7",
-}
+# Hitung Indeks Spektral
+e     = 1e-9
+ndvi  = (b8  - b4)  / (b8  + b4  + e)
+ndwi  = (b3  - b8)  / (b3  + b8  + e)
+mndwi = (b3  - b11) / (b3  + b11 + e)
+ndbi  = (b11 - b8)  / (b11 + b8  + e)
 
+height, width = b2.shape
 
-def hex_ke_rgb(h):
-  h = h.lstrip("#")
-  return [int(h[i : i + 2], 16) for i in (0, 2, 4)]
+# Susun matriks fitur & terapkan StandardScaler
+features_stack  = np.column_stack((
+    b2.flatten(), b3.flatten(), b4.flatten(), b8.flatten(), b11.flatten(),
+    ndvi.flatten(), ndwi.flatten(), mndwi.flatten(), ndbi.flatten()
+))
+valid_mask      = (b2.flatten() > 0)
+features_scaled = scaler.transform(features_stack)
 
+# Prediksi seluruh piksel menggunakan KNN
+pred_1d  = knn_model.predict(features_scaled)
+pred_2d  = pred_1d.reshape((height, width))
+valid_2d = valid_mask.reshape((height, width))
 
-# 1. Muat Centroid Data Latih & Latih Model Pipeline KNN
-df_px = pd.read_csv("hasil_s2_piksel/piksel_s2.csv")
-df_px = df_px.replace([np.inf, -np.inf], np.nan).dropna(subset=FITUR)
-agg = df_px.groupby("poligon_id")[FITUR].mean()
-info = df_px.groupby("poligon_id").agg(
-    label=("label", "first"),
-    label_teks=("label_teks", "first"),
-    lon_centroid=("lon", "mean"),
-    lat_centroid=("lat", "mean"),
-)
-cen = info.join(agg).reset_index()
-
-model_knn = Pipeline([
-    ("scaler", StandardScaler()),
-    (
-        "knn",
-        KNeighborsClassifier(
-            n_neighbors=7, weights="distance", metric="euclidean"
-        ),
-    ),
-])
-model_knn.fit(cen[FITUR], cen["label_teks"])
-
-# 2. Citra Satelit Esri & Koordinat Bounding Box
-FILE_SATELIT = "satelit_aoi.jpeg"
-img_sat = Image.open(FILE_SATELIT)
-W, H = 1536, 896
-img_res = img_sat.resize((W, H), Image.Resampling.BILINEAR)
-arr_rgb = np.array(img_res)
-
-lat_s, lon_w = -8.85, 111.0
-lat_n, lon_e = -6.75, 114.65
-
-
-def coord_to_px(lat, lon):
-  c = int((lon - lon_w) / (lon_e - lon_w) * W)
-  r = int((lat_n - lat) / (lat_n - lat_s) * H)
-  return np.clip(r, 0, H - 1), np.clip(c, 0, W - 1)
-
-
-# 3. Estimator Fitur Spektral RGB -> Sentinel-2
-rgb_samples = [
-    arr_rgb[
-        coord_to_px(row["lat_centroid"], row["lon_centroid"])[0],
-        coord_to_px(row["lat_centroid"], row["lon_centroid"])[1],
-        :3,
-    ]
-    for _, row in cen.iterrows()
-]
-reg_mapper = RandomForestRegressor(n_estimators=30, random_state=42, n_jobs=-1)
-reg_mapper.fit(np.array(rgb_samples), cen[FITUR].values)
-
-# 4. Masking Daratan Jawa Timur
-prov = gpd.read_file("jawa_timur_provinsi.geojson")
-transform = from_bounds(lon_w, lat_s, lon_e, lat_n, W, H)
-mask_daratan = rasterize(
-    [(geom, 1) for geom in prov.geometry],
-    out_shape=(H, W),
-    transform=transform,
-    fill=0,
-    dtype=np.uint8,
-)
-
-# 5. Prediksi Granular Per Piksel Daratan via KNN
-idx_daratan = np.where(mask_daratan == 1)
-rgb_daratan = arr_rgb[idx_daratan[0], idx_daratan[1], :3]
-feat_daratan = reg_mapper.predict(rgb_daratan)
-preds_daratan = model_knn.predict(feat_daratan)
-
-# Susun Matriks Piksel RGBA
-rgba = np.zeros((H, W, 4), dtype=np.uint8)
-idx_laut = np.where(mask_daratan == 0)
-rgba[idx_laut[0], idx_laut[1]] = hex_ke_rgb(WARNA_KELAS["Laut"]) + [225]
-
-for k, col in WARNA_KELAS.items():
-  idx_k = np.where(preds_daratan == k)[0]
-  rgba[idx_daratan[0][idx_k], idx_daratan[1][idx_k]] = hex_ke_rgb(col) + [225]
-
-# 6. Membangun Peta Interaktif Folium
-pusat = [(AOI[1] + AOI[3]) / 2, (AOI[0] + AOI[2]) / 2]
-peta = folium.Map(location=pusat, zoom_start=8, tiles=None, control_scale=True)
-
+m2 = folium.Map(location=[center_lat, center_lon], zoom_start=8, tiles=None)
 folium.TileLayer(
     tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     attr="Tiles &copy; Esri",
     name="Esri Satellite",
-    max_zoom=19,
-    overlay=False,
-).add_to(peta)
+    overlay=False
+).add_to(m2)
+folium.TileLayer("OpenStreetMap", name="OpenStreetMap", overlay=False).add_to(m2)
 
-folium.TileLayer(
-    tiles="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
-    attr="Google Hybrid",
-    name="Google Hybrid (dengan label)",
-    max_zoom=20,
-    overlay=False,
-    show=False,
-).add_to(peta)
+# Buat ImageOverlay transparan per kelas tutupan lahan
+for label_str, hex_color in colors.items():
+    rgba_img = np.zeros((height, width, 4), dtype=np.uint8)
+    mask = (pred_2d == label_str) & valid_2d
+    if np.any(mask):
+        r, g, b = hex_to_rgb(hex_color)
+        rgba_img[mask, 0] = r
+        rgba_img[mask, 1] = g
+        rgba_img[mask, 2] = b
+        rgba_img[mask, 3] = 180
+        ImageOverlay(image=rgba_img, bounds=img_bounds, opacity=0.65, name=f"Sebaran {label_str}").add_to(m2)
 
-batas_peta = [[lat_s, lon_w], [lat_n, lon_e]]
-ImageOverlay(
-    image=rgba,
-    bounds=batas_peta,
-    opacity=0.65,
-    name="Hasil Klasifikasi K-Nearest Neighbors (KNN)",
-    zindex=5,
-).add_to(peta)
-
-# Tambahkan Titik Sampel Validasi per Kelas
-for nama in WARNA_KELAS.keys():
-  grup = folium.FeatureGroup(name=f"Titik Sampel: {nama}", show=False)
-  for _, r in cen[cen["label_teks"] == nama].iterrows():
-    folium.CircleMarker(
-        [r["lat_centroid"], r["lon_centroid"]],
-        radius=4,
-        color="white",
-        weight=1,
-        fill=True,
-        fill_color=WARNA_KELAS[nama],
-        fill_opacity=1,
-        popup=f"{nama} ({r['lon_centroid']:.4f}, {r['lat_centroid']:.4f})",
-    ).add_to(grup)
-  grup.add_to(peta)
-
-# Legenda Interaktif LULC
-item_legenda = "".join(
-    f'<div style="margin:2px 0"><span'
-    f' style="display:inline-block;width:14px;height:14px;background:{WARNA_KELAS[k]};border:1px'
-    f' solid #333;margin-right:6px;vertical-align:middle"></span>{k}</div>'
-    for k in WARNA_KELAS.keys()
-)
-legenda_html = (
-    f'<div style="position:fixed;bottom:30px;left:30px;z-index:9999;background:rgba(255,255,255,0.95);'
-    f'padding:10px 14px;border:1px solid #888;border-radius:6px;font:12px sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.2);">'
-    f'<b>Legenda Tutupan Lahan (KNN)</b><hr style="margin:5px 0">{item_legenda}</div>'
-)
-peta.get_root().html.add_child(folium.Element(legenda_html))
-
-folium.LayerControl(collapsed=False).add_to(peta)
-peta.save("hasil_klasifikasi_knn.html")
-
-peta
+folium.LayerControl(collapsed=False).add_to(m2)
+m2.save("hasil_klasifikasi_knn.html")
 ```
 
 #### Tampilan Peta Interaktif Skala Regional (Folium ImageOverlay):
@@ -1015,9 +885,11 @@ peta
 ```{raw} html
 <div style="margin: 20px 0; border: 1px solid #d0d7de; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
     <div style="background: #f6f8fa; padding: 10px 16px; border-bottom: 1px solid #d0d7de; display: flex; justify-content: space-between; align-items: center; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; font-size: 13px;">
-        <span><b>Peta Interaktif 2:</b> Klasifikasi Tutupan Lahan Skala Regional Jawa Timur (Folium ImageOverlay - KNN)</span>
         <div>
-            <a href="https://klasifikasi-lahan-jawatimur.streamlit.app/" target="_blank" style="color: #0F766E; text-decoration: none; font-weight: 600; padding: 4px 10px; background: #E7F4F2; border: 1px solid #99F6E4; border-radius: 4px; margin-right: 6px;">🚀 Buka di Web Streamlit</a>
+            <b style="color: #18232F;">Peta 2: Klasifikasi Tutupan Lahan Skala Regional Jawa Timur</b>
+        </div>
+        <div>
+            <a href="https://klasifikasi-spasial-tutupan-lahan-jawatimur.streamlit.app/" target="_blank" style="color: #0F766E; text-decoration: none; font-weight: 600; padding: 4px 10px; background: #E7F4F2; border: 1px solid #99F6E4; border-radius: 4px; margin-right: 6px;">Buka di Web Streamlit</a>
             <a href="hasil_klasifikasi_knn.html" target="_blank" style="color: #0969da; text-decoration: none; font-weight: 600; padding: 4px 10px; background: white; border: 1px solid #d0d7de; border-radius: 4px;">↗ Layar Penuh</a>
         </div>
     </div>
