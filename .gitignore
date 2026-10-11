@@ -1,3 +1,5 @@
 *.nc
 hasil_s2_piksel/
-_build/
+_build/.doctrees/
+_build/jupyter_execute/
+_build/.jupyter_cache/
