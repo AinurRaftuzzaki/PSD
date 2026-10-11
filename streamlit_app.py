@@ -240,7 +240,7 @@ with tab2:
     st.caption("Centroid poligon sampel. Ukuran proporsional terhadap jumlah piksel Sentinel-2A dalam poligon.")
     cen_plot = cen.copy()
     cen_plot["n_piksel_log"] = np.log1p(cen_plot["n_piksel"])
-    fig_map = px.scatter_mapbox(
+    fig_map = px.scatter_map(
         cen_plot, lat="lat", lon="lon",
         color="label_teks",
         color_discrete_map={k: v["warna"] for k, v in KELAS_META.items()},
@@ -249,7 +249,7 @@ with tab2:
         hover_data={"n_piksel":True, "NDVI":":.3f", "NDWI":":.3f",
                     "lat":False, "lon":False, "n_piksel_log":False},
         zoom=7, center={"lat":-7.5,"lon":112.5},
-        mapbox_style="carto-darkmatter", height=520,
+        map_style="carto-darkmatter", height=520,
         labels={"label_teks":"Kelas"},
         category_orders={"label_teks": URUT_KELAS},
     )
@@ -257,14 +257,14 @@ with tab2:
     st.plotly_chart(fig_map, use_container_width=True)
 
     st.markdown('<div class="sec">Sebaran Data Uji & Kesalahan Prediksi KNN</div>', unsafe_allow_html=True)
-    fig_uji = px.scatter_mapbox(
+    fig_uji = px.scatter_map(
         df_test, lat="lat", lon="lon",
         color="benar",
         color_discrete_map={True:"#10b981", False:"#ef4444"},
         hover_name="poligon_id",
         hover_data={"kelas_asli":True,"kelas_prediksi":True,"keyakinan":":.1%","n_piksel":True,"lat":False,"lon":False,"benar":False},
         zoom=7, center={"lat":-7.5,"lon":112.5},
-        mapbox_style="carto-darkmatter", height=460,
+        map_style="carto-darkmatter", height=460,
         labels={"benar":"Prediksi Benar"},
     )
     fig_uji.update_layout(**LAYOUT, margin=dict(l=0,r=0,t=0,b=0))
