@@ -817,64 +817,119 @@ Fitur Peta 2:
 * **Lapisan Klasifikasi Terpisah (*Toggleable*)**: Masing-masing kelas tutupan lahan dijadikan layer `ImageOverlay` tersendiri, sehingga pengguna dapat memfilter sebaran Sawah, Bangunan, atau Hutan secara independen melalui panel kontrol di pojok kanan atas.
 * **Opasitas Transparan Semu**: Disetel pada opasitas $65\%$ sehingga bentang relief muka bumi asli tetap terlihat di bawah hasil klasifikasi.
 
+
 ```python
 # Pembuatan Peta Regional (Cell 14 pada notebook)
+import numpy as np
+import pandas as pd
+import folium
+import geopandas as gpd
 import rasterio
 from folium.raster_layers import ImageOverlay
+from rasterio.mask import mask as rio_mask
+from shapely.validation import make_valid
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 
-with rasterio.open('hasil_s2_piksel/jatim_250m.tif') as src:
-    b2  = src.read(1).astype(float)
-    b3  = src.read(2).astype(float)
-    b4  = src.read(3).astype(float)
-    b8  = src.read(4).astype(float)
-    b11 = src.read(5).astype(float)
+RASTER_PATH = "hasil_s2_piksel/jatim_250m.tif"
+FITUR = ["B02", "B03", "B04", "B08", "B11", "NDVI", "NDWI", "MNDWI", "NDBI"]
+SUMBER = {
+    "Sawah": "sawah.zip", "Bangunan": "Bangunan.zip",
+    "Hutan": "Lahan_Hijau.zip", "Danau": "Danau.zip",
+    "Laut": "Laut.zip", "Mangrove": "Mangrove.zip",
+}
+
+def compute_indices(b2, b3, b4, b8, b11):
+    e = 1e-9
+    return ((b8-b4)/(b8+b4+e), (b3-b8)/(b3+b8+e),
+            (b3-b11)/(b3+b11+e), (b11-b8)/(b11+b8+e))
+
+# 1. Baca raster & clip outlier ke [0, 10000]
+with rasterio.open(RASTER_PATH) as src:
+    raster_crs = src.crs
+    b2_raw = src.read(1).astype(float)
+    b2  = np.clip(b2_raw,  0, 10000)
+    b3  = np.clip(src.read(2).astype(float), 0, 10000)
+    b4  = np.clip(src.read(3).astype(float), 0, 10000)
+    b8  = np.clip(src.read(4).astype(float), 0, 10000)
+    b11 = np.clip(src.read(5).astype(float), 0, 10000)
     bounds     = src.bounds
     img_bounds = [[bounds.bottom, bounds.left], [bounds.top, bounds.right]]
     center_lat = (bounds.bottom + bounds.top)  / 2
     center_lon = (bounds.left   + bounds.right) / 2
 
-# Hitung Indeks Spektral
-e     = 1e-9
-ndvi  = (b8  - b4)  / (b8  + b4  + e)
-ndwi  = (b3  - b8)  / (b3  + b8  + e)
-mndwi = (b3  - b11) / (b3  + b11 + e)
-ndbi  = (b11 - b8)  / (b11 + b8  + e)
-
 height, width = b2.shape
+valid_2d = (b2_raw > 0)
+ndvi, ndwi, mndwi, ndbi = compute_indices(b2, b3, b4, b8, b11)
 
-# Susun matriks fitur & terapkan StandardScaler
-features_stack  = np.column_stack((
-    b2.flatten(), b3.flatten(), b4.flatten(), b8.flatten(), b11.flatten(),
-    ndvi.flatten(), ndwi.flatten(), mndwi.flatten(), ndbi.flatten()
+# 2. Ekstrak piksel training langsung dari jatim_250m.tif
+#    (memastikan distribusi fitur training & prediksi konsisten)
+rows_list = []
+with rasterio.open(RASTER_PATH) as src:
+    for kelas, file_zip in SUMBER.items():
+        gdf = gpd.read_file(file_zip).to_crs(raster_crs)
+        gdf["geometry"] = gdf.geometry.apply(
+            lambda g: make_valid(g) if g is not None and not g.is_valid else g
+        )
+        gdf = gdf[gdf.geometry.notna() & ~gdf.geometry.is_empty]
+        for _, row in gdf.iterrows():
+            try:
+                out, _ = rio_mask(src, [row.geometry.__geo_interface__], crop=True, nodata=0)
+            except Exception:
+                continue
+            b2m = np.clip(out[0].astype(float), 0, 10000).ravel()
+            valid_px = b2m > 0
+            if not valid_px.any():
+                continue
+            b2m  = b2m[valid_px]
+            b3m  = np.clip(out[1].astype(float).ravel()[valid_px], 0, 10000)
+            b4m  = np.clip(out[2].astype(float).ravel()[valid_px], 0, 10000)
+            b8m  = np.clip(out[3].astype(float).ravel()[valid_px], 0, 10000)
+            b11m = np.clip(out[4].astype(float).ravel()[valid_px], 0, 10000)
+            ndvi_, ndwi_, mndwi_, ndbi_ = compute_indices(b2m, b3m, b4m, b8m, b11m)
+            rows_list.append(pd.DataFrame({
+                "kelas": kelas,
+                "B02": b2m, "B03": b3m, "B04": b4m, "B08": b8m, "B11": b11m,
+                "NDVI": ndvi_, "NDWI": ndwi_, "MNDWI": mndwi_, "NDBI": ndbi_,
+            }))
+
+df_train = pd.concat(rows_list, ignore_index=True)
+df_train = df_train.replace([np.inf, -np.inf], np.nan).dropna(subset=FITUR)
+
+# 3. Latih pipeline KNN
+knn_model = Pipeline([
+    ("scaler", StandardScaler()),
+    ("knn",    KNeighborsClassifier(n_neighbors=7, weights="distance", metric="euclidean")),
+])
+knn_model.fit(df_train[FITUR], df_train["kelas"])
+scaler = knn_model.named_steps["scaler"]
+
+# 4. Prediksi seluruh piksel raster
+features_stack = np.column_stack((
+    b2.ravel(), b3.ravel(), b4.ravel(), b8.ravel(), b11.ravel(),
+    ndvi.ravel(), ndwi.ravel(), mndwi.ravel(), ndbi.ravel()
 ))
-valid_mask      = (b2.flatten() > 0)
 features_scaled = scaler.transform(features_stack)
+pred_2d = knn_model.predict(features_scaled).reshape((height, width))
 
-# Prediksi seluruh piksel menggunakan KNN
-pred_1d  = knn_model.predict(features_scaled)
-pred_2d  = pred_1d.reshape((height, width))
-valid_2d = valid_mask.reshape((height, width))
-
+# 5. Bangun peta Folium ImageOverlay per kelas
 m2 = folium.Map(location=[center_lat, center_lon], zoom_start=8, tiles=None)
 folium.TileLayer(
     tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    attr="Tiles &copy; Esri",
-    name="Esri Satellite",
-    overlay=False
+    attr="Tiles &copy; Esri", name="Esri Satellite", overlay=False
 ).add_to(m2)
 folium.TileLayer("OpenStreetMap", name="OpenStreetMap", overlay=False).add_to(m2)
 
-# Buat ImageOverlay transparan per kelas tutupan lahan
 for label_str, hex_color in colors.items():
     rgba_img = np.zeros((height, width, 4), dtype=np.uint8)
     mask = (pred_2d == label_str) & valid_2d
     if np.any(mask):
         r, g, b = hex_to_rgb(hex_color)
-        rgba_img[mask, 0] = r
-        rgba_img[mask, 1] = g
-        rgba_img[mask, 2] = b
-        rgba_img[mask, 3] = 180
-        ImageOverlay(image=rgba_img, bounds=img_bounds, opacity=0.65, name=f"Sebaran {label_str}").add_to(m2)
+        rgba_img[mask, 0] = r; rgba_img[mask, 1] = g
+        rgba_img[mask, 2] = b; rgba_img[mask, 3] = 180
+        ImageOverlay(image=rgba_img, bounds=img_bounds, opacity=0.65,
+                     name=f"Sebaran {label_str}").add_to(m2)
 
 folium.LayerControl(collapsed=False).add_to(m2)
 m2.save("hasil_klasifikasi_knn.html")
