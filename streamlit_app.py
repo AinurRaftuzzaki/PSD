@@ -253,7 +253,7 @@ with tab2:
         labels={"label_teks":"Kelas"},
         category_orders={"label_teks": URUT_KELAS},
     )
-    fig_map.update_layout(**LAYOUT, margin=dict(l=0,r=0,t=0,b=0))
+    fig_map.update_layout({**LAYOUT, "margin": dict(l=0, r=0, t=0, b=0)})
     st.plotly_chart(fig_map, use_container_width=True)
 
     st.markdown('<div class="sec">Sebaran Data Uji & Kesalahan Prediksi KNN</div>', unsafe_allow_html=True)
@@ -267,7 +267,7 @@ with tab2:
         map_style="carto-darkmatter", height=460,
         labels={"benar":"Prediksi Benar"},
     )
-    fig_uji.update_layout(**LAYOUT, margin=dict(l=0,r=0,t=0,b=0))
+    fig_uji.update_layout({**LAYOUT, "margin": dict(l=0, r=0, t=0, b=0)})
     st.plotly_chart(fig_uji, use_container_width=True)
 
     st.markdown('<div class="sec">Distribusi Jumlah Poligon per Kelas</div>', unsafe_allow_html=True)
