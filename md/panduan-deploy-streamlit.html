@@ -1,0 +1,1136 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Panduan Deployment Visualisasi Spasial ke Streamlit &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'md/panduan-deploy-streamlit';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Klasifikasi Spasial Tutupan Lahan Jawa Timur (K-Nearest Neighbors / KNN)" href="klasifikasi-spasial-tutupan-lahan-knn.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="My sample book - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="My sample book - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Profile
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="markdown.html">Polutan di Kabupaten Nunukan</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bussiness-understanding.html">Business Understanding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data-understanding.html">Data Understanding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Penjelasan%20Metrik%20Statistika%20Deskriptif.html">Penjelasan Metrik Statistika Deskriptif</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="Preprocessing%20feature%20extraction.html">Preprocessing Sebelum Ekstraksi Fitur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="K-means.html">K-Means Clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="K-means%28Polynomial%29.html">K-Means Clustering (Polynomial)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Clustering%20Fitur%20TSFEL%20%26%20Klasifikasi%20Tutupan%20Lahan%20Sawah.html">Klasifikasi Spasial Lahan Sawah dan Non-Sawah</a></li>
+<li class="toctree-l2"><a class="reference internal" href="klasifikasi-spasial-tutupan-lahan-knn.html">Klasifikasi Spasial Tutupan Lahan Jawa Timur (K-Nearest Neighbors / KNN)</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Panduan Deployment Visualisasi Spasial ke Streamlit</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/AinurRaftuzzaki/PSD" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/AinurRaftuzzaki/PSD/issues/new?title=Issue%20on%20page%20%2Fmd/panduan-deploy-streamlit.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/md/panduan-deploy-streamlit.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Panduan Deployment Visualisasi Spasial ke Streamlit</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ringkasan-aset-visualisasi-dari-notebook">1. Ringkasan Aset Visualisasi dari Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arsitektur-strategi-rendering-di-streamlit">2. Arsitektur &amp; Strategi Rendering di Streamlit</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#struktur-direktori-proyek-deployment">3. Struktur Direktori Proyek Deployment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kode-lengkap-aplikasi-streamlit-app-py">4. Kode Lengkap Aplikasi Streamlit (<code class="docutils literal notranslate"><span class="pre">app.py</span></code>)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#konfigurasi-dependensi-tema">5. Konfigurasi Dependensi &amp; Tema</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#file-requirements-txt">5.1. File <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#file-streamlit-config-toml-opsional-untuk-personalisasi-tema">5.2. File <code class="docutils literal notranslate"><span class="pre">.streamlit/config.toml</span></code> (Opsional untuk Personalisasi Tema)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-menjalankan-di-komputer-lokal-local-run">6. Langkah-Langkah Menjalankan di Komputer Lokal (<em>Local Run</em>)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-1-buka-terminal-powershell">Langkah 1: Buka Terminal / PowerShell</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-2-buat-aktifkan-virtual-environment-rekomendasi">Langkah 2: Buat &amp; Aktifkan Virtual Environment (Rekomendasi)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-3-instal-dependensi">Langkah 3: Instal Dependensi</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-4-jalankan-aplikasi-streamlit">Langkah 4: Jalankan Aplikasi Streamlit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-5-buka-di-browser">Langkah 5: Buka di Browser</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-deploy-ke-streamlit-community-cloud">7. Langkah-Langkah Deploy ke Streamlit Community Cloud</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-1-persiapan-repositori-github">Tahap 1: Persiapan Repositori GitHub</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-2-mendaftarkan-aplikasi-di-streamlit-cloud">Tahap 2: Mendaftarkan Aplikasi di Streamlit Cloud</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-3-pemantauan-build-peluncuran">Tahap 3: Pemantauan Build &amp; Peluncuran</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tips-optimasi-best-practices-troubleshooting">8. Tips Optimasi, Best Practices, &amp; Troubleshooting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#menghindari-out-of-memory-oom-di-streamlit-cloud">1. Menghindari Out of Memory (OOM) di Streamlit Cloud</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mengatasi-scroll-ganda-pada-iframe-folium">2. Mengatasi Scroll Ganda pada IFrame Folium</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#menggunakan-st-cache-data-untuk-file-csv">3. Menggunakan <code class="docutils literal notranslate"><span class="pre">@st.cache_data</span></code> untuk File CSV</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="panduan-deployment-visualisasi-spasial-ke-streamlit">
+<h1>Panduan Deployment Visualisasi Spasial ke Streamlit<a class="headerlink" href="#panduan-deployment-visualisasi-spasial-ke-streamlit" title="Link to this heading">#</a></h1>
+<p>Panduan ini mendokumentasikan langkah demi langkah (<strong>step-by-step</strong>) untuk mendeploy visualisasi hasil pemodelan klasifikasi tutupan lahan (<em>Land Use / Land Cover</em> - LULC) Jawa Timur dari materi <a class="reference internal" href="klasifikasi-spasial-tutupan-lahan-knn.html"><span class="doc">Klasifikasi Spasial Tutupan Lahan Jawa Timur (K-Nearest Neighbors / KNN)</span></a> ke dalam aplikasi web interaktif berbasis <strong>Streamlit</strong>, baik untuk dijalankan di lingkungan lokal (<em>local development</em>) maupun dipublikasikan secara daring (<em>cloud hosting</em>) melalui <strong>Streamlit Community Cloud</strong>.</p>
+<hr class="docutils" />
+<section id="ringkasan-aset-visualisasi-dari-notebook">
+<h2>1. Ringkasan Aset Visualisasi dari Notebook<a class="headerlink" href="#ringkasan-aset-visualisasi-dari-notebook" title="Link to this heading">#</a></h2>
+<p>Dari eksperimen pemodelan klasifikasi spasial, terdapat tiga kategori visualisasi dan data yang dihasilkan:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Kategori Aset</p></th>
+<th class="head text-left"><p>File Sumber</p></th>
+<th class="head text-left"><p>Deskripsi Visualisasi</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><strong>Peta Interaktif 1 (Vektor)</strong></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">peta_klasifikasi_rf.html</span></code> / <code class="docutils literal notranslate"><span class="pre">peta_klasifikasi_knn.html</span></code></p></td>
+<td class="text-left"><p>Peta interaktif Folium berbasis poligon sampel 6 kelas tutupan lahan (~300 poligon), dilengkapi layer sorotan data uji (outline biru), layer salah klasifikasi (outline oranye + ikon peringatan), serta popup rincian nilai spektral (NDVI, NDWI, jumlah piksel, dan probabilitas prediksi).</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Peta Interaktif 2 (Regional)</strong></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">hasil_klasifikasi_random_forest.html</span></code> / <code class="docutils literal notranslate"><span class="pre">hasil_klasifikasi_knn.html</span></code></p></td>
+<td class="text-left"><p>Peta inferensi spasial skala regional seluruh daratan Jawa Timur berbasis grid resolusi tinggi (~200m/piksel) dengan overlay transparan 6 kelas di atas citra satelit <em>Esri World Imagery</em> (z=10).</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>Grafik Evaluasi Model</strong></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">confusion_matrix.png</span></code>, <code class="docutils literal notranslate"><span class="pre">kepentingan_fitur.png</span></code></p></td>
+<td class="text-left"><p>Visualisasi matriks kontinjensi (<em>confusion matrix</em>) data uji (akurasi 96.4%) dan diagram batang kepentingan fitur Gini (<em>feature importance</em>) yang menonjolkan peran dominan band SWIR (B11) dan NDBI.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Data Tabular Evaluasi</strong></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">prediksi_data_uji.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">confusion_matrix.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">kepentingan_fitur.csv</span></code></p></td>
+<td class="text-left"><p>Data 83 poligon uji beserta kelas aktual, hasil prediksi model Random Forest / KNN, status kebenaran prediksi, dan nilai probabilitas setiap kelas.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="arsitektur-strategi-rendering-di-streamlit">
+<h2>2. Arsitektur &amp; Strategi Rendering di Streamlit<a class="headerlink" href="#arsitektur-strategi-rendering-di-streamlit" title="Link to this heading">#</a></h2>
+<p>Dalam mendeploy visualisasi geospasial Folium ke Streamlit, terdapat dua pendekatan utama:</p>
+<div class="pst-scrollable-table-container"><table class="table" id="id1">
+<caption><span class="caption-number">Table 1 </span><span class="caption-text">Perbandingan Pendekatan Rendering Peta di Streamlit</span><a class="headerlink" href="#id1" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Pendekatan</p></th>
+<th class="head"><p>Cara Kerja</p></th>
+<th class="head"><p>Kelebihan</p></th>
+<th class="head"><p>Rekomendasi Penggunaan</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Metode 1: Pre-rendered HTML IFrame</strong> <em>(Rekomendasi Utama)</em></p></td>
+<td><p>Membaca file peta HTML yang diekspor dari Folium (<code class="docutils literal notranslate"><span class="pre">peta.save()</span></code>) lalu merendernya via <code class="docutils literal notranslate"><span class="pre">streamlit.components.v1.html(konten_html,</span> <span class="pre">height=720)</span></code>.</p></td>
+<td><p><strong>Sangat cepat &amp; ringan</strong>: Waktu pemuatan (<em>loading time</em>) instan. Menghindari konsumsi RAM server cloud berlebih karena komputasi piksel berat (1536 x 896) tidak diulang setiap kali pengguna berinteraksi.</p></td>
+<td><p><strong>Terbaik untuk produksi &amp; Streamlit Cloud</strong> (free tier RAM 1 GB).</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Metode 2: Dynamic Python Folium (<code class="docutils literal notranslate"><span class="pre">streamlit-folium</span></code>)</strong></p></td>
+<td><p>Mengonstruksi objek <code class="docutils literal notranslate"><span class="pre">folium.Map</span></code> secara dinamis di kode Python Streamlit dan dirender via <code class="docutils literal notranslate"><span class="pre">st_folium(peta)</span></code>.</p></td>
+<td><p>Memungkinkan komunikasi dua arah (menangkap koordinat klik pengguna atau poligon yang dipilih untuk filter data).</p></td>
+<td><p>Membutuhkan waktu render ulang saat state widget berubah; memerlukan dependensi tambahan <code class="docutils literal notranslate"><span class="pre">streamlit-folium</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Pada panduan ini, kita menerapkan <strong>arsitektur hibrida terbaik</strong>:</p>
+<ol class="arabic simple">
+<li><p>Merender peta interaktif berskala besar menggunakan <strong>IFrame komponen HTML</strong> teroptimasi.</p></li>
+<li><p>Menyajikan kartu metrik, filter interaktif, diagram evaluasi, tabel data uji, dan fitur ekspor CSV menggunakan <strong>fitur native Streamlit</strong>.</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="struktur-direktori-proyek-deployment">
+<h2>3. Struktur Direktori Proyek Deployment<a class="headerlink" href="#struktur-direktori-proyek-deployment" title="Link to this heading">#</a></h2>
+<p>Untuk mempublikasikan aplikasi ke GitHub dan Streamlit Community Cloud secara rapi dan mandiri (<em>standalone</em>), siapkan struktur folder sebagai berikut:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>streamlit_spasial_jatim/
+│
+├── .streamlit/
+│   └── config.toml                 # Konfigurasi tema warna &amp; batas unggahan
+│
+├── data/
+│   ├── prediksi_data_uji.csv       # Hasil prediksi data uji
+│   ├── confusion_matrix.csv        # Tabel matriks kontinjensi
+│   ├── kepentingan_fitur.csv       # Nilai Gini feature importance
+│   ├── confusion_matrix.png        # Grafik gambar confusion matrix
+│   └── kepentingan_fitur.png       # Grafik gambar feature importance
+│
+├── maps/
+│   ├── peta_klasifikasi_rf.html              # Peta evaluasi poligon sampel
+│   └── hasil_klasifikasi_random_forest.html  # Peta regional se-Jawa Timur
+│
+├── app.py                          # Skrip utama aplikasi Streamlit
+├── requirements.txt                # Daftar library Python yang dibutuhkan
+└── README.md                       # Dokumentasi repositori
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Jika dijalankan di dalam repositori proyek sains data ini, file skrip <code class="docutils literal notranslate"><span class="pre">streamlit_app.py</span></code> sudah dilengkapi algoritma pencari file otomatis (<code class="docutils literal notranslate"><span class="pre">cari_file()</span></code>), sehingga dapat langsung membaca aset dari folder <code class="docutils literal notranslate"><span class="pre">data/Klasifikasi/</span></code> dan <code class="docutils literal notranslate"><span class="pre">data/Klasifikasi/hasil_rf/</span></code> tanpa perlu memindahkan file secara manual.</p>
+</div>
+</section>
+<hr class="docutils" />
+<section id="kode-lengkap-aplikasi-streamlit-app-py">
+<h2>4. Kode Lengkap Aplikasi Streamlit (<code class="docutils literal notranslate"><span class="pre">app.py</span></code>)<a class="headerlink" href="#kode-lengkap-aplikasi-streamlit-app-py" title="Link to this heading">#</a></h2>
+<p>Simpan kode berikut sebagai <code class="docutils literal notranslate"><span class="pre">app.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""</span>
+<span class="sd">Dashboard Klasifikasi Spasial Tutupan Lahan (LULC) Jawa Timur</span>
+<span class="sd">Berbasis Sentinel-2A Level-2A &amp; Algoritma Random Forest / KNN</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">streamlit</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">st</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">streamlit.components.v1</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">components</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># 1. KONFIGURASI HALAMAN &amp; TEMA</span>
+<span class="c1"># ==============================================================================</span>
+<span class="n">st</span><span class="o">.</span><span class="n">set_page_config</span><span class="p">(</span>
+    <span class="n">page_title</span><span class="o">=</span><span class="s2">"Klasifikasi Spasial Tutupan Lahan Jawa Timur"</span><span class="p">,</span>
+    <span class="n">page_icon</span><span class="o">=</span><span class="s2">"🛰️"</span><span class="p">,</span>
+    <span class="n">layout</span><span class="o">=</span><span class="s2">"wide"</span><span class="p">,</span>
+    <span class="n">initial_sidebar_state</span><span class="o">=</span><span class="s2">"expanded"</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Custom Styling CSS</span>
+<span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">"""</span>
+<span class="s2">&lt;style&gt;</span>
+<span class="s2">    .main-title {</span>
+<span class="s2">        font-size: 2.2rem;</span>
+<span class="s2">        font-weight: 800;</span>
+<span class="s2">        color: #1b4332;</span>
+<span class="s2">        margin-bottom: 0.2rem;</span>
+<span class="s2">    }</span>
+<span class="s2">    .sub-title {</span>
+<span class="s2">        font-size: 1.05rem;</span>
+<span class="s2">        color: #495057;</span>
+<span class="s2">        margin-bottom: 1.5rem;</span>
+<span class="s2">    }</span>
+<span class="s2">    .stTabs [data-baseweb="tab-list"] {</span>
+<span class="s2">        gap: 8px;</span>
+<span class="s2">    }</span>
+<span class="s2">    .stTabs [data-baseweb="tab"] {</span>
+<span class="s2">        height: 48px;</span>
+<span class="s2">        white-space: pre-wrap;</span>
+<span class="s2">        background-color: #f1f3f5;</span>
+<span class="s2">        border-radius: 8px 8px 0px 0px;</span>
+<span class="s2">        padding-top: 10px;</span>
+<span class="s2">        padding-bottom: 10px;</span>
+<span class="s2">        font-weight: 600;</span>
+<span class="s2">    }</span>
+<span class="s2">    .stTabs [aria-selected="true"] {</span>
+<span class="s2">        background-color: #2d6a4f !important;</span>
+<span class="s2">        color: white !important;</span>
+<span class="s2">    }</span>
+<span class="s2">    .info-box {</span>
+<span class="s2">        background: #e8f5e9;</span>
+<span class="s2">        border-left: 4px solid #2e7d32;</span>
+<span class="s2">        padding: 12px 16px;</span>
+<span class="s2">        border-radius: 4px;</span>
+<span class="s2">        margin: 10px 0 15px 0;</span>
+<span class="s2">        font-size: 0.95rem;</span>
+<span class="s2">    }</span>
+<span class="s2">&lt;/style&gt;</span>
+<span class="s2">"""</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># 2. HELPER PENCARIAN FILE ASET &amp; CACHING</span>
+<span class="c1"># ==============================================================================</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cari_file</span><span class="p">(</span><span class="n">nama_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Mencari file di berbagai kemungkinan direktori lokal."""</span>
+    <span class="n">kandidat</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Path</span><span class="p">(</span><span class="n">nama_file</span><span class="p">),</span>
+        <span class="n">Path</span><span class="p">(</span><span class="s2">"maps"</span><span class="p">)</span> <span class="o">/</span> <span class="n">nama_file</span><span class="p">,</span>
+        <span class="n">Path</span><span class="p">(</span><span class="s2">"data"</span><span class="p">)</span> <span class="o">/</span> <span class="n">nama_file</span><span class="p">,</span>
+        <span class="n">Path</span><span class="p">(</span><span class="s2">"data/Klasifikasi"</span><span class="p">)</span> <span class="o">/</span> <span class="n">nama_file</span><span class="p">,</span>
+        <span class="n">Path</span><span class="p">(</span><span class="s2">"views/klasifikasi-spasial"</span><span class="p">)</span> <span class="o">/</span> <span class="n">nama_file</span><span class="p">,</span>
+        <span class="n">Path</span><span class="p">(</span><span class="s2">"data/Klasifikasi/hasil_rf"</span><span class="p">)</span> <span class="o">/</span> <span class="n">nama_file</span><span class="p">,</span>
+        <span class="n">Path</span><span class="p">(</span><span class="s2">"hasil_rf"</span><span class="p">)</span> <span class="o">/</span> <span class="n">nama_file</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">kandidat</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">path</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">muat_data_csv</span><span class="p">(</span><span class="n">path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path_str</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">muat_konten_html</span><span class="p">(</span><span class="n">path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path_str</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># 3. SIDEBAR: METADATA &amp; FILTER</span>
+<span class="c1"># ==============================================================================</span>
+<span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">sidebar</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="s2">"https://upload.wikimedia.org/wikipedia/commons/e/e0/Sentinel-2_model.png"</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">260</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">"### 🛰️ Spasial LULC Jawa Timur"</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">caption</span><span class="p">(</span><span class="s2">"**Model**: Random Forest Classifier / KNN (Scikit-Learn)"</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">caption</span><span class="p">(</span><span class="s2">"**Sensor**: Sentinel-2A MSI (ESA Copernicus)"</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">caption</span><span class="p">(</span><span class="s2">"**Koleksi**: Level-2A Surface Reflectance (BOA)"</span><span class="p">)</span>
+    
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">"---"</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">"#### 🏷️ 6 Kelas Tutupan Lahan"</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">"""</span>
+<span class="s2">    - &lt;span style='color:#FFD92F; font-weight:bold;'&gt;■&lt;/span&gt; **Sawah**: Lahan pertanian padi</span>
+<span class="s2">    - &lt;span style='color:#E41A1C; font-weight:bold;'&gt;■&lt;/span&gt; **Bangunan**: Perkotaan / pemukiman</span>
+<span class="s2">    - &lt;span style='color:#2E7D32; font-weight:bold;'&gt;■&lt;/span&gt; **Hutan / Lahan Hijau**: Kanopi rapat</span>
+<span class="s2">    - &lt;span style='color:#4FC3F7; font-weight:bold;'&gt;■&lt;/span&gt; **Danau**: Badan air pedalaman</span>
+<span class="s2">    - &lt;span style='color:#0D47A1; font-weight:bold;'&gt;■&lt;/span&gt; **Laut**: Perairan terbuka pesisir</span>
+<span class="s2">    - &lt;span style='color:#8E44AD; font-weight:bold;'&gt;■&lt;/span&gt; **Mangrove**: Hutan bakau pasang-surut</span>
+<span class="s2">    """</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">"---"</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">"#### ⚙️ Pengaturan Tampilan"</span><span class="p">)</span>
+    <span class="n">tinggi_peta</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">slider</span><span class="p">(</span><span class="s2">"Tinggi Frame Peta (px):"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">max_value</span><span class="o">=</span><span class="mi">950</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">720</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"💡 **Tips**: Gunakan tab di layar utama untuk berpindah antara peta poligon, peta regional, dan metrik model."</span><span class="p">)</span>
+
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># 4. HEADER UTAMA &amp; KARTU METRIK RINGKASAN</span>
+<span class="c1"># ==============================================================================</span>
+<span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">"&lt;div class='main-title'&gt;Dashboard Klasifikasi Spasial Tutupan Lahan Jawa Timur&lt;/div&gt;"</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span>
+    <span class="s2">"&lt;div class='sub-title'&gt;Visualisasi Geospasial Interaktif dan Evaluasi Model Machine Learning "</span>
+    <span class="s2">"berbasis Citra Satelit Sentinel-2A&lt;/div&gt;"</span><span class="p">,</span>
+    <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="c1"># Memuat data hasil evaluasi</span>
+<span class="n">p_pred</span> <span class="o">=</span> <span class="n">cari_file</span><span class="p">(</span><span class="s2">"prediksi_data_uji.csv"</span><span class="p">)</span>
+<span class="n">df_pred</span> <span class="o">=</span> <span class="n">muat_data_csv</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">p_pred</span><span class="p">))</span> <span class="k">if</span> <span class="n">p_pred</span> <span class="k">else</span> <span class="kc">None</span>
+
+<span class="c1"># Baris Metrik Utama</span>
+<span class="n">col1</span><span class="p">,</span> <span class="n">col2</span><span class="p">,</span> <span class="n">col3</span><span class="p">,</span> <span class="n">col4</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">df_pred</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">n_uji</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_pred</span><span class="p">)</span>
+    <span class="n">n_benar</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">df_pred</span><span class="p">[</span><span class="s2">"benar"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+    <span class="n">n_salah</span> <span class="o">=</span> <span class="n">n_uji</span> <span class="o">-</span> <span class="n">n_benar</span>
+    <span class="n">akurasi</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_benar</span> <span class="o">/</span> <span class="n">n_uji</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+    
+    <span class="k">with</span> <span class="n">col1</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">metric</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">"🎯 Akurasi Data Uji"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">akurasi</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%"</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">n_benar</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">n_uji</span><span class="si">}</span><span class="s2"> Poligon"</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">col2</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">metric</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">"📐 F1-Score Macro"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">"0.963"</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="s2">"Keseimbangan Kelas Tinggi"</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">col3</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">metric</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">"📦 Total Poligon Sampel"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">"~300"</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="s2">"6 Kelas Tutupan Lahan"</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">col4</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">metric</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">"⚠️ Salah Klasifikasi"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">n_salah</span><span class="si">}</span><span class="s2"> Poligon"</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="s2">"-3.6</span><span class="si">% E</span><span class="s2">rror"</span><span class="p">,</span> <span class="n">delta_color</span><span class="o">=</span><span class="s2">"inverse"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">col1</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">metric</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">"🎯 Akurasi Data Uji"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">"96.4%"</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">col2</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">metric</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">"📐 F1-Score Macro"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">"0.963"</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">col3</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">metric</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">"📦 Total Poligon Sampel"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">"~300"</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">col4</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">metric</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">"🛰️ Fitur Spektral"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">"9 Fitur (5 Band + 4 Indeks)"</span><span class="p">)</span>
+
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># 5. TAB NAVIGASI UTAMA</span>
+<span class="c1"># ==============================================================================</span>
+<span class="n">tab1</span><span class="p">,</span> <span class="n">tab2</span><span class="p">,</span> <span class="n">tab3</span><span class="p">,</span> <span class="n">tab4</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">tabs</span><span class="p">([</span>
+    <span class="s2">"🗺️ Peta Evaluasi Poligon (Vector)"</span><span class="p">,</span>
+    <span class="s2">"🌏 Peta Regional Skala Jawa Timur (High-Res)"</span><span class="p">,</span>
+    <span class="s2">"📊 Evaluasi Model &amp; Feature Importance"</span><span class="p">,</span>
+    <span class="s2">"📋 Eksplorasi Data Uji &amp; Ekspor"</span>
+<span class="p">])</span>
+
+<span class="c1"># TAB 1: PETA POLIGON</span>
+<span class="k">with</span> <span class="n">tab1</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">"### 🗺️ Peta Evaluasi Poligon Sampel &amp; Hasil Prediksi Data Uji"</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">"""</span>
+<span class="s2">    &lt;div class='info-box'&gt;</span>
+<span class="s2">        &lt;b&gt;Panduan Layer Peta:&lt;/b&gt;</span>
+<span class="s2">        &lt;ul&gt;</span>
+<span class="s2">            &lt;li&gt;&lt;b&gt;Layer 6 Kelas:&lt;/b&gt; Menampilkan poligon ground truth utuh dengan warna standar GIS.&lt;/li&gt;</span>
+<span class="s2">            &lt;li&gt;&lt;b&gt;Outline Biru:&lt;/b&gt; Poligon subset &lt;i&gt;Data Uji (Testing)&lt;/i&gt; yang diuji oleh model.&lt;/li&gt;</span>
+<span class="s2">            &lt;li&gt;&lt;b&gt;Outline Oranye + Tanda Seru:&lt;/b&gt; Poligon yang &lt;b&gt;salah diklasifikasikan&lt;/b&gt; oleh model.&lt;/li&gt;</span>
+<span class="s2">            &lt;li&gt;&lt;b&gt;Klik Poligon:&lt;/b&gt; Menampilkan popup nilai NDVI, NDWI, jumlah piksel, dan probabilitas kelas.&lt;/li&gt;</span>
+<span class="s2">        &lt;/ul&gt;</span>
+<span class="s2">    &lt;/div&gt;</span>
+<span class="s2">    """</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">file_peta1</span> <span class="o">=</span> <span class="n">cari_file</span><span class="p">(</span><span class="s2">"peta_klasifikasi_rf.html"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">cari_file</span><span class="p">(</span><span class="s2">"peta_klasifikasi_knn.html"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">file_peta1</span><span class="p">:</span>
+        <span class="n">konten_html1</span> <span class="o">=</span> <span class="n">muat_konten_html</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">file_peta1</span><span class="p">))</span>
+        <span class="n">components</span><span class="o">.</span><span class="n">html</span><span class="p">(</span><span class="n">konten_html1</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">tinggi_peta</span><span class="p">,</span> <span class="n">scrolling</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"File `peta_klasifikasi_rf.html` / `peta_klasifikasi_knn.html` tidak ditemukan."</span><span class="p">)</span>
+
+<span class="c1"># TAB 2: PETA REGIONAL JAWA TIMUR</span>
+<span class="k">with</span> <span class="n">tab2</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">"### 🌏 Peta Inferensi Klasifikasi Tutupan Lahan Se-Jawa Timur"</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">"""</span>
+<span class="s2">    &lt;div class='info-box'&gt;</span>
+<span class="s2">        &lt;b&gt;Karakteristik Peta Regional:&lt;/b&gt;</span>
+<span class="s2">        &lt;ul&gt;</span>
+<span class="s2">            &lt;li&gt;&lt;b&gt;Resolusi Tinggi Granular:&lt;/b&gt; Grid inferensi 1536 x 896 piksel (~200m per piksel) seluruh Jawa Timur.&lt;/li&gt;</span>
+<span class="s2">            &lt;li&gt;&lt;b&gt;Esri Satellite Mosaic (z=10):&lt;/b&gt; Citra satelit tertanam dengan lapisan prediksi transparan (opasitas 65%).&lt;/li&gt;</span>
+<span class="s2">            &lt;li&gt;&lt;b&gt;Masking Daratan:&lt;/b&gt; Menggunakan batas provinsi Jawa Timur untuk membedakan daratan dan laut terbuka.&lt;/li&gt;</span>
+<span class="s2">        &lt;/ul&gt;</span>
+<span class="s2">    &lt;/div&gt;</span>
+<span class="s2">    """</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">file_peta2</span> <span class="o">=</span> <span class="n">cari_file</span><span class="p">(</span><span class="s2">"hasil_klasifikasi_random_forest.html"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">cari_file</span><span class="p">(</span><span class="s2">"hasil_klasifikasi_knn.html"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">file_peta2</span><span class="p">:</span>
+        <span class="n">konten_html2</span> <span class="o">=</span> <span class="n">muat_konten_html</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">file_peta2</span><span class="p">))</span>
+        <span class="n">components</span><span class="o">.</span><span class="n">html</span><span class="p">(</span><span class="n">konten_html2</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">tinggi_peta</span><span class="p">,</span> <span class="n">scrolling</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"File `hasil_klasifikasi_random_forest.html` / `hasil_klasifikasi_knn.html` tidak ditemukan."</span><span class="p">)</span>
+
+<span class="c1"># TAB 3: EVALUASI PERFORMA</span>
+<span class="k">with</span> <span class="n">tab3</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">"### 📊 Evaluasi Kinerja Model"</span><span class="p">)</span>
+    <span class="n">col_kiri</span><span class="p">,</span> <span class="n">col_kanan</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    
+    <span class="k">with</span> <span class="n">col_kiri</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">"#### 🎯 Confusion Matrix (Data Uji)"</span><span class="p">)</span>
+        <span class="n">p_cm_img</span> <span class="o">=</span> <span class="n">cari_file</span><span class="p">(</span><span class="s2">"confusion_matrix.png"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p_cm_img</span><span class="p">:</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">p_cm_img</span><span class="p">),</span> <span class="n">caption</span><span class="o">=</span><span class="s2">"Confusion Matrix Data Uji"</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">p_cm_csv</span> <span class="o">=</span> <span class="n">cari_file</span><span class="p">(</span><span class="s2">"confusion_matrix.csv"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">p_cm_csv</span><span class="p">:</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">dataframe</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">p_cm_csv</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">caption</span><span class="p">(</span><span class="s2">"Akurasi data uji mencapai 96.4% (80 dari 83 poligon benar)."</span><span class="p">)</span>
+    
+    <span class="k">with</span> <span class="n">col_kanan</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">"#### 🌲 Kepentingan Fitur Spektral (Gini Importance)"</span><span class="p">)</span>
+        <span class="n">p_fi_img</span> <span class="o">=</span> <span class="n">cari_file</span><span class="p">(</span><span class="s2">"kepentingan_fitur.png"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p_fi_img</span><span class="p">:</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">p_fi_img</span><span class="p">),</span> <span class="n">caption</span><span class="o">=</span><span class="s2">"Feature Importance Model"</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">p_fi_csv</span> <span class="o">=</span> <span class="n">cari_file</span><span class="p">(</span><span class="s2">"kepentingan_fitur.csv"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">p_fi_csv</span><span class="p">:</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">dataframe</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">p_fi_csv</span><span class="p">),</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">caption</span><span class="p">(</span><span class="s2">"Band SWIR (B11) dan indeks NDBI berkontribusi paling dominan dalam pemisahan kelas."</span><span class="p">)</span>
+
+<span class="c1"># TAB 4: TABEL DATA &amp; EKSPOR</span>
+<span class="k">with</span> <span class="n">tab4</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">"### 📋 Detail Prediksi Data Uji (83 Poligon)"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">df_pred</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">c1</span><span class="p">:</span>
+            <span class="n">pilihan_kelas</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">multiselect</span><span class="p">(</span>
+                <span class="s2">"Filter Kelas Asli:"</span><span class="p">,</span>
+                <span class="n">options</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">df_pred</span><span class="p">[</span><span class="s2">"kelas_asli"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span>
+                <span class="n">default</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">df_pred</span><span class="p">[</span><span class="s2">"kelas_asli"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+            <span class="p">)</span>
+        <span class="k">with</span> <span class="n">c2</span><span class="p">:</span>
+            <span class="n">status_filter</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">radio</span><span class="p">(</span>
+                <span class="s2">"Filter Status Prediksi:"</span><span class="p">,</span>
+                <span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s2">"Semua"</span><span class="p">,</span> <span class="s2">"Hanya Benar"</span><span class="p">,</span> <span class="s2">"Hanya Salah Klasifikasi"</span><span class="p">],</span>
+                <span class="n">horizontal</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        
+        <span class="n">df_tampil</span> <span class="o">=</span> <span class="n">df_pred</span><span class="p">[</span><span class="n">df_pred</span><span class="p">[</span><span class="s2">"kelas_asli"</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">pilihan_kelas</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">status_filter</span> <span class="o">==</span> <span class="s2">"Hanya Benar"</span><span class="p">:</span>
+            <span class="n">df_tampil</span> <span class="o">=</span> <span class="n">df_tampil</span><span class="p">[</span><span class="n">df_tampil</span><span class="p">[</span><span class="s2">"benar"</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">status_filter</span> <span class="o">==</span> <span class="s2">"Hanya Salah Klasifikasi"</span><span class="p">:</span>
+            <span class="n">df_tampil</span> <span class="o">=</span> <span class="n">df_tampil</span><span class="p">[</span><span class="n">df_tampil</span><span class="p">[</span><span class="s2">"benar"</span><span class="p">]</span> <span class="o">==</span> <span class="kc">False</span><span class="p">]</span>
+            
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Menampilkan **</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df_tampil</span><span class="p">)</span><span class="si">}</span><span class="s2">** dari total **</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df_pred</span><span class="p">)</span><span class="si">}</span><span class="s2">** poligon uji:"</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">dataframe</span><span class="p">(</span><span class="n">df_tampil</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">350</span><span class="p">)</span>
+        
+        <span class="n">csv_bytes</span> <span class="o">=</span> <span class="n">df_tampil</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">download_button</span><span class="p">(</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">"📥 Unduh Data Hasil Prediksi (CSV)"</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">csv_bytes</span><span class="p">,</span>
+            <span class="n">file_name</span><span class="o">=</span><span class="s2">"hasil_prediksi_data_uji.csv"</span><span class="p">,</span>
+            <span class="n">mime</span><span class="o">=</span><span class="s2">"text/csv"</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"File `prediksi_data_uji.csv` tidak ditemukan."</span><span class="p">)</span>
+
+<span class="c1"># FOOTER</span>
+<span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">"---"</span><span class="p">)</span>
+<span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span>
+    <span class="s2">"&lt;div style='text-align: center; color: #6c757d; font-size: 0.85rem;'&gt;"</span>
+    <span class="s2">"Proyek Sains Data — Klasifikasi Spasial LULC Jawa Timur | Sentinel-2A"</span>
+    <span class="s2">"&lt;/div&gt;"</span><span class="p">,</span>
+    <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="konfigurasi-dependensi-tema">
+<h2>5. Konfigurasi Dependensi &amp; Tema<a class="headerlink" href="#konfigurasi-dependensi-tema" title="Link to this heading">#</a></h2>
+<section id="file-requirements-txt">
+<h3>5.1. File <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code><a class="headerlink" href="#file-requirements-txt" title="Link to this heading">#</a></h3>
+<p>Buat file <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> dengan isi berikut:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>streamlit&gt;=1.30.0
+pandas&gt;=2.0.0
+numpy&gt;=1.24.0
+pillow&gt;=9.5.0
+matplotlib&gt;=3.7.0
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Karena peta interaktif dibaca dalam format HTML (<code class="docutils literal notranslate"><span class="pre">peta_klasifikasi_rf.html</span></code> dan <code class="docutils literal notranslate"><span class="pre">hasil_klasifikasi_random_forest.html</span></code>), library berat seperti <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>, <code class="docutils literal notranslate"><span class="pre">rasterio</span></code>, atau <code class="docutils literal notranslate"><span class="pre">openeo</span></code> <strong>tidak perlu</strong> diinstal di lingkungan Streamlit runtime. Hal ini membuat waktu instalasi dependensi di cloud menjadi sangat cepat (&lt; 1 menit) dan tidak membebani limit memori.</p>
+</div>
+</section>
+<section id="file-streamlit-config-toml-opsional-untuk-personalisasi-tema">
+<h3>5.2. File <code class="docutils literal notranslate"><span class="pre">.streamlit/config.toml</span></code> (Opsional untuk Personalisasi Tema)<a class="headerlink" href="#file-streamlit-config-toml-opsional-untuk-personalisasi-tema" title="Link to this heading">#</a></h3>
+<p>Buat direktori <code class="docutils literal notranslate"><span class="pre">.streamlit/</span></code> dan file <code class="docutils literal notranslate"><span class="pre">config.toml</span></code>:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[theme]</span>
+<span class="n">primaryColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"#2d6a4f"</span>
+<span class="n">backgroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"#ffffff"</span>
+<span class="n">secondaryBackgroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"#f8f9fa"</span>
+<span class="n">textColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"#212529"</span>
+<span class="n">font</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"sans serif"</span>
+
+<span class="k">[server]</span>
+<span class="n">maxUploadSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span>
+<span class="n">enableCORS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+<span class="n">enableXsrfProtection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="langkah-langkah-menjalankan-di-komputer-lokal-local-run">
+<h2>6. Langkah-Langkah Menjalankan di Komputer Lokal (<em>Local Run</em>)<a class="headerlink" href="#langkah-langkah-menjalankan-di-komputer-lokal-local-run" title="Link to this heading">#</a></h2>
+<p>Berikut tahapan menjalankan aplikasi di komputer lokal:</p>
+<section id="langkah-1-buka-terminal-powershell">
+<h3>Langkah 1: Buka Terminal / PowerShell<a class="headerlink" href="#langkah-1-buka-terminal-powershell" title="Link to this heading">#</a></h3>
+<p>Pastikan Anda berada di direktori kerja proyek:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="s2">"d:/PSD/Tugas"</span>
+</pre></div>
+</div>
+</section>
+<section id="langkah-2-buat-aktifkan-virtual-environment-rekomendasi">
+<h3>Langkah 2: Buat &amp; Aktifkan Virtual Environment (Rekomendasi)<a class="headerlink" href="#langkah-2-buat-aktifkan-virtual-environment-rekomendasi" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Membuat virtual environment</span>
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+
+<span class="c1"># Aktivasi di Windows PowerShell:</span>
+.venv<span class="se">\S</span>cripts<span class="se">\A</span>ctivate.ps1
+
+<span class="c1"># Atau di Command Prompt (cmd):</span>
+.venv<span class="se">\S</span>cripts<span class="se">\a</span>ctivate.bat
+
+<span class="c1"># Atau di Linux/macOS:</span>
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+</pre></div>
+</div>
+</section>
+<section id="langkah-3-instal-dependensi">
+<h3>Langkah 3: Instal Dependensi<a class="headerlink" href="#langkah-3-instal-dependensi" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</section>
+<section id="langkah-4-jalankan-aplikasi-streamlit">
+<h3>Langkah 4: Jalankan Aplikasi Streamlit<a class="headerlink" href="#langkah-4-jalankan-aplikasi-streamlit" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>streamlit<span class="w"> </span>run<span class="w"> </span>app.py
+</pre></div>
+</div>
+</section>
+<section id="langkah-5-buka-di-browser">
+<h3>Langkah 5: Buka di Browser<a class="headerlink" href="#langkah-5-buka-di-browser" title="Link to this heading">#</a></h3>
+<p>Aplikasi secara otomatis membuka peramban di alamat:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>http://localhost:8501
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="langkah-langkah-deploy-ke-streamlit-community-cloud">
+<h2>7. Langkah-Langkah Deploy ke Streamlit Community Cloud<a class="headerlink" href="#langkah-langkah-deploy-ke-streamlit-community-cloud" title="Link to this heading">#</a></h2>
+<p>Streamlit Community Cloud (<a class="reference external" href="https://share.streamlit.io/">share.streamlit.io</a>) menyediakan hosting gratis untuk aplikasi Streamlit langsung dari repositori GitHub.</p>
+<section id="tahap-1-persiapan-repositori-github">
+<h3>Tahap 1: Persiapan Repositori GitHub<a class="headerlink" href="#tahap-1-persiapan-repositori-github" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Buat repositori baru di GitHub (misal: <code class="docutils literal notranslate"><span class="pre">klasifikasi-spasial-jatim-streamlit</span></code>).</p></li>
+<li><p>Pastikan file <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code> dibuat agar file besar yang tidak digunakan di runtime (seperti file zip mentah atau GeoTIFF ratusan MB) tidak ikut terunggah:</p></li>
+</ol>
+<div class="highlight-gitignore notranslate"><div class="highlight"><pre><span></span># .gitignore
+.venv/
+__pycache__/
+*.tif
+*.tiff
+*.zip
+dataset.csv
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Lakukan inisialisasi git, commit, dan push:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>init
+git<span class="w"> </span>add<span class="w"> </span>app.py<span class="w"> </span>requirements.txt<span class="w"> </span>.streamlit/<span class="w"> </span>data/<span class="w"> </span>maps/<span class="w"> </span>README.md
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"feat: inisialisasi aplikasi dashboard spasial tutupan lahan jatim"</span>
+git<span class="w"> </span>branch<span class="w"> </span>-M<span class="w"> </span>main
+git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>https://github.com/&lt;username-anda&gt;/&lt;nama-repo-anda&gt;.git
+git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>main
+</pre></div>
+</div>
+</section>
+<section id="tahap-2-mendaftarkan-aplikasi-di-streamlit-cloud">
+<h3>Tahap 2: Mendaftarkan Aplikasi di Streamlit Cloud<a class="headerlink" href="#tahap-2-mendaftarkan-aplikasi-di-streamlit-cloud" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Kunjungi <a class="reference external" href="https://share.streamlit.io/">https://share.streamlit.io/</a> dan login menggunakan akun <strong>GitHub</strong> Anda.</p></li>
+<li><p>Klik tombol <strong>“Create app”</strong> (atau <strong>“New app”</strong>).</p></li>
+<li><p>Isi formulir konfigurasi deployment:</p>
+<ul class="simple">
+<li><p><strong>Repository</strong>: Pilih repositori GitHub Anda (misal: <code class="docutils literal notranslate"><span class="pre">&lt;username&gt;/klasifikasi-spasial-jatim-streamlit</span></code>).</p></li>
+<li><p><strong>Branch</strong>: <code class="docutils literal notranslate"><span class="pre">main</span></code>.</p></li>
+<li><p><strong>Main file path</strong>: <code class="docutils literal notranslate"><span class="pre">app.py</span></code> (atau <code class="docutils literal notranslate"><span class="pre">streamlit_app.py</span></code> sesuai nama file utama Anda).</p></li>
+<li><p><strong>App URL (opsional)</strong>: Tentukan subdomain khusus (misal: <code class="docutils literal notranslate"><span class="pre">klasifikasi-spasial-jatim.streamlit.app</span></code>).</p></li>
+</ul>
+</li>
+<li><p>Klik tombol <strong>“Deploy!”</strong>.</p></li>
+</ol>
+</section>
+<section id="tahap-3-pemantauan-build-peluncuran">
+<h3>Tahap 3: Pemantauan Build &amp; Peluncuran<a class="headerlink" href="#tahap-3-pemantauan-build-peluncuran" title="Link to this heading">#</a></h3>
+<ol class="arabic">
+<li><p>Buka tab <strong>“Manage app”</strong> di pojok kanan bawah untuk memantau proses instalasi <em>dependencies</em> dari <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code>.</p></li>
+<li><p>Setelah proses instalasi selesai (biasanya berlangsung 1–2 menit), aplikasi akan langsung aktif dan dapat diakses publik melalui tautan:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>https://&lt;nama-subdomain&gt;.streamlit.app
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="tips-optimasi-best-practices-troubleshooting">
+<h2>8. Tips Optimasi, Best Practices, &amp; Troubleshooting<a class="headerlink" href="#tips-optimasi-best-practices-troubleshooting" title="Link to this heading">#</a></h2>
+<section id="menghindari-out-of-memory-oom-di-streamlit-cloud">
+<h3>1. Menghindari Out of Memory (OOM) di Streamlit Cloud<a class="headerlink" href="#menghindari-out-of-memory-oom-di-streamlit-cloud" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Penyebab</strong>: Server gratis Streamlit Cloud memiliki alokasi memori RAM sebesar 1 GB. Melakukan rasterisasi citra regional Jawa Timur (<span class="math notranslate nohighlight">\(1536 \times 896\)</span>) atau <em>training</em> model langsung di runtime web server dapat memicu penghentian paksa (<em>crash OOM</em>).</p></li>
+<li><p><strong>Solusi</strong>: Lakukan proses <em>training</em> dan <em>raster rendering</em> di lingkungan Jupyter Notebook. Simpan hasilnya menjadi file HTML serta file metrik CSV/PNG. Aplikasi Streamlit cukup bertugas sebagai antarmuka penyaji visualisasi (<em>presentation layer</em>).</p></li>
+</ul>
+</section>
+<section id="mengatasi-scroll-ganda-pada-iframe-folium">
+<h3>2. Mengatasi Scroll Ganda pada IFrame Folium<a class="headerlink" href="#mengatasi-scroll-ganda-pada-iframe-folium" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Atur parameter <code class="docutils literal notranslate"><span class="pre">scrolling=True</span></code> dan tinggi komponen yang cukup (<code class="docutils literal notranslate"><span class="pre">height=720</span></code> atau lebih) pada <code class="docutils literal notranslate"><span class="pre">components.html(konten_html,</span> <span class="pre">height=tinggi_peta,</span> <span class="pre">scrolling=True)</span></code> agar pengguna dapat melakukan pergeseran peta (<em>panning</em>) dan pembesaran (<em>zooming</em>) dengan lancar tanpa terpotong oleh batas kontainer.</p></li>
+</ul>
+</section>
+<section id="menggunakan-st-cache-data-untuk-file-csv">
+<h3>3. Menggunakan <code class="docutils literal notranslate"><span class="pre">&#64;st.cache_data</span></code> untuk File CSV<a class="headerlink" href="#menggunakan-st-cache-data-untuk-file-csv" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Terapkan dekorator <code class="docutils literal notranslate"><span class="pre">&#64;st.cache_data</span></code> pada fungsi pemuatan data (<code class="docutils literal notranslate"><span class="pre">muat_data_csv()</span></code> dan <code class="docutils literal notranslate"><span class="pre">muat_konten_html()</span></code>). Dengan caching, file hanya dibaca satu kali dari disk ke memori, sehingga interaksi pengguna (seperti pemilihan filter kelas tutupan lahan) akan dieksekusi secara instan tanpa lag.</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./md"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="klasifikasi-spasial-tutupan-lahan-knn.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Klasifikasi Spasial Tutupan Lahan Jawa Timur (K-Nearest Neighbors / KNN)</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ringkasan-aset-visualisasi-dari-notebook">1. Ringkasan Aset Visualisasi dari Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arsitektur-strategi-rendering-di-streamlit">2. Arsitektur &amp; Strategi Rendering di Streamlit</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#struktur-direktori-proyek-deployment">3. Struktur Direktori Proyek Deployment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kode-lengkap-aplikasi-streamlit-app-py">4. Kode Lengkap Aplikasi Streamlit (<code class="docutils literal notranslate"><span class="pre">app.py</span></code>)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#konfigurasi-dependensi-tema">5. Konfigurasi Dependensi &amp; Tema</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#file-requirements-txt">5.1. File <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#file-streamlit-config-toml-opsional-untuk-personalisasi-tema">5.2. File <code class="docutils literal notranslate"><span class="pre">.streamlit/config.toml</span></code> (Opsional untuk Personalisasi Tema)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-menjalankan-di-komputer-lokal-local-run">6. Langkah-Langkah Menjalankan di Komputer Lokal (<em>Local Run</em>)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-1-buka-terminal-powershell">Langkah 1: Buka Terminal / PowerShell</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-2-buat-aktifkan-virtual-environment-rekomendasi">Langkah 2: Buat &amp; Aktifkan Virtual Environment (Rekomendasi)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-3-instal-dependensi">Langkah 3: Instal Dependensi</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-4-jalankan-aplikasi-streamlit">Langkah 4: Jalankan Aplikasi Streamlit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-5-buka-di-browser">Langkah 5: Buka di Browser</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-deploy-ke-streamlit-community-cloud">7. Langkah-Langkah Deploy ke Streamlit Community Cloud</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-1-persiapan-repositori-github">Tahap 1: Persiapan Repositori GitHub</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-2-mendaftarkan-aplikasi-di-streamlit-cloud">Tahap 2: Mendaftarkan Aplikasi di Streamlit Cloud</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tahap-3-pemantauan-build-peluncuran">Tahap 3: Pemantauan Build &amp; Peluncuran</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tips-optimasi-best-practices-troubleshooting">8. Tips Optimasi, Best Practices, &amp; Troubleshooting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#menghindari-out-of-memory-oom-di-streamlit-cloud">1. Menghindari Out of Memory (OOM) di Streamlit Cloud</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mengatasi-scroll-ganda-pada-iframe-folium">2. Mengatasi Scroll Ganda pada IFrame Folium</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#menggunakan-st-cache-data-untuk-file-csv">3. Menggunakan <code class="docutils literal notranslate"><span class="pre">@st.cache_data</span></code> untuk File CSV</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
