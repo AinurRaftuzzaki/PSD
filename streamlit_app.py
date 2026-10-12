@@ -23,7 +23,7 @@ from sklearn.preprocessing import StandardScaler
 
 st.set_page_config(
     page_title="Klasifikasi Tutupan Lahan Jawa Timur",
-    page_icon="🌏",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -122,12 +122,12 @@ df_test["lat"]            = cen.loc[X_te.index, "lat"].values
 
 # ── Sidebar
 with st.sidebar:
-    st.markdown("### 🌏 Spasial LULC")
+    st.markdown("### Spasial LULC")
     st.caption("Model: K-Nearest Neighbors")
     st.caption("Sensor: Sentinel-2A MSI (ESA CDSE)")
     st.caption("Koleksi: Level-2A BOA Surface Reflectance")
     st.divider()
-    st.markdown("**🏷 6 KELAS TUTUPAN LAHAN**")
+    st.markdown("**  6 KELAS TUTUPAN LAHAN**")
     for k, v in KELAS_META.items():
         st.markdown(
             f"<span class='dot' style='background:{v['warna']}'></span>"
@@ -136,16 +136,16 @@ with st.sidebar:
     st.divider()
     st.markdown("""
     <div class="ibox">
-    📡 Algoritma: <b>KNN k=7</b><br>
-    ⚖️ Bobot: <b>Distance (Euclidean)</b><br>
-    📐 CV: <b>5-Fold Stratified GridSearchCV</b><br>
-    📍 AOI: <b>Provinsi Jawa Timur</b>
+     Algoritma: <b>KNN k=7</b><br>
+     Bobot: <b>Distance (Euclidean)</b><br>
+     CV: <b>5-Fold Stratified GridSearchCV</b><br>
+     AOI: <b>Provinsi Jawa Timur</b>
     </div>""", unsafe_allow_html=True)
 
 # ── Hero
 st.markdown("""
 <div class="hero">
-    <h1>🌏 Klasifikasi Spasial Tutupan Lahan Jawa Timur</h1>
+    <h1> Klasifikasi Spasial Tutupan Lahan Jawa Timur</h1>
     <p>Visualisasi spasial berbasis citra satelit Sentinel-2A Level-2A dan algoritma
     <b>K-Nearest Neighbors (KNN)</b> untuk pemetaan 6 kelas tutupan lahan di Provinsi Jawa Timur.</p>
 </div>
@@ -154,17 +154,17 @@ st.markdown("🛰️ **Sentinel-2A MSI BOA &nbsp;•&nbsp; K-Nearest Neighbors (
 
 # ── KPI
 c1, c2, c3, c4 = st.columns(4)
-c1.metric("Akurasi Data Uji ✅", f"{acc:.1%}", f"{int(acc*n_test)}/{n_test} Poligon", help="Evaluasi Stratified Test Set (KNN)")
-c2.metric("F1-Score Macro 🏆", f"{f1mac:.3f}", "Seimbang", help="Rata-rata harmonik seluruh 6 kelas")
-c3.metric("Poligon Ground Truth 🗺️", f"~{len(cen):,}", "6 Kategori", help="Centroid poligon bebas autokorelasi")
-c4.metric("Salah Klasifikasi ⚠️", str(n_err), f"Error {n_err/n_test:.1%}", delta_color="inverse")
+c1.metric("Akurasi Data Uji ", f"{acc:.1%}", f"{int(acc*n_test)}/{n_test} Poligon", help="Evaluasi Stratified Test Set (KNN)")
+c2.metric("F1-Score Macro ", f"{f1mac:.3f}", "Seimbang", help="Rata-rata harmonik seluruh 6 kelas")
+c3.metric("Poligon Ground Truth ", f"~{len(cen):,}", "6 Kategori", help="Centroid poligon bebas autokorelasi")
+c4.metric("Salah Klasifikasi ", str(n_err), f"Error {n_err/n_test:.1%}", delta_color="inverse")
 
 # ── Tabs
 tab1, tab2, tab3, tab4 = st.tabs([
-    "📊 Evaluasi Kinerja Model",
-    "🗺️ Sebaran Spasial Sampel",
-    "📋 Eksplorasi Data Prediksi",
-    "🔍 Karakteristik Spektral",
+    " Evaluasi Kinerja Model",
+    " Sebaran Spasial Sampel",
+    " Eksplorasi Data Prediksi",
+    " Karakteristik Spektral",
 ])
 
 # ── Tab 1: Evaluasi
@@ -319,7 +319,7 @@ with tab3:
     fig_conf.update_layout(**LAYOUT, yaxis=dict(gridcolor="rgba(255,255,255,.06)", tickformat=".0%"))
     st.plotly_chart(fig_conf, use_container_width=True)
 
-    st.download_button("⬇️ Unduh Data Prediksi (CSV)",
+    st.download_button(" Unduh Data Prediksi (CSV)",
         data=df_test.to_csv(index=False).encode("utf-8"),
         file_name="knn_prediksi_data_uji.csv", mime="text/csv")
 
