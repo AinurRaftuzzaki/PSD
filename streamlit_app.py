@@ -127,7 +127,7 @@ with st.sidebar:
     st.caption("Sensor: Sentinel-2A MSI (ESA CDSE)")
     st.caption("Koleksi: Level-2A BOA Surface Reflectance")
     st.divider()
-    st.markdown("**  6 KELAS TUTUPAN LAHAN**")
+    st.markdown("**6 KELAS TUTUPAN LAHAN**")
     for k, v in KELAS_META.items():
         st.markdown(
             f"<span class='dot' style='background:{v['warna']}'></span>"
@@ -150,7 +150,7 @@ st.markdown("""
     <b>K-Nearest Neighbors (KNN)</b> untuk pemetaan 6 kelas tutupan lahan di Provinsi Jawa Timur.</p>
 </div>
 """, unsafe_allow_html=True)
-st.markdown("🛰️ **Sentinel-2A MSI BOA &nbsp;•&nbsp; K-Nearest Neighbors (KNN)**")
+st.markdown("**Sentinel-2A MSI BOA &nbsp;•&nbsp; K-Nearest Neighbors (KNN)**")
 
 # ── KPI
 c1, c2, c3, c4 = st.columns(4)
